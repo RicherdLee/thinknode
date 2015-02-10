@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh-cn">
+    <!--加载后台头部公共文件-->
+    <%include ../../../Admin/View/default/public_header.html%>
+    <!-- 在此加入当前页面自定义CSS及JS start -->
+    <script src="/Public/js/admin/index.min.js"></script>
+    <!-- 在此加入当前页面自定义CSS及JS end -->
+</head>
+<body>
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <a href="#" class="brand">
+                <small>
+                    <i class="icon-leaf"></i>
+                    Mobile Application Content Management System
+                </small>
+            </a><!--/.brand-->
+
+            <ul class="nav ace-nav pull-right">
+
+                <li class="light-blue">
+                    <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                        <img class="nav-user-photo" src="/Public/avatars/avatar2.png" alt="Jason's Photo"/>
+								<span class="user-info">
+									<small>欢迎,</small>
+									<%=username%>
+								</span>
+
+                        <i class="icon-caret-down"></i>
+                    </a>
+
+                    <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
+
+                        <li>
+                            <a href="javascript:loadMenuContent('profile','个人资料','/Admin/AdminUser/public_profile');">
+                                <i class="icon-user"></i>
+                                个人资料
+                            </a>
+                        </li>
+
+                        <li class="divider"></li>
+
+                        <li>
+                            <a href="/Admin/Public/logout">
+                                <i class="icon-off"></i>
+                                退出
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <!--/.ace-nav-->
+        </div>
+        <!--/.container-fluid-->
+    </div>
+    <!--/.navbar-inner-->
+</div>
+
+<div class="main-container container-fluid">
+    <a class="menu-toggler" id="menu-toggler" href="#">
+        <span class="menu-text"></span>
+    </a>
+
+    <!--加载后台公共菜单-->
+    <%include ../../../Admin/View/default/public_menu.html%>
+
+    <div class="main-content">
+        <div class="tabbable">
+            <ul class="nav nav-tabs padding-10" id="myTab">
+                <li id="tab_home" class="active">
+                    <a data-toggle="tab" href="#tabContent_home">
+                        <input type="hidden" id="targetUrl_home" name="targetUrl" value="#home"/>
+                        <i class="green icon-home bigger-110"></i>
+                        首页
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="myTabContent">
+                <div id="tabContent_home" class="tab-pane in active">
+                    <div class="page-content">
+                        <div class="row-fluid">
+                            <div class="offset1 span10">
+                                <!--PAGE CONTENT BEGINS-->
+                                <h4 class="header blue bolder smaller"><i class="purple icon-cog"></i>系统信息</h4>
+
+                                <div class="profile-user-info profile-user-info-striped">
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name"> 操作系统</div>
+
+                                        <div class="profile-info-value">
+                                            <span class="editable editable-click"><%=info.platform%></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name"> 运行环境</div>
+
+                                        <div class="profile-info-value">
+                                            <span class="editable editable-click"><%=info.runTime%></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name"> 服务器时间</div>
+
+                                        <div class="profile-info-value">
+                                            <span class="editable editable-click"><%=info.serverTime%></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name"> 运行环境版本</div>
+
+                                        <div class="profile-info-value">
+                                            <span class="editable editable-click"><%=info.nodeVersion%></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name"> 数据库版本</div>
+
+                                        <div class="profile-info-value">
+                                            <span class="editable editable-click"><%=info.dbVersion%></span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <h4 class="header blue bolder smaller"><i class="icon-rss orange"></i>产品信息</h4>
+
+                                <div class="profile-user-info profile-user-info-striped">
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name"> 产品名称</div>
+
+                                        <div class="profile-info-value">
+                                            <span class="editable editable-click">Mobile Application Content Management System</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name"> 产品版本</div>
+
+                                        <div class="profile-info-value">
+                                            <span class="editable editable-click"><%=info.version%></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name"> 产品流水号</div>
+
+                                        <div class="profile-info-value">
+                                            <span class="editable editable-click"><%=info.versionCode%></span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <h4 class="header blue bolder smaller"><i class="blue icon-group"></i>技术支持</h4>
+
+                                <div class="profile-user-info profile-user-info-striped">
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name"> 开发团队</div>
+
+                                        <div class="profile-info-value">
+                                            <span class="editable editable-click"><a href="http://ric.so" target="_blank">Richen</a></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name"> 官网</div>
+
+                                        <div class="profile-info-value">
+                                            <span class="editable editable-click"><a href="http://www.enlink.mobi"
+                                                                                     target="_blank">Enlink.Mobi</a></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name"> 邮箱</div>
+
+                                        <div class="profile-info-value">
+                                            <span>admin@enlink-mob.com </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name"> 特别鸣谢</div>
+                                        <div class="profile-info-value">
+                                            <span class="editable editable-click"><a href="http://thinkjs.org/" target="_blank">ThinkJS.org</a></span>
+                                            <span class="editable editable-click"><a href="http://acetemplate.com/" target="_blank"> Ace Template</a></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/.page-content-->
+                        </div>
+
+                    </div>
+                </div>
+                <!--.breadcrumb-->
+
+            </div>
+            <!--/.main-content-->
+        </div>
+        <!--/.main-container-->
+        <div class="nav-search">
+						<span id="refresh_tab" onclick="refreshMenuContent();">
+							<i class="btn icon-refresh btn-small"></i>
+						</span>
+        </div>
+        <!--#nav-search-->
+        <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-small btn-inverse">
+            <i class="icon-double-angle-up icon-only bigger-110"></i>
+        </a>
+    </div>
+</div>
+</body>
+</html>
