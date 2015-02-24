@@ -2,7 +2,7 @@
  * controller
  * @return 
  */
-module.exports = Controller("Common/AppFrameController", function(){
+module.exports = Controller("AppFrameController", function(){
   "use strict";
   return {
     init: function (http) {

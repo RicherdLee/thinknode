@@ -177,7 +177,7 @@
                 //1 = 'FILE_LOAD_FAILED',
                 //2 = 'IMAGE_LOAD_FAILED',
                 //3 = 'THUMBNAIL_FAILED'
-                //alert(error_code);
+                alert(error_code);
             }
 
         }).on('change', function(){
@@ -185,7 +185,7 @@
             //console.log($(this).data('ace_input_method'));
         });
 
-        $(".J_file_format").removeAttr('checked').on('change', function() {
+        $(".J_file_format").on('change', function() {
             var before_change;
             var btn_choose;
             var no_icon;
@@ -221,7 +221,7 @@
             }
             var file_input_id = $(this).attr("for");
             var file_input = $("#"+file_input_id);
-            file_input.ace_file_input('update_settings', {'before_change':before_change, 'btn_choose': btn_choose, 'no_icon':no_icon})
+            file_input.ace_file_input('update_settings', {'before_change':before_change, 'btn_choose': btn_choose, 'no_icon':no_icon});
             file_input.ace_file_input('reset_input');
         });
     }

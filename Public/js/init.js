@@ -1,25 +1,6 @@
 /**
  * Created by richen on 14/11/4.
  */
-<!--basic styles-->
-document.write('<link href="/Public/css/bootstrap.min.css" rel="stylesheet" />'+
-'<link href="/Public/css/bootstrap-responsive.min.css" rel="stylesheet" />'+
-'<link rel="stylesheet" href="/Public/css/font-awesome.min.css" />'+
-'<!--[if IE 7]>'+
-'<link rel="stylesheet" href="/Public/css/font-awesome-ie7.min.css" />'+
-'<![endif]-->'+
-'<!--fonts-->'+
-'<link rel="stylesheet" href="/Public/css/fonts.css" />'+
-
-'<!--ace styles-->'+
-'<link rel="stylesheet" href="/Public/css/ace.min.css" />'+
-'<link rel="stylesheet" href="/Public/css/ace-responsive.min.css" />'+
-'<link rel="stylesheet" href="/Public/css/ace-skins.min.css" />'+
-
-'<!--[if lte IE 8]>'+
-'<link rel="stylesheet" href="/Public/css/ace-ie.min.css" />'+
-'<![endif]-->');
-
 
 head.js('/Public/js/bootstrap.min.js','/Public/js/ace-elements.min.js','/Public/js/ace.min.js',function(){
     <!--band plugin-->

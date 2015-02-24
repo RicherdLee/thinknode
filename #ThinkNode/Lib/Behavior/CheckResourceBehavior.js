@@ -27,7 +27,7 @@ module.exports = Behavior(function () {
             pathname = path.normalize(pathname);
             var file = THINK.ROOT_PATH + '/' + pathname;
             var res = this.http.res;
-            if (fs.existsSync(file)) {
+            if (fs.existsSync(file) && fs.statSync(file).isFile()) {
                 var contentType = mime.lookup(file);
                 res.setHeader('Content-Type', contentType + '; charset=' + C('encoding'));
                 tag('resource_output', this.http, file);

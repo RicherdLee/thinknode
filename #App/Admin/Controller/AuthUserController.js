@@ -58,7 +58,7 @@ module.exports = Controller("AdminBaseController", function () {
         },
 
         _before_delAction: function(){
-            if(I(this,"id") == 1){
+            if(I("id",this) == 1){
                 return this.error("超级管理员不允许删除");
             }
         },

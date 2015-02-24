@@ -48,9 +48,5 @@ module.exports = Model("CommonModel", function () {
                 return data;
             });
         }
-
-
-
-
     };
 });
