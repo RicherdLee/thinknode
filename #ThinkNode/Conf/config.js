@@ -23,7 +23,7 @@ module.exports = {
     post_max_fields: 100, //最大表单数，默认为100
     post_max_fields_size: 2 * 1024 * 1024, //单个表单长度最大值，默认为2MB
     post_ajax_filename_header: 'x-filename', //通过ajax上传文件时文件名对应的header，如果有这个header表示是文件上传
-    post_file_upload_path: THINK.APP_PATH + '/Runtime/Temp', //文件上传的临时目录
+    post_file_upload_path: THINK.RUNTIME_PATH + '/Temp', //文件上传的临时目录
     post_file_autoremove: true, //请求完成时，自动删除未处理的上传缓存文件
 
     app_group_list: ['Home', 'Admin', 'Restful'], //分组列表

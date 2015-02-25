@@ -181,16 +181,14 @@
             }
 
         }).on('change', function(){
-            console.log($(this).data('ace_input_files'));
-            //console.log($(this).data('ace_input_method'));
+            //console.log($(this).data('ace_input_files'));
         });
-
-        $(".J_file_format").on('change', function() {
-            var before_change;
-            var btn_choose;
-            var no_icon;
-            if(this.checked) {
-                btn_choose = "Drop images here or click to choose";
+        var before_change;
+        var btn_choose;
+        var no_icon;
+        $(".J_file_input").each(function (s,element) {
+            if($(element).attr("file_type") == "img"){
+                btn_choose = "拖动图片到此或点击选择";
                 no_icon = "icon-picture";
                 before_change = function(files, dropped) {
                     var allowed_files = [];
@@ -212,17 +210,15 @@
 
                     return allowed_files;
                 }
-            }else {
-                btn_choose = "Drop files here or click to choose";
+            }else{
+                btn_choose = "拖动文件到此或点击选择";
                 no_icon = "icon-cloud-upload";
                 before_change = function(files, dropped) {
                     return files;
                 }
             }
-            var file_input_id = $(this).attr("for");
-            var file_input = $("#"+file_input_id);
-            file_input.ace_file_input('update_settings', {'before_change':before_change, 'btn_choose': btn_choose, 'no_icon':no_icon});
-            file_input.ace_file_input('reset_input');
+            $(element).ace_file_input('update_settings', {'before_change':before_change, 'btn_choose': btn_choose, 'no_icon':no_icon});
+            $(element).ace_file_input('reset_input');
         });
     }
 

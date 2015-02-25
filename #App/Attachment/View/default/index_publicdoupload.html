@@ -10,13 +10,15 @@
 <body>
 <!--PAGE CONTENT BEGINS-->
 <div class="page-content">
-    <div class="row-fluid">
-        <input multiple="" class="J_file_input" type="file" id="file_upload" />
-        <label>
-            <input type="checkbox" class="J_file_format" file_type="img" name="file-format" for="file_upload" />
-            <span class="lbl"> Allow only images</span>
-        </label>
-    </div>
+    <form id="file_upload_form" class="form-inline page-header J_ajaxForm" method="post" action="" enctype="multipart/form-data">
+        <div class="row-fluid">
+            <input class="J_file_input" type="file" id="file_upload" name="file_upload" file_type="img"/>
+        </div>
+        <button class="btn btn-info J_ajax_submit_btn" type="submit">
+            <i class="icon-ok bigger-110"></i>
+            提交
+        </button>
+    </form>
 </div>
 </body>
 </html>

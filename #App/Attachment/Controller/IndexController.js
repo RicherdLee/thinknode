@@ -11,6 +11,7 @@ module.exports = Controller("AppFrameController", function(){
       },
 
       publicDoUploadAction: function () {
+          echo(this.file());
           this.display();
       }
   };

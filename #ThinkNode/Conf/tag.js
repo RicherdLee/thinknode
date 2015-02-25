@@ -79,5 +79,5 @@ module.exports = {
   //应用结束
   app_end: [closeDbConnect],
   //内容输出
-  content_write: []
+  content_write: ['GzipContent']
 };
