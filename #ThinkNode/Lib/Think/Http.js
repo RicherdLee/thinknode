@@ -157,7 +157,7 @@ var Http = module.exports = Class(function(){
       var self = this;
       var filename = this.req.headers[C('post_ajax_filename_header')];
       var deferred = getDefer();
-      var filepath = C('post_file_upload_path') || (os.tmpdir() + '/thinkjs_upload');
+      var filepath = C('post_file_upload_path') || (THINK.RUNTIME_PATH + '/Temp');
       var name = crypto.randomBytes(20).toString('base64').replace(/\+/g, '_').replace(/\//g, '_');
       mkdir(filepath);
       filepath += '/' + name + path.extname(filename);

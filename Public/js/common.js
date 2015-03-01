@@ -153,8 +153,8 @@
     }
 
     //文件上传控件
-    if($(".J_file_input").length){
-        $(".J_file_input").ace_file_input({
+    if($(".J_upload_input").length){
+        $(".J_upload_input").ace_file_input({
             style:'well',
             btn_choose:'Drop files here or click to choose',
             btn_change:null,
@@ -186,7 +186,7 @@
         var before_change;
         var btn_choose;
         var no_icon;
-        $(".J_file_input").each(function (s,element) {
+        $(".J_upload_input").each(function (s,element) {
             if($(element).attr("file_type") == "img"){
                 btn_choose = "拖动图片到此或点击选择";
                 no_icon = "icon-picture";
@@ -220,6 +220,11 @@
             $(element).ace_file_input('update_settings', {'before_change':before_change, 'btn_choose': btn_choose, 'no_icon':no_icon});
             $(element).ace_file_input('reset_input');
         });
+    }
+
+    //文件上传输入框
+    if($(".J_file_input").length){
+
     }
 
 
@@ -358,7 +363,7 @@
             head.use('artDialog',function(){
                 art.dialog.close();
             });
-        };
+        }
     });
 
     //所有的删除操作，删除数据后刷新页面

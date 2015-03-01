@@ -411,6 +411,6 @@ global.arrToObj = function(arr, key, valueKey){
         }else{
             result[keyValue] = item;
         }
-    });ƒ
+    });
     return valueKey === null ? arrResult : result;
 };
