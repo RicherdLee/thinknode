@@ -37,7 +37,7 @@ App.getBaseController = function(http, options, checkAction, ignoreCall){
     if (isFunction(instance[action + C('action_suffix')])) {
         return instance;
     }
-    if (!ignoreCall && isFunction(instance[C('call_method')])) {
+    if (!ignoreCall && isFunction(instance[C('empty_method')])) {
         return instance;
     }
 };
@@ -50,7 +50,7 @@ App.execAction = function(controller, action, data, callMethod){
     'use strict';
     //action操作
     var act = action + C('action_suffix');
-    var call = C('call_method');
+    var call = C('empty_method');
     var flag = false;
     if (callMethod && !isFunction(controller[act])) {
         if (call && isFunction(controller[call])) {

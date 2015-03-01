@@ -80,7 +80,7 @@ var Http = module.exports = Class(function(){
     _filePost: function(){
       var deferred = getDefer();
       var self = this;
-      var uploadDir = C('post_file_upload_path');
+      var uploadDir = C('post_file_temp_path');
       if (uploadDir) {
         mkdir(uploadDir);
       }
@@ -157,7 +157,7 @@ var Http = module.exports = Class(function(){
       var self = this;
       var filename = this.req.headers[C('post_ajax_filename_header')];
       var deferred = getDefer();
-      var filepath = C('post_file_upload_path') || (THINK.RUNTIME_PATH + '/Temp');
+      var filepath = C('post_file_temp_path') || (THINK.RUNTIME_PATH + '/Temp');
       var name = crypto.randomBytes(20).toString('base64').replace(/\+/g, '_').replace(/\//g, '_');
       mkdir(filepath);
       filepath += '/' + name + path.extname(filename);
@@ -374,7 +374,7 @@ var Http = module.exports = Class(function(){
           this.sendCookie();
           this.res.end();
           this.emit('afterEnd', this);
-          if (C('post_file_autoremove') && !isEmpty(this.file)) {
+          if (C('post_file_temp_autoremove') && !isEmpty(this.file)) {
             var key, path;
             for(key in this.file){
               path = this.file[key].path;

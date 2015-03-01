@@ -23,8 +23,8 @@ module.exports = {
     post_max_fields: 100, //最大表单数，默认为100
     post_max_fields_size: 2 * 1024 * 1024, //单个表单长度最大值，默认为2MB
     post_ajax_filename_header: 'x-filename', //通过ajax上传文件时文件名对应的header，如果有这个header表示是文件上传
-    post_file_upload_path: THINK.RUNTIME_PATH + '/Temp', //文件上传的临时目录
-    post_file_autoremove: true, //请求完成时，自动删除未处理的上传缓存文件
+    post_file_temp_path: THINK.RUNTIME_PATH + '/Temp', //文件上传的临时目录
+    post_file_temp_autoremove: true, //请求完成时，自动删除未处理的上传缓存文件
     post_file_save_path: THINK.ROOT_PATH + '/Public/uploads/',//上传文件保存目录
     post_file_save_url: '/Public/uploads/',//上传文件目录访问URL
 
@@ -33,8 +33,7 @@ module.exports = {
     default_group: 'Home', //默认分组
     default_controller: 'Index', //默认模块
     default_action: 'index',  //默认Action
-    call_controller: 'Home:Index:_404', //controller不存在时执行方法，此配置表示调用Home分组下IndexController的_404Action方法
-    call_method: '_empty', //当找不到方法时调用此方法，这个方法存在时才有效
+    empty_method: '_empty', //当找不到方法时调用此方法，这个方法存在时才有效
     before_action: '_before_', //调用一个action前调用的方法，会将action名传递进去
     after_action: '_after_', //调用一个action之后调用的方法，会将action名传递进去
     url_params_bind: true, //方法参数绑定,将URL参数值绑定到action的参数上
@@ -42,14 +41,12 @@ module.exports = {
     url_callback_name: 'callback', //jsonp格式的callback名字
     json_content_type: 'application/json', //发送json时的content-type
     auto_send_content_type: true, //是否自动发送Content-Type,默认值为`tpl_content_type`配置值
+
     log_process_pid: true, //记录进程的id,方便其他脚本处理。
     use_cluster: false, //是否使用cluster，默认不使用，0：为cpu的数量，可以自定义值
     autoload_path: {}, //autoload查找的path，用于thinkRequire加载自定义库的时候查找
 
     restful_group: 'Restful', //RESTFUL API默认分组
-
-    load_ext_config: [], //加载额外的配置文件 CONF_PATH
-    load_ext_file: [], //加载额外的文件 COMMON_PATH
 
     use_websocket: false, //是否使用websocket
     websocket_allow_origin: '', //允许从那里发送过来的websocket，可以是字符串、数组、回调函数，为空表示不检测
