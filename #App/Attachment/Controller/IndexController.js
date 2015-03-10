@@ -34,6 +34,10 @@ module.exports = Controller("AppFrameController", function(){
           }else{
               this.display();
           }
+      },
+
+      publicCheckUploadAction: function(){
+          this.json({"status":true,"info":""});
       }
   };
 });

@@ -34,19 +34,35 @@
                         <h4 class="header blue bolder smaller">基本信息</h4>
 
                         <div class="row-fluid">
-                            <div class="control-group">
-                                <label class="control-label" for="form-field-username">用户名</label>
-
-                                <div class="controls">
-                                    <input type="text" id="form-field-username" readonly name="username" placeholder="Username"
-                                           value="<%=userinfo.username%>"/>
+                            <div class="span4">
+                                <%if(userinfo.icon){%>
+                                <span class="profile-picture"><img id="user_icon" name="icon" onerror="this.onerror=null; this.src='/Public/avatars/profile-pic.jpg'" src="<%=userinfo.icon%>" alt="user_icon"/></span>
+                                <%}else{%>
+                                <div style="text-align: center;">
+                                    <a onclick="doUpload('thumb', '图片上传','imgPreview');return false;" href="javascript:void(0);">
+                                        <img style="cursor:hand" id="thumb" src="/Public/img/upload-pic.png">
+                                    </a><br />
+                                    <input type="button" class="btn btn-mini" value="图片裁剪" onclick="blcrop_cut_img($('#thumb').val(),'thumb','thumb_preview','contents');return false;" />
+                                    <input type="button" class="btn btn-mini" value="取消图片" onclick="$('#thumb_preview').attr('src','/Public/img/upload-pic.png');$('#thumb').val('');return false;">
                                 </div>
+                                <%}%>
                             </div>
 
-                            <div class="control-group">
-                                <label class="control-label" for="form-field-name">姓名</label>
-                                <div class="controls">
-                                    <input type="text" id="form-field-name" name="nickname" value="<%=userinfo.nickname%>"/>
+                            <div class="span8">
+                                <div class="control-group">
+                                    <label class="control-label" for="form-field-username">用户名</label>
+
+                                    <div class="controls">
+                                        <input type="text" id="form-field-username" readonly name="username" placeholder="Username"
+                                               value="<%=userinfo.username%>"/>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="form-field-name">姓名</label>
+                                    <div class="controls">
+                                        <input type="text" id="form-field-name" name="nickname" value="<%=userinfo.nickname%>"/>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -161,7 +161,7 @@
             no_icon:'icon-cloud-upload',
             droppable:true,
             thumbnail:'small'
-            //,icon_remove:null//set null, to hide remove/reset button
+            ,icon_remove:null//set null, to hide remove/reset button
             /**,before_change:function(files, dropped) {
 						//Check an example below
 						//or examples/file-upload.html
@@ -180,9 +180,9 @@
                 alert(error_code);
             }
 
-        }).on('change', function(){
-            //console.log($(this).data('ace_input_files'));
-        });
+        });//.on('change', function(){
+        //    //console.log($(this).data('ace_input_files'));
+        //});
         var before_change;
         var btn_choose;
         var no_icon;
@@ -221,12 +221,6 @@
             $(element).ace_file_input('reset_input');
         });
     }
-
-    //文件上传输入框
-    if($(".J_file_input").length){
-
-    }
-
 
     /*****************************ajaxForm************************************/
     //ajax form提交
@@ -313,13 +307,13 @@
                 var $_this = this,
                     _this = $($_this);
 
-                art.dialog.open($(this).prop('href'), {
+                art.dialog.open($(this).attr('href'), {
                     //close: function () {
                     //    $_this.focus(); //关闭时让触发弹窗的元素获取焦点
                     //    return true;
                     //},
-                    id: $(this).prop('href')+"",
-                    title: _this.prop('title'),
+                    id: $(this).attr('href')+"",
+                    title: _this.attr('title'),
                     resize: true,
                     top: '0%',
                     width: '60%',
@@ -337,13 +331,12 @@
                 e.preventDefault();
                 var $_this = this,
                     _this = $($_this);
-
-                art.dialog.open($(this).data('action'),{
+                art.dialog.open($(this).attr('data-action'),{
                     //close: function(){
                     //    $_this.focus();
                     //    return true;
                     //},
-                    id: $(this).prop('action')+"",
+                    id: $(this).attr('data-action')+"",
                     title: _this.text(),
                     resize: true,
                     top: '0%',
@@ -374,7 +367,7 @@
                 e.preventDefault();
                 var $_this = this,
                     $this = $($_this),
-                    href = $this.prop('href'),
+                    href = $this.attr('href'),
                     msg = $this.data('msg');
                 art.dialog({
                     title: false,
@@ -554,5 +547,69 @@
             return v.toString(16);
         });
     }
+
 })();
 
+//提示框 alert
+function isAlert(content,icon){
+    if(content == ''){
+        return;
+    }
+    icon = icon|| "error";
+    head.use("artDialog",function(){
+        head.css('/Public/js/artDialog/skins/default.css');
+        art.dialog({
+            id:icon,
+            icon: icon,
+            fixed: true,
+            lock: true,
+            opacity:0,
+            content: content,
+            cancelVal: '确定',
+            cancel: true
+        });
+    });
+}
+/**
+ * 文件上传
+ * @param obj       上传完成后表单赋值对象
+ * @param title     上传窗口标题
+ * @param callback  回调函数
+ */
+function doUpload(obj,title,callback){
+    // 前置检查
+    $.ajax({
+        type : "POST",
+        url : '/Attachment/Index/publicCheckUpload/',
+        dataType : "json",
+        async : false,
+        success : function(json) {
+            if(json.status == true){
+                head.use("artDialog", function() {
+                    head.css('/Public/js/artDialog/skins/default.css');
+                    art.dialog.open('/Attachment/Index/publicDoUpload',{
+                        id : obj,
+                        title : title,
+                        width : '350px',
+                        height : '420px',
+                        lock : true,
+                        fixed : true,
+                        ok : function() {
+                            var d = this.iframe.contentWindow;
+                            $("#"+obj).attr("src","/Public/img/loading.gif");
+                            $.post
+                            //d.$("#file_upload_form").append('<img src="/Public/img/loading.gif">');
+                            //if (callback) {
+                            //    callback.apply(this, [ this, obj ]);
+                            //}
+                        },
+                        cancel : true
+                    });
+                });
+            }else{
+                isAlert(json.info || '没有上传权限');
+                return false;
+            }
+        }
+    });
+}

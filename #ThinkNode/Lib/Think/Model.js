@@ -330,7 +330,6 @@ var Model = module.exports = Class(function () {
              ];*/
             try {
                 if (!isEmpty(this._validate)) {
-                    var Valid = thinkRequire('Valid');
                     var promises = this._validate.map(function (validate) {
                         if (isEmpty(validate.name)) {
                             return getPromise(true);

@@ -59,17 +59,14 @@ module.exports = {
 			Cache: THINK.CORE_PATH + '/Cache.js',
 			Db: THINK.CORE_PATH + '/Db.js',
 			Dispatcher: THINK.CORE_PATH + '/Dispatcher.js',
-			//Filter: THINK.THINK_PATH + 'Lib/Util/Filter.js',
 			HHttp: THINK.CORE_PATH + '/Http.js',
 			Log: THINK.CORE_PATH + '/Log.js',
 			Model: THINK.CORE_PATH + '/Model.js',
 			Session: THINK.CORE_PATH + '/Session.js',
 			Think: THINK.CORE_PATH + '/Think.js',
-			//Valid: THINK.THINK_PATH + 'Lib/Util/Valid.js',
 			View: THINK.CORE_PATH + '/View.js',
 			Cookie: THINK.CORE_PATH + '/Cookie.js',
-			WebSocket: THINK.CORE_PATH + '/WebSocket.js'//,
-			//Auth: THINK.THINK_PATH + 'Lib/Util/Auth.js'
+			WebSocket: THINK.CORE_PATH + '/WebSocket.js'
 		};
 		aliasImport(core);
 

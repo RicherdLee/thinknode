@@ -42,7 +42,6 @@ module.exports = Controller("AppFrameController", function(){
                                 return self.redirect("/Admin/Public/error/errmsg/没有权限");
                             }
                         }
-                        self.userInfo = user;
                         //将用户信息赋值到模版变量里，供模版里使用
                         self.assign("userInfo", user);
                     });

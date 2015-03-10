@@ -375,11 +375,11 @@ var Http = module.exports = Class(function(){
           this.res.end();
           this.emit('afterEnd', this);
           if (C('post_file_temp_autoremove') && !isEmpty(this.file)) {
-            var key, path;
+              var key, path, fn = function(){};
             for(key in this.file){
               path = this.file[key].path;
               if (isFile(path)) {
-                fs.unlink(path, function(){});
+                  fs.unlink(path, fn);
               }
             }
           }
@@ -438,4 +438,4 @@ Http.getDefaultHttp = function(data){
 Http.empty = function(data){
   'use strict';
   return data;
-}
+};
