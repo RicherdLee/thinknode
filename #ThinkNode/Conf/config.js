@@ -24,6 +24,7 @@ module.exports = {
     post_max_fields_size: 2 * 1024 * 1024, //单个表单长度最大值，默认为2MB
     post_ajax_filename_header: 'x-filename', //通过ajax上传文件时文件名对应的header，如果有这个header表示是文件上传
     post_file_temp_path: THINK.RUNTIME_PATH + '/Temp', //文件上传的临时目录
+    post_file_allow_type:'jpg|jpeg|png|bmp|gif|zip|rar|ipa|apk',//允许上传的文件类型
     post_file_temp_autoremove: true, //请求完成时，自动删除未处理的上传缓存文件
     post_file_save_path: THINK.ROOT_PATH + '/Public/uploads/',//上传文件保存目录
     post_file_save_url: '/Public/uploads/',//上传文件目录访问URL

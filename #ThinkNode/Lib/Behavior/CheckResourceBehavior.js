@@ -14,7 +14,7 @@ module.exports = Behavior(function () {
         },
         run: function () {
             var reg = C('url_resource_reg');
-            if (!reg || !this.options.url_resource_on || !this.http.pathname) {
+            if (!this.options.url_resource_on || !reg || !this.http.pathname) {
                 return false;
             }
             var pathname = this.http.pathname;
@@ -26,7 +26,7 @@ module.exports = Behavior(function () {
                 return false;
             }
             pathname = path.normalize(pathname);
-            var file = THINK.ROOT_PATH + '/' + pathname;
+            var file = THINK.ROOT_PATH + '/' + decodeURI(pathname);
             //正则判断是否文件
             var urlReg= new RegExp(/[^\/]+\/([^\.]*)\/([^\/]+\.[^\/\.]+)$/);
             var flag = !!file.match(urlReg);

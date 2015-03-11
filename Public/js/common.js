@@ -152,6 +152,36 @@
         });
     }
 
+    //图片上传(带预览)表单元素
+    if($("input.J_upload_preview").length){
+        if(typeof($("input.J_upload_preview").attr("id")) !== undefined){
+            var _id = $("input.J_upload_preview").attr("id");
+            $("input.J_upload_preview").after('<div style="text-align: center;">'
+            +'<a onclick="doUpload(\''+_id+'\', \'图片上传\',imgPreview,1);return false;" href="javascript:void(0);">'
+            +'<img style="cursor:hand" id="'+_id+'_preview" src="/Public/img/upload-pic.png">'
+            +'</a><br />'
+            //+'<button class="btn btn-info btn-mini" onclick="imgCrop($(\'#'+_id+'\').val(),\''+_id+'\',imgPreview);return false;" >图片裁剪</button>'
+            +'<button class="btn btn-info btn-mini" onclick="doUpload(\''+_id+'\', \'图片上传\',imgPreview,1);return false;return false;" >图片上传</button>'
+            +'<button class="btn btn-mini" onclick="$(\'#'+_id+'_preview\').attr(\'src\',\'/Public/img/upload-pic.png\');$(\'#'+_id+'\').val(\'\');return false;">取消图片</button>'
+            +'</div>');
+            if($("#"+_id).val()){
+                $("#"+_id+"_preview").attr("src",$("#"+_id).val());
+            }
+        }
+    }
+
+    //文件上传(输入框不带预览)表单元素
+    if($("input.J_upload_text").length){
+        if(typeof($("input.J_upload_text").attr("id")) !== undefined){
+            var _id = $("input.J_upload_text").attr("id");
+            $("input.J_upload_text").after(
+                '<button class="btn btn-info btn-mini" onclick="doUpload(\''+_id+'\',\'上传\',upInput,2);return false;" >上传</button>'
+                +'<button class="btn btn-mini" onclick="$(\'#'+_id+'_preview\').attr(\'src\',\'/Public/img/upload-pic.png\');$(\'#'+_id+'\').val(\'\');return false;">取消</button>'
+            );
+        }
+    }
+
+
     //文件上传控件
     if($(".J_upload_input").length){
         $(".J_upload_input").ace_file_input({
@@ -180,45 +210,72 @@
                 alert(error_code);
             }
 
-        });//.on('change', function(){
-        //    //console.log($(this).data('ace_input_files'));
-        //});
+        });
         var before_change;
         var btn_choose;
         var no_icon;
         $(".J_upload_input").each(function (s,element) {
-            if($(element).attr("file_type") == "img"){
+            if($(element).attr("data_type") == "1"){
                 btn_choose = "拖动图片到此或点击选择";
                 no_icon = "icon-picture";
-                before_change = function(files, dropped) {
-                    var allowed_files = [];
-                    for(var i = 0 ; i < files.length; i++) {
-                        var file = files[i];
-                        if(typeof file === "string") {
-                            //IE8 and browsers that don't support File Object
-                            if(! (/\.(jpe?g|png|gif|bmp)$/i).test(file) ) return false;
-                        }else{
-                            var type = $.trim(file.type);
-                            if( ( type.length > 0 && ! (/^image\/(jpe?g|png|gif|bmp)$/i).test(type) )
-                                || ( type.length == 0 && ! (/\.(jpe?g|png|gif|bmp)$/i).test(file.name) )//for android's default browser which gives an empty string for file.type
-                            ) continue;//not an image so don't keep this file
-                        }
-
-                        allowed_files.push(file);
-                    }
-                    if(allowed_files.length == 0) return false;
-
-                    return allowed_files;
-                }
             }else{
                 btn_choose = "拖动文件到此或点击选择";
                 no_icon = "icon-cloud-upload";
-                before_change = function(files, dropped) {
-                    return files;
-                }
             }
+            before_change = function(files, dropped) {
+                var allowed_files = [];
+                var allowed_type = $(element).attr("file_type");
+                var re = new RegExp("\\.?(" + allowed_type + ")$","i");
+                for(var i = 0 ; i < files.length; i++) {
+                    var file = files[i];
+                    if(typeof file === "string") {
+                        //IE8 and browsers that don't support File Object
+                        if(! re.test(file) ) return false;
+                    }else{
+                        var type = $.trim(file.type);
+                        var _type = type.split("/");
+                        if( ( type.length > 0 && ! re.test(_type[1]) )
+                            || ( type.length == 0 && ! re.test(file.name) )//for android's default browser which gives an empty string for file.type
+                        ) continue;//not an image so don't keep this file
+                    }
+                    allowed_files.push(file);
+                }
+                if(allowed_files.length == 0) return false;
+
+                return allowed_files;
+            };
             $(element).ace_file_input('update_settings', {'before_change':before_change, 'btn_choose': btn_choose, 'no_icon':no_icon});
             $(element).ace_file_input('reset_input');
+            $(element).ace_file_input().on('change', function(){
+                //    //console.log($(this).data('ace_input_files'));
+                var obj = $(this);
+                var _span = obj.next().find("span").eq(0);
+                head.use('ajaxForm', function () {
+                    var form = $("#file_upload_form");
+                    if(obj.val()){
+                        form.ajaxSubmit({
+                            url: form.attr('action') || "/Attachment/Index/publicDoUpload",
+                            dataType: 'json',
+                            beforeSubmit: function (arr, $form, options) {
+                                _span.attr("data-title","上传中...");
+                            },
+                            success: function (result) {
+                                if(result.status == true){
+                                    obj.attr("readonly",true);
+                                    _span.attr("data-title",result.info);
+                                    $("#file_url").val(result.info);
+                                    return;
+                                }else{
+                                    _span.attr("data-title",result.info);
+                                    return false;
+                                }
+                            }
+                        });
+                    }else{
+                        return false;
+                    }
+                });
+            });
         });
     }
 
@@ -575,8 +632,9 @@ function isAlert(content,icon){
  * @param obj       上传完成后表单赋值对象
  * @param title     上传窗口标题
  * @param callback  回调函数
+ * @param type      上传类别
  */
-function doUpload(obj,title,callback){
+function doUpload(obj,title,callback,type){
     // 前置检查
     $.ajax({
         type : "POST",
@@ -587,21 +645,17 @@ function doUpload(obj,title,callback){
             if(json.status == true){
                 head.use("artDialog", function() {
                     head.css('/Public/js/artDialog/skins/default.css');
-                    art.dialog.open('/Attachment/Index/publicDoUpload',{
+                    art.dialog.open('/Attachment/Index/publicDoUpload/type/'+type,{
                         id : obj,
                         title : title,
-                        width : '350px',
-                        height : '420px',
+                        width : '600px',
+                        height : '400px',
                         lock : true,
                         fixed : true,
                         ok : function() {
-                            var d = this.iframe.contentWindow;
-                            $("#"+obj).attr("src","/Public/img/loading.gif");
-                            $.post
-                            //d.$("#file_upload_form").append('<img src="/Public/img/loading.gif">');
-                            //if (callback) {
-                            //    callback.apply(this, [ this, obj ]);
-                            //}
+                            if (callback) {
+                                callback.apply(this, [ this, obj ]);
+                            }
                         },
                         cancel : true
                     });
@@ -612,4 +666,79 @@ function doUpload(obj,title,callback){
             }
         }
     });
+}
+
+// 验证地址是否为图片
+function isImg(url) {
+    var sTemp;
+    var b = false;
+    var opt = "jpg|gif|png|bmp|jpeg";
+    var s = opt.toUpperCase().split("|");
+    for (var i = 0; i < s.length; i++) {
+        sTemp = url.substr(url.length - s[i].length - 1);
+        sTemp = sTemp.toUpperCase();
+        s[i] = "." + s[i];
+        if (s[i] == sTemp) {
+            b = true;
+            break;
+        }
+    }
+    return b;
+}
+//检查URL录入的文件是否有效
+function isAllowdFile(allow,url){
+    var sTemp;
+    var b = false;
+    var s = allow.toUpperCase().split("|");
+    for (var i = 0; i < s.length; i++) {
+        sTemp = url.substr(url.length - s[i].length - 1);
+        sTemp = sTemp.toUpperCase();
+        s[i] = "." + s[i];
+        if (s[i] == sTemp) {
+            b = true;
+            break;
+        }
+    }
+    return b;
+}
+//带预览的图片上传回调
+function imgPreview(uploadid, returnid){
+    // 取得iframe对象
+    var d = uploadid.iframe.contentWindow;
+    // 取得选择的图片
+    var in_content = d.$("#file_url").val();
+
+    if (in_content == ''){
+        return false;
+    }
+    if (!isImg(in_content)) {
+        isAlert('选择的类型必须为图片类型！');
+        return false;
+    }
+    if ($('#' + returnid + '_preview').attr('src')) {
+        $('#' + returnid + '_preview').attr('src', in_content);
+    }
+    $('#' + returnid).val(in_content);
+}
+//文本输入框上传回调
+function upInput(uploadid, returnid){
+    // 取得iframe对象
+    var d = uploadid.iframe.contentWindow;
+    // 取得选择的图片
+    var in_content = d.$("#file_url").val();
+
+    if (in_content == ''){
+        return false;
+    }
+    $('#' + returnid).val(in_content);
+}
+
+/**
+ * 图片裁切
+ * @param value
+ * @param obj
+ * @param callback
+ */
+function imgCrop(value,obj,callback){
+    return false;
 }

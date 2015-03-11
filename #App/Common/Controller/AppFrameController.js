@@ -23,7 +23,7 @@ module.exports = Controller(function(){
         },
 
         _empty: function(){
-            //this.redirect("/");
+            this.redirect("/");
         }
     };
 });
