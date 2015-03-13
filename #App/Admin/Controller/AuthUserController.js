@@ -35,16 +35,25 @@ module.exports = Controller("AdminBaseController", function () {
         },
 
         _before_addAction: function () {
-            var self = this;
-            return M("AuthRole").where({status:1}).select().then(function (data) {
-                self.assign("roles",data);
-            });
+            if(!this.isPost()){
+                var self = this;
+                return M("AuthRole").where({status:1}).select().then(function (data) {
+                    self.assign("roles",data);
+                });
+            }
         },
 
         _before_editAction: function () {
             var self = this;
-            return M("AuthRole").where({status:1}).select().then(function (data) {
-                self.assign("roles",data);
+            if(!this.isPost()){
+                return M("AuthRole").where({status:1}).select().then(function (data) {
+                    self.assign("roles",data);
+                });
+            }else{
+                if(I("id",this) == 1){
+                    //跳转到错误页
+                    return self.error("此超级管理员不允许编辑");
+                }
                 if(isEmpty(self.post("password")) && isEmpty(self.post("repassword"))){
                     delete self.http.post.password;
                     delete self.http.post.repassword;
@@ -53,13 +62,12 @@ module.exports = Controller("AdminBaseController", function () {
                         return self.error("两次输入的密码不一致");
                     }
                 }
-
-            });
+            }
         },
 
         _before_delAction: function(){
             if(I("id",this) == 1){
-                return this.error("超级管理员不允许删除");
+                return this.error("此超级管理员不允许删除");
             }
         },
 

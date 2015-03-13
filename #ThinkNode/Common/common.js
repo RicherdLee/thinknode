@@ -244,6 +244,36 @@ global.mkdir = function(p, mode){
     }
     return true;
 };
+
+/**
+ * 读取文件
+ * @param filename 文件物理路径
+ * @param enc      为空返回Buffer类型,'utf8'返回String类型
+ * @returns {Promise}
+ */
+global.mReadFile = function(filename, enc){
+    return new Promise(function (fulfill, reject){
+        fs.readFile(filename, enc, function (err, res){
+            if (err) reject(err);
+            else fulfill(res);
+        });
+    });
+};
+/**
+ * 写入文件
+ * @param filename 文件物理路径
+ * @param data     Buffer数据
+ * @returns {Promise}
+ */
+global.mWriteFile = function (filename, data) {
+    return new Promise(function (fulfill, reject) {
+        fs.writeFile(filename, data, function (err, res) {
+            if (err) reject(err);
+            else fulfill(res);
+        })
+    });
+};
+
 /**
  * 递归的删除目录，返回promise
  * @param  string p       要删除的目录

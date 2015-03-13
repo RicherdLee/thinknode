@@ -19,7 +19,7 @@ module.exports = {
     filter_data: true, //主要是安全过滤，强烈建议开启
 
     post_json_content_type: ['application/json'], //post数据为json时的content-type
-    post_max_file_size: 1024 * 1024 * 1024, //上传文件大小限制，默认1G
+    post_max_file_size: 300 * 1024 * 1024, //上传文件大小限制，默认300M
     post_max_fields: 100, //最大表单数，默认为100
     post_max_fields_size: 2 * 1024 * 1024, //单个表单长度最大值，默认为2MB
     post_ajax_filename_header: 'x-filename', //通过ajax上传文件时文件名对应的header，如果有这个header表示是文件上传

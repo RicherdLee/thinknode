@@ -9,35 +9,18 @@ module.exports = Controller("AppFrameController", function(){
           this.super_("init", http);
           //this.Model = D("Attachment");
       },
-
-      publicDoUploadAction: function () {
-          var allowUploadType = C("post_file_allow_type");
+      //上传文件
+      doUploadAction: function () {
+          var self = this;
           if(this.isPost()){
               //获取上传的图片文件
-              var self = this;
               var vBImg = this.file('file_upload');
-              var fs = require('fs');
-              //读取文件
-              fs.readFile(vBImg.path, function(err, data) {
-                  if (err) {
-                      console.log('There was an error when reading file');
-                  } else {
-                      //写入文件到uplaod
-                      var filepath = C("post_file_save_path") + vBImg.originalFilename;
-                      var fileurl = C('post_file_save_url') + vBImg.originalFilename;
-                      fs.writeFile(filepath, data, function(err) {
-                          if (err) {
-                              console.log('There was an error when write file');
-                              return self.json({"status":false,"info":"There was an error when write file"});
-                          } else {
-                              console.log('saved');
-                              return self.json({"status":true,"info":fileurl});
-                          }
-                      });
-                  }
+              return X("Attachment/Attachment").upload(vBImg).then(function (data) {
+                  return self.json(data);
               });
           }else{
               var type = this.get("type") || 1;
+              var allowUploadType = C("post_file_allow_type");
               if(type == 1){
                   allowUploadType = "jpg|jpeg|png|bmp|gif";
               }
@@ -46,9 +29,26 @@ module.exports = Controller("AppFrameController", function(){
               this.display();
           }
       },
-
+      //上传前置检查
       publicCheckUploadAction: function(){
-          this.json({"status":true,"info":""});
+          var self = this;
+          //判断用户是否登录
+          return this.session("userInfo").then(function(user) {
+              if (isEmpty(user)) {
+                  self.json({"status":false,"info":"用户未登录，不能访问"});
+              } else {
+                  //检查用户权限
+                  ///
+
+
+                  self.json({"status":true,"info":""});
+              }
+          });
+      },
+
+      albumAction: function(){
+          var self = this;
+          this.display();
       }
   };
 });

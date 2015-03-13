@@ -37,16 +37,20 @@ module.exports = Controller("AdminBaseController",function(){
 
         _before_addAction: function () {
             var self = this;
-            return this.Model.where({level:['<',4]}).select().then(function (data) {
-                self.assign("parents",data);
-            });
+            if(!this.isPost()){
+                return this.Model.where({level:['<',4]}).select().then(function (data) {
+                    self.assign("parents",data);
+                });
+            }
         },
 
         _before_editAction: function(){
             var self = this;
-            return this.Model.where({level:['<',4]}).select().then(function (data) {
-                self.assign("parents",data);
-            });
+            if(!this.isPost()){
+                return this.Model.where({level:['<',4]}).select().then(function (data) {
+                    self.assign("parents",data);
+                });
+            }
         },
 
         _before_viewAction: function(){

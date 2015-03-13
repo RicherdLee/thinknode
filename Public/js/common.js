@@ -158,7 +158,7 @@
             var _id = $("input.J_upload_preview").attr("id");
             $("input.J_upload_preview").after('<div style="text-align: center;">'
             +'<a onclick="doUpload(\''+_id+'\', \'图片上传\',imgPreview,1);return false;" href="javascript:void(0);">'
-            +'<img style="cursor:hand" id="'+_id+'_preview" src="/Public/img/upload-pic.png">'
+            +'<img class="profile-picture" style="cursor:hand" id="'+_id+'_preview" src="/Public/img/upload-pic.png" />'
             +'</a><br />'
             //+'<button class="btn btn-info btn-mini" onclick="imgCrop($(\'#'+_id+'\').val(),\''+_id+'\',imgPreview);return false;" >图片裁剪</button>'
             +'<button class="btn btn-info btn-mini" onclick="doUpload(\''+_id+'\', \'图片上传\',imgPreview,1);return false;return false;" >图片上传</button>'
@@ -207,7 +207,16 @@
                 //1 = 'FILE_LOAD_FAILED',
                 //2 = 'IMAGE_LOAD_FAILED',
                 //3 = 'THUMBNAIL_FAILED'
-                alert(error_code);
+                if(error_code == 1){
+                    isAlert("FILE_LOAD_FAILED");
+                }else if(error_code == 2){
+                    isAlert("IMAGE_LOAD_FAILED");
+                }else if(error_code == 3){
+                    isAlert("THUMBNAIL_FAILED");
+                }else{
+                    isAlert("FILE_LOAD_FAILED");
+                }
+                return false;
             }
 
         });
@@ -254,7 +263,7 @@
                     var form = $("#file_upload_form");
                     if(obj.val()){
                         form.ajaxSubmit({
-                            url: form.attr('action') || "/Attachment/Index/publicDoUpload",
+                            url: form.attr('action') || "/Attachment/Index/doUpload",
                             dataType: 'json',
                             beforeSubmit: function (arr, $form, options) {
                                 _span.attr("data-title","上传中...");
@@ -645,7 +654,7 @@ function doUpload(obj,title,callback,type){
             if(json.status == true){
                 head.use("artDialog", function() {
                     head.css('/Public/js/artDialog/skins/default.css');
-                    art.dialog.open('/Attachment/Index/publicDoUpload/type/'+type,{
+                    art.dialog.open('/Attachment/Index/doUpload/type/'+type,{
                         id : obj,
                         title : title,
                         width : '600px',

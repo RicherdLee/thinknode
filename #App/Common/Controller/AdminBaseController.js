@@ -46,6 +46,9 @@ module.exports = Controller("AppFrameController", function(){
                         self.assign("userInfo", user);
                     });
                 }
+            }).catch(function (e) {
+                //跳转到错误页
+                return self.redirect("/Admin/Public/error/errmsg/请重新登录再操作");
             });
             ////初始化配置
             //var Config = F("Config");

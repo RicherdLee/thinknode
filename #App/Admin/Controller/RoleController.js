@@ -31,17 +31,20 @@ module.exports = Controller("AdminBaseController", function () {
 
         _before_addAction: function(){
             var self = this;
-            return M("AuthRule").where({status:1,name:["!=",'']}).select().then(function (data) {
-                self.assign("rules",data);
-            });
-
+            if(!this.isPost()){
+                return M("AuthRule").where({status:1,name:["!=",'']}).select().then(function (data) {
+                    self.assign("rules",data);
+                });
+            }
         },
 
         _before_editAction: function () {
             var self = this;
-            return M("AuthRule").where({status:1,name:["!=",'']}).select().then(function (data) {
-                self.assign("rules",data);
-            });
+            if(!this.isPost()){
+                return M("AuthRule").where({status:1,name:["!=",'']}).select().then(function (data) {
+                    self.assign("rules",data);
+                });
+            }
         },
 
         _before_delAction: function(){
