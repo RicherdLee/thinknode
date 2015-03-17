@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 
 #Mysql数据库配置
 cp ./#App/Common/Conf/config.js ./#App/Common/Conf/config.js.bak
@@ -26,3 +26,4 @@ chown richen:docker /www/web/node
 docker restart nodejs
 
 rm -rf /www/web/node/*.sh
+
