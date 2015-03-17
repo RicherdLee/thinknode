@@ -238,8 +238,8 @@ function reChangeTab(key, targetKey) {
 }
 
 //动态调整TAB个数
-function resizeTabs(newWidth, flag) {
-    var prevTab, pKey, prevTabHtml, pTab, tabs, moreTabNum, pHtml, currentWidth;
+function resizeTabs(newWidth, newHeight, flag) {
+    var prevTab, pKey, moreTabNum, currentWidth;
     //当前所有TAB宽度和(包含此次事件新增Tab)
     var totalWidth = 0;
 
@@ -306,12 +306,13 @@ $(document).ready(function () {
     myTabWidth = $("#myTab").width();
     $(window).resize(function () {
         var newWidth = $("#myTab").width();
+        var newHeight = $("#myTab").height();
         if (newWidth > 0) {
             var flag = newWidth - myTabWidth;
             if (flag > 0) {
-                resizeTabs(newWidth, 1);
+                resizeTabs(newWidth, newHeight, 1);
             } else if (flag < 0) {
-                resizeTabs(newWidth, 2);
+                resizeTabs(newWidth, newHeight, 2);
             }
             myTabWidth = newWidth;
         }

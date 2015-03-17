@@ -81,7 +81,7 @@ var Http = module.exports = Class(function(){
       var deferred = getDefer();
       var self = this;
       var uploadDir = C('post_file_temp_path');
-      if (uploadDir) {
+      if (!isDir(uploadDir)) {
         mkdir(uploadDir);
       }
       var form = this.form = new multiparty.Form({
@@ -159,7 +159,9 @@ var Http = module.exports = Class(function(){
       var deferred = getDefer();
       var filepath = C('post_file_temp_path') || (THINK.RUNTIME_PATH + '/Temp');
       var name = crypto.randomBytes(20).toString('base64').replace(/\+/g, '_').replace(/\//g, '_');
-      mkdir(filepath);
+        if (!isDir(filepath)) {
+            mkdir(filepath);
+        }
       filepath += '/' + name + path.extname(filename);
       var stream = fs.createWriteStream(filepath);
       this.req.pipe(stream);
@@ -374,15 +376,6 @@ var Http = module.exports = Class(function(){
           this.sendCookie();
           this.res.end();
           this.emit('afterEnd', this);
-          if (C('post_file_temp_autoremove') && !isEmpty(this.file)) {
-              var key, path, fn = function(){};
-            for(key in this.file){
-              path = this.file[key].path;
-              if (isFile(path)) {
-                  fs.unlink(path, fn);
-              }
-            }
-          }
         }
       };
       extend(this.http, res);

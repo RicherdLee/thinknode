@@ -11,67 +11,48 @@
 <div class="page-content">
     <form id="main_form" class="J_ajaxForm" method="post">
         <div class="row-fluid">
-            <div class="widget-box">
-                <div class="widget-header">
-                    <h4></h4>
-
-                <span class="widget-toolbar">
-                    <a href="#" data-action="collapse">
-                        <i class="icon-chevron-up"></i>
-                    </a>
-                </span>
-                </div>
-
-                <div class="widget-body">
-                    <div class="widget-main">
-                        <div class="table-container">
-                            <table class="table table-striped table-bordered">
-                                <tr>
-                                    <td>用户名</td>
-                                    <td><input type="text" name="username" placeholder="用户名" value="<%=info.username%>" /></td>
-                                </tr>
-                                <tr>
-                                    <td>姓名</td>
-                                    <td><input type="text" name="nickname" placeholder="姓名" value="<%=info.nickname%>" /></td>
-                                </tr>
-                                <tr>
-                                    <td>Email</td>
-                                    <td><input type="email" name="email" placeholder="alexdoe@gmail.com" value="<%=info.email%>" />
-                                        <i class="icon-envelope"></i>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>密码</td>
-                                    <td><input type="password" name="password" value=""/>不修改则不填写</td>
-                                </tr>
-                                <tr>
-                                    <td>再次输入密码</td>
-                                    <td><input type="password" name="repassword"/>不修改则不填写</td>
-                                </tr>
-                                <tr>
-                                    <td>状态</td>
-                                    <td>
-                                        <input name="status" class="ace-switch ace-switch-3 J_switch" type="checkbox" <%if(info.status == 1){%>checked<%}%> />
-                                        <span class="lbl"></span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>所属角色</td>
-                                    <td>
-                                        <select name="role_id" class="J_select chzn-select" data-placeholder="请选择...">
-                                            <option value=""></option>
-                                            <%roles.forEach(function(v,k){%>
-                                            <option value="<%=v.id%>" <%if(info.role_id == v.id){%>selected<%}%>><%=v.desc%></option>
-                                            <%})%>
-                                        </select>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
+            <table class="table table-striped table-bordered">
+                <tr>
+                    <td>用户名</td>
+                    <td><input type="text" name="username" placeholder="用户名" value="<%=info.username%>" /></td>
+                </tr>
+                <tr>
+                    <td>姓名</td>
+                    <td><input type="text" name="nickname" placeholder="姓名" value="<%=info.nickname%>" /></td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td><input type="email" name="email" placeholder="alexdoe@gmail.com" value="<%=info.email%>" />
+                        <i class="icon-envelope"></i>
+                    </td>
+                </tr>
+                <tr>
+                    <td>密码</td>
+                    <td><input type="password" name="password" value=""/>不修改则不填写</td>
+                </tr>
+                <tr>
+                    <td>再次输入密码</td>
+                    <td><input type="password" name="repassword"/>不修改则不填写</td>
+                </tr>
+                <tr>
+                    <td>状态</td>
+                    <td>
+                        <input name="status" class="ace-switch ace-switch-3 J_switch" type="checkbox" <%if(info.status == 1){%>checked<%}%> />
+                        <span class="lbl"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>所属角色</td>
+                    <td>
+                        <select name="role_id" class="J_select chzn-select" data-placeholder="请选择...">
+                            <option value=""></option>
+                            <%roles.forEach(function(v,k){%>
+                            <option value="<%=v.id%>" <%if(info.role_id == v.id){%>selected<%}%>><%=v.desc%></option>
+                            <%})%>
+                        </select>
+                    </td>
+                </tr>
+            </table>
         </div>
         <div class="form-actions">
             <input name="id" type="hidden" value="<%=info.id%>"/>

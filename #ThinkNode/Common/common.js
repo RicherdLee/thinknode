@@ -273,6 +273,20 @@ global.mWriteFile = function (filename, data) {
         })
     });
 };
+/**
+ * 修改文件名，支持移动
+ * @param filename 原文件名
+ * @param sfilename 新文件名
+ * @returns {Promise}
+ */
+global.mReName = function(filename, nfilename){
+    return new Promise(function (fulfill, reject){
+        fs.rename(filename, nfilename, function (err, res){
+            if (err) reject(err);
+            else fulfill(res);
+        });
+    });
+};
 
 /**
  * 递归的删除目录，返回promise

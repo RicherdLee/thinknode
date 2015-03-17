@@ -36,14 +36,26 @@ module.exports = Class(function(){
                 //var ext = file.originalFilename.split(".");
                 var newFileName = md5(file.originalFilename + file.size) + "." + mimetype;
                 //读取文件
-                return Promise.all([self.getFilePath(),mReadFile(file.path)]).then(function (data) {
-                    filePath = C("post_file_save_path") + data[0] + newFileName;
-                    fileUrl = C('post_file_save_url') + data[0] + newFileName;
-                    return mWriteFile(filePath,data[1]);
+                //return Promise.all([self.getFilePath(),mReadFile(file.path)]).then(function (data) {
+                //    filePath = C("post_file_save_path") + data[0] + newFileName;
+                //    fileUrl = C('post_file_save_url') + data[0] + newFileName;
+                //    return mWriteFile(filePath,data[1]);
+                //}).then(function () {
+                //    return getPromise({"status":true,"info":fileUrl});
+                //}).catch(function (e) {
+                //    return getPromise({"status":false,"info":e});
+                //});
+
+                return self.getFilePath().then(function (path) {
+                    filePath = C("post_file_save_path") + path + newFileName;
+                    fileUrl = C('post_file_save_url') + path + newFileName;
+                    return mReName(file.path,filePath);
                 }).then(function () {
                     return getPromise({"status":true,"info":fileUrl});
                 }).catch(function (e) {
-                    return getPromise({"status":false,"info":e});
+                    var fs = require("fs");
+                    fs.unlink(file.path, fn);
+                    return getPromise({"status":false,"info": e.toString()});
                 });
             }else{
                 return getPromise({"status":false,"info":"获取文件错误"});
