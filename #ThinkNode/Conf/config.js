@@ -46,6 +46,7 @@ module.exports = {
     log_process_pid: true, //记录进程的id,方便其他脚本处理。
     use_cluster: false, //是否使用cluster，默认不使用，0：为cpu的数量，可以自定义值
     autoload_path: {}, //autoload查找的path，用于thinkRequire加载自定义库的时候查找
+    cli_timeout: 0, //命令行模式下，超时时间，0为不超时。单位为秒
 
     restful_group: 'Restful', //RESTFUL API默认分组
 

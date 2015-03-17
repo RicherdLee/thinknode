@@ -12,7 +12,7 @@ module.exports = Controller(function(){
       //资源id
       this.id = this.get('id') | 0;
       //实例化对应的模型
-      this.model = D(this.resource);
+      this.model = M(this.resource);
     },
     /**
      * 获取
@@ -95,8 +95,9 @@ module.exports = Controller(function(){
         return self.error(msg);
       });
     },
-    __call: function(action){
+
+    _empty: function(action){
       return this.error('action `' + action + '` is not allowed');
     }
   }
-})
+});

@@ -176,7 +176,7 @@
             var _id = $("input.J_upload_text").attr("id");
             $("input.J_upload_text").after(
                 '<button class="btn btn-info btn-mini" onclick="doUpload(\''+_id+'\',\'上传\',upInput,2);return false;" >上传</button>'
-                +'<button class="btn btn-mini" onclick="$(\'#'+_id+'_preview\').attr(\'src\',\'/Public/img/upload-pic.png\');$(\'#'+_id+'\').val(\'\');return false;">取消</button>'
+                +'<button class="btn btn-mini" onclick="$(\'#'+_id+'\').val(\'\');$(\'#'+_id+'\').val(\'\');return false;">取消</button>'
             );
         }
     }

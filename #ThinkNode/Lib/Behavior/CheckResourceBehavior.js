@@ -9,12 +9,9 @@ var zlib = require('zlib');
 module.exports = Behavior(function () {
     'use strict';
     return {
-        options: {
-            'url_resource_on': true
-        },
         run: function () {
             var reg = C('url_resource_reg');
-            if (!this.options.url_resource_on || !reg || !this.http.pathname) {
+            if (!reg || !this.http.pathname) {
                 return false;
             }
             var pathname = this.http.pathname;

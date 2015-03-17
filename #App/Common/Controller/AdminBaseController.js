@@ -21,17 +21,17 @@ module.exports = Controller("AppFrameController", function(){
         //初始化项目
         initSite: function () {
             var self = this;
-            //判断用户是否登录
-            return this.session("userInfo").then(function(user){
-                if(isEmpty(user)){
-                    //ajax访问返回一个json的错误信息
-                    if(self.isAjax()){
-                        return self.error("用户未登录，不能访问");
-                    }else{
-                        //跳转到登录页
-                        return self.redirect("/Admin/Public/login");
-                    }
-                }else{
+                    //判断用户是否登录
+                    return this.session("userInfo").then(function(user){
+                        if(isEmpty(user)){
+                            //ajax访问返回一个json的错误信息
+                            if(self.isAjax()){
+                                return self.error("用户未登录，不能访问");
+                            }else{
+                                //跳转到登录页
+                                return self.redirect("/Admin/Public/login");
+                            }
+                        }else{
                     return authCheck(self.http.group,self.http.controller,self.http.action,user,2,'or',self.http).then(function (check) {
                         if(check === false){
                             //ajax访问返回一个json的错误信息

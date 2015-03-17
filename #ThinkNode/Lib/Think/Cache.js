@@ -18,7 +18,7 @@ var gcTimer = {};
  */
 var gc = function(instance){
   'use strict';
-  if (THINK.APP_DEBUG || APP_MODE === 'cli' || gcTimer[instance.gcType]) {
+  if (THINK.APP_DEBUG || THINK.APP_MODE === 'cli' || gcTimer[instance.gcType]) {
     return;
   }
   gcTimer[instance.gcType] = setInterval(function(){
