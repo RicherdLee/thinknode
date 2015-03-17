@@ -8,6 +8,13 @@
 module.exports = Controller("Common/AdminBaseController", function () {
     "use strict";
     return {
+        init: function () {
+            this.super_("init", http);
+        },
+
+        indexAction: function () {
+            this.redirect('/Admin/Index/public_index');
+        },
 
         publicIndexAction: function () {
             var self = this;

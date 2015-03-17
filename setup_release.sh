@@ -21,7 +21,7 @@ rm -rf /www/web/node/#Runtime/Temp/*
 chmod -R 755 /www/web/node
 chmod -R 777 ./Public
 chmod -R 777 ./\#Runtime
-chown richen:docker /www/web/node
+chown -R richen:docker /www/web/node
 
 docker restart nodejs
 
