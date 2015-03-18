@@ -16,9 +16,9 @@ module.exports = Behavior(function(){
         if (content.indexOf(key) > -1) {
           return content.replace(key, token);
         }else if (content.indexOf('</form>') > -1) {
-          return content.replace('</form>', '<input type="hidden" name="' + name +'" value="' + token + '" /></form>');
+          return content.replace(/<\/form>/g, '<input type="hidden" name="' + name +'" value="' + token + '" /></form>');
         }else{
-          return content.replace('</head>', '<meta name="' + name + '" content="' + token + '" /></head>');
+          return content.replace(/<\/head>/g, '<meta name="' + name + '" content="' + token + '" /></head>');
         }
       })
     },
@@ -42,4 +42,4 @@ module.exports = Behavior(function(){
       })
     }
   }
-})
+});

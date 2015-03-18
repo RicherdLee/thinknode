@@ -98,7 +98,7 @@ module.exports = {
     tpl_engine_type: 'ejs', //模版引擎名称
     tpl_engine_config: {},
 
-    token_on: false, //是否开启token功能
+    token_on: true, //是否开启token功能
     token_name: 'token', //token name
     token_key: '{__TOKEN__}', //记录token在模版中的位置替换用。默认自动查找<form和</head>标签替换
 
@@ -119,7 +119,7 @@ module.exports = {
     html_cache_on: false, //HTML静态缓存
     html_cache_timeout: 3600, //缓存时间，单位为秒
     html_cache_rules: {}, //缓存规则
-    html_cache_path: THINK.CACHE_PATH + '/html',
+    html_cache_path: THINK.CACHE_PATH + '/Temp',
     html_cache_file_callback: undefined, //生成缓存文件的回调函数
     html_cache_file_suffix: '.html', //缓存文件后缀名
 

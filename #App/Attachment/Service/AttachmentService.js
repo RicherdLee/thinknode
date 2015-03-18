@@ -53,8 +53,12 @@ module.exports = Class(function(){
                 }).then(function () {
                     return getPromise({"status":true,"info":fileUrl});
                 }).catch(function (e) {
-                    var fs = require("fs");
-                    fs.unlink(file.path, fn);
+                    //删除未成功上传的临时文件
+                    try{
+                        var fs = require("fs");
+                        fs.unlink(file.path, fn);
+                    }catch (e){}
+
                     return getPromise({"status":false,"info": e.toString()});
                 });
             }else{

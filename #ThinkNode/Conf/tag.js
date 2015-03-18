@@ -67,7 +67,7 @@ module.exports = {
   //定位模版文件
   view_template: ['LocateTemplate'],
   //模版解析
-  view_parse: ['ParseTemplate'],
+  view_parse: ['ParseTemplate','Token'],
   //模版内容过滤
   view_filter: [],
   //模版解析结束

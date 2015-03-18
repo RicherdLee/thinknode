@@ -9,9 +9,12 @@ var zlib = require('zlib');
 module.exports = Behavior(function () {
     'use strict';
     return {
+        options: {
+            'url_resource_on': false
+        },
         run: function () {
-            var reg = C('url_resource_reg');
-            if (!reg || !this.http.pathname) {
+            var url_resource_on = C('url_resource_on');
+            if (!url_resource_on || !this.http.pathname) {
                 return false;
             }
             var pathname = this.http.pathname;
@@ -19,6 +22,7 @@ module.exports = Behavior(function () {
                 pathname = pathname.substr(1);
             }
             //通过正则判断是否是静态资源请求
+            var reg = C('url_resource_reg');
             if (!reg.test(pathname)) {
                 return false;
             }

@@ -38,8 +38,7 @@ module.exports = Controller("AppFrameController", function(){
                   self.json({"status":false,"info":"用户未登录，不能访问"});
               } else {
                   //检查用户权限
-                  ///
-
+                  //...
 
                   self.json({"status":true,"info":""});
               }

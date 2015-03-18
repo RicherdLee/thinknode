@@ -8,18 +8,18 @@ module.exports = Behavior(function () {
         run: function (content) {
             var self = this;
             var deferred = getDefer();
-            //            if (self.http.headers["accept-encoding"].indexOf("deflate") != -1) {
-            //                self.deflate(content, self.http, deferred);
-            //            } else if (self.http.headers["accept-encoding"].indexOf("gzip") != -1) {
-            //                self.gzip(content, self.http, deferred);
-            //            } else {
-            //                return content;
-            //            }
             if (self.http.headers["accept-encoding"].indexOf("gzip") != -1) {
                 self.gzip(content, self.http, deferred);
+            } else if (self.http.headers["accept-encoding"].indexOf("deflate") != -1) {
+                self.deflate(content, self.http, deferred);
             } else {
                 return content;
             }
+            //if (self.http.headers["accept-encoding"].indexOf("gzip") != -1) {
+            //    self.gzip(content, self.http, deferred);
+            //} else {
+            //    return content;
+            //}
             return deferred.promise;
         },
         gzip: function (content, http, deferred) { //检测是否是手机访问
