@@ -18,10 +18,6 @@ module.exports = Controller(function(){
         // index列表分页查询SQL数组参数
         Mo:{sortasc:'',sortby:'',field:'*',ispage:true,pagesize:10},
 
-        init: function(http){
-            this.super("init", http);
-        },
-
         _empty: function(){
             this.redirect("/");
         }

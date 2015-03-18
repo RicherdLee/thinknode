@@ -73,20 +73,26 @@ module.exports = Controller("AppFrameController", function(){
                     return self.error(e.toString());
                 });
             }
-            this.end("未定义Model");
+            this.end();
         },
 
         addAction: function(){
             var self = this;
             if(this.isPost()){
                 if(!isEmpty(this.Model)){
+                    //表单令牌验证
+                    if(C('token_on')){
+                        if(this.token(this.post(C('token_name')))){
+                            return this.error("表单令牌失效");
+                        }
+                    }
                     return this.Model.add(I('',this,'post')).then(function (data) {
                         return self.success("操作成功");
                     }).catch(function (e) {
                         return self.error(e.toString());
                     });
                 }
-                this.end("未定义Model");
+                this.end();
             }else{
                 this.display();
             }
@@ -97,6 +103,12 @@ module.exports = Controller("AppFrameController", function(){
             var id = I("id",this);
             if(!isEmpty(this.Model)){
                 if(this.isPost()){
+                    //表单令牌验证
+                    if(C('token_on')){
+                        if(this.token(this.post(C('token_name')))){
+                            return this.error("表单令牌失效");
+                        }
+                    }
                     return this.Model.update(I('',this,'post')).then(function (data) {
                         return self.success("操作成功");
                     }).catch(function (e) {
@@ -111,7 +123,7 @@ module.exports = Controller("AppFrameController", function(){
                     });
                 }
             }
-            this.end("未定义Model");
+            this.end();
         },
 
         delAction: function(){
@@ -140,7 +152,7 @@ module.exports = Controller("AppFrameController", function(){
                     return self.error(e.toString());
                 });
             }
-            this.end("未定义Model");
+            this.end();
         },
 
         sortAction: function(){
@@ -171,7 +183,7 @@ module.exports = Controller("AppFrameController", function(){
                     return self.error(e.toString());
                 });
             }
-            this.end("未定义Model");
+            this.end();
         },
 
         viewAction: function(){
@@ -185,7 +197,7 @@ module.exports = Controller("AppFrameController", function(){
                     });
                 });
             }
-            this.end("未定义Model");
+            this.end();
         }
 
     };

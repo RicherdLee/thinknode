@@ -98,8 +98,8 @@ module.exports = {
     tpl_engine_type: 'ejs', //模版引擎名称
     tpl_engine_config: {},
 
-    token_on: true, //是否开启token功能
-    token_name: 'token', //token name
+    token_on: false, //是否开启表单令牌功能,需要自行在控制器内调用this.token(this.post(C('token_name')))验证
+    token_name: '__token__', //token name
     token_key: '{__TOKEN__}', //记录token在模版中的位置替换用。默认自动查找<form和</head>标签替换
 
     log_console: true, //是否记录日志，开启后会重写console.error等系列方法
