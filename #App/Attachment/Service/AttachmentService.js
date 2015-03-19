@@ -114,11 +114,11 @@ module.exports = Class(function(){
 
         },
         //阿里云上传
-        doUploadAliyun: function (file, filePath) {
+        doUploadAliyun: function (srcfile, filepath, filename) {
 
         },
         //亚马逊AWS上传
-        doUploadAws: function(file, filePath){
+        doUploadAws: function(srcfile, filepath, filename){
 
         }
 

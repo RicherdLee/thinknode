@@ -328,57 +328,55 @@ var Model = module.exports = Class(function () {
              {name: "url", valid: "required", msg: "url必填"},
              {name: "username", valid: "function",func_name:"checkName", msg: "username不合法"}
              ];*/
-            try {
-                if (!isEmpty(this._validate)) {
-                    var promises = this._validate.map(function (validate) {
-                        if (isEmpty(validate.name)) {
-                            return getPromise(true);
-                        } else {
-                            validate.type = validate.type || type;
-                            if (validate.valid == 'function') {
-                                if (validate.type === type) {
-                                    if (self[validate.func_name](data) === false) {
-                                        return getPromise(getObject(validate.name, validate.msg));
-                                    } else {
-                                        return getPromise(true);
-                                    }
+            if (!isEmpty(this._validate)) {
+                var promises = this._validate.map(function (validate) {
+                    if (isEmpty(validate.name)) {
+                        return true;
+                    } else {
+                        validate.type = validate.type || type;
+                        if (validate.valid == 'function') {
+                            if (validate.type === type) {
+                                if (self[validate.func_name](data) === false) {
+                                    return getObject(validate.name, validate.msg);
                                 } else {
-                                    return getPromise(true);
+                                    return true;
                                 }
                             } else {
-                                //此处修改为字段存在才验证
-                                //if(isEmpty(data[validate.name]) && validate.valid !== 'required'){
-                                if (data.hasOwnProperty(validate.name)) {
-                                    if (validate.type === type) {
-                                        //删除type属性兼容Vaild类
-                                        delete validate.type;
-                                        validate.value = data[validate.name];
+                                return true;
+                            }
+                        } else {
+                            //此处修改为字段存在才验证
+                            //if(isEmpty(data[validate.name]) && validate.valid !== 'required'){
+                            if (data.hasOwnProperty(validate.name)) {
+                                if (validate.type === type) {
+                                    //删除type属性兼容Vaild类
+                                    delete validate.type;
+                                    validate.value = data[validate.name];
 
-                                        return getPromise(Valid(validate));
-                                    } else {
-                                        return getPromise(true);
-                                    }
+                                    return Valid(validate);
                                 } else {
-                                    return getPromise(true);
+                                    return true;
                                 }
+                            } else {
+                                return true;
                             }
                         }
+                    }
 
-                    });
+                });
 
-                    return Promise.all(promises).then(function (status) {
-                        for (var name in status) {
-                            if (!isEmpty(status[name]) && status[name] !== true) {
-                                return Object.values(status[name]);
-                            }
+                return Promise.all(promises).then(function (status) {
+                    for (var name in status) {
+                        if (!isEmpty(status[name]) && status[name] !== true) {
+                            return Object.values(status[name]);
                         }
-                        return true;
-                    });
-                } else {
-                    return getPromise(true);
-                }
-            } catch (e) {
-                return getPromise({"errmsg": e});
+                    }
+                    return true;
+                }).catch(function (e) {
+                    return getPromise({"errmsg": e});
+                });
+            } else {
+                return getPromise(true);
             }
 
         },
@@ -398,33 +396,32 @@ var Model = module.exports = Class(function () {
              {name: "url", value: 'http://xxx.com'},
              {name: "username", value: "function",func_name:"autoName"}
              ];*/
-            try {
-                if (!isEmpty(this._auto)) {
-                    var auto, func_value;
-                    for (var i in this._auto) {
-                        auto = this._auto[i];
-                        if (isEmpty(auto.name)) {
-                            continue;
-                        }
-                        auto.type = auto.type || type;
-                        if (auto.type !== type) {
-                            continue;
-                        }
-                        if (auto.value === 'function' && auto.func_name !== undefined) {
-                            //自定义方法内没有定义返回结果,data内不增加此属性
-                            func_value = self[auto.func_name](data);
-                            if (func_value !== undefined) {
-                                data[auto.name] = func_value;
-                            }
-
-                        } else {
-                            data[auto.name] = auto.value;
-                        }
+            if (!isEmpty(this._auto)) {
+                var func_value;
+                var promises = this._auto.map(function (auto) {
+                    if (isEmpty(auto.name)) {
+                        return;
                     }
-                }
-                return getPromise(data);
-            } catch (e) {
-                return getPromise({"errmsg": e});
+                    auto.type = auto.type || type;
+                    if(auto.type !== type){
+                        return;
+                    }
+                    if(auto.value === 'function' && auto.func_name !== undefined){
+                        //自定义方法内没有定义返回结果,data内不增加此属性
+                        func_value = self[auto.func_name](data);
+                        if (func_value !== undefined) {
+                            return data[auto.name] = func_value;
+                        }
+                    } else {
+                        return data[auto.name] = auto.value;
+                    }
+                });
+
+                return Promise.all(promises).then(function () {
+                    return data;
+                }).catch(function (e) {
+                    return getPromise({"errmsg": e});
+                });
             }
         },
         /**
