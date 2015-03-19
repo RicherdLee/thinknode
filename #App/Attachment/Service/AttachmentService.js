@@ -5,9 +5,13 @@
  * @license    CC BY-NC-ND
  * @version    14-10-21
  */
+var fs = require("fs");
+
 module.exports = Class(function(){
     "use strict";
     return {
+        handle: null,
+
         getFilePath: function(){
             var path = new Date().Format('YYYY/MM/DD') + "/";
             var tempPath = C("post_file_save_path") + path;
@@ -35,6 +39,8 @@ module.exports = Class(function(){
                 }
                 //var ext = file.originalFilename.split(".");
                 var newFileName = md5(file.originalFilename + file.size) + "." + mimetype;
+                var uploadType = C("post_file_upload_type");
+
                 //读取文件
                 //return Promise.all([self.getFilePath(),mReadFile(file.path)]).then(function (data) {
                 //    filePath = C("post_file_save_path") + data[0] + newFileName;
@@ -47,23 +53,74 @@ module.exports = Class(function(){
                 //});
 
                 return self.getFilePath().then(function (path) {
-                    filePath = C("post_file_save_path") + path + newFileName;
-                    fileUrl = C('post_file_save_url') + path + newFileName;
-                    return mReName(file.path,filePath);
-                }).then(function () {
-                    return getPromise({"status":true,"info":fileUrl});
+                    if(uploadType == 'ftp'){
+                        return self.doUploadFtp(file.path,path,newFileName);
+                    }else if(uploadType == 'aliyun'){
+                        return self.doUploadAliyun(file.path,path,newFileName);
+                    }else if(uploadType == 'aws'){
+                        return self.doUploadAws(file.path,path,newFileName);
+                    }else{
+                        return self.doUploadLocal(file.path,path,newFileName);
+                    }
+                }).then(function (data) {
+                    return getPromise({"status":true,"info":data});
                 }).catch(function (e) {
-                    //删除未成功上传的临时文件
-                    try{
-                        var fs = require("fs");
-                        fs.unlink(file.path, fn);
-                    }catch (e){}
-
                     return getPromise({"status":false,"info": e.toString()});
                 });
             }else{
                 return getPromise({"status":false,"info":"获取文件错误"});
             }
+        },
+        //本地上传
+        doUploadLocal: function (srcfile, filepath, filename) {
+            return mReName(srcfile,C("post_file_save_path") + filepath + filename).then(function () {
+                return C('post_file_save_url') + filepath + filename;
+            });
+        },
+        //FTP上传
+        doUploadFtp: function (srcfile, filepath, filename) {
+            var ftp = require("ftp");
+            var config = {
+                host:C("ftp_server"),
+                port:C("ftp_port"),
+                user:C("ftp_user"),
+                password:C("ftp_pwd")
+            };
+
+            return new Promise(function (fulfill, reject){
+                var client = new ftp();
+                client.on('ready', function () {
+                    client.mkdir(filepath,true, function (err) {
+                        if (err) {
+                            reject(err);
+                        }else {
+                            client.put (srcfile, filepath + filename,function (err, res){
+                                if (err) {
+                                    reject(err);
+                                }else {
+                                    //删除临时文件
+                                    var fn = function(){};
+                                    try{
+                                        fs.unlink(srcfile, fn);
+                                    }catch (e){}
+                                    fulfill(C("ftp_url") + filepath + filename);
+                                }
+                            });
+                        }
+                    });
+                });
+                client.connect(config);
+            });
+
+        },
+        //阿里云上传
+        doUploadAliyun: function (file, filePath) {
+
+        },
+        //亚马逊AWS上传
+        doUploadAws: function(file, filePath){
+
         }
+
     };
 });

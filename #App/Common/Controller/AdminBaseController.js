@@ -53,12 +53,6 @@ module.exports = Controller("AppFrameController", function(){
             ////初始化配置
             //var Config = F("Config");
             //this.assign("Config",Config);
-            //
-            ////初始化后台菜单
-            //var menuid = I("menuid",this);
-            //if(!isEmpty(menuid)){
-            //    this.cookie("menuid",menuid);
-            //}
         },
 
         indexAction: function(){
