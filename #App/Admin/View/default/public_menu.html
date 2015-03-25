@@ -1,19 +1,19 @@
 <div class="sidebar" id="sidebar">
 <div class="sidebar-shortcuts" id="sidebar-shortcuts">
     <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
-        <button class="btn btn-small btn-success">
+        <button class="btn btn-small btn-success" title="WEB网站" >
             <i class="icon-laptop"></i>
         </button>
 
-        <button class="btn btn-small btn-info">
+        <button class="btn btn-small btn-info" title="发布文章" >
             <i class="icon-pencil"></i>
         </button>
 
-        <button class="btn btn-small btn-warning">
+        <button class="btn btn-small btn-warning" title="系统设置" onclick="javascript:loadMenuContent('sysConfig','系统设置','/Admin/Sysconf/sysConfig');">
             <i class="icon-cogs"></i>
         </button>
 
-        <button class="btn btn-small btn-danger" onclick="javascript:loadMenuContent('cache','缓存','/Admin/Sysconf/public_cache');">
+        <button class="btn btn-small btn-danger" title="清除缓存" onclick="javascript:loadMenuContent('cache','清除缓存','/Admin/Sysconf/public_cache');">
             <i class="icon-trash"></i>
         </button>
     </div>

@@ -4,7 +4,7 @@
  * @type {Object}
  */
 module.exports = {
-  Filter: THINK.THINK_PATH + '/Lib/Util/Filter.js',
-  Valid: THINK.THINK_PATH + '/Lib/Util/Valid.js',
-  Auth: THINK.THINK_PATH + '/Lib/Util/Auth.js'
+    Filter: THINK.THINK_PATH + '/Lib/Util/Filter.js',
+    Valid: THINK.THINK_PATH + '/Lib/Util/Valid.js',
+    Auth: THINK.THINK_PATH + '/Lib/Util/Auth.js'
 };

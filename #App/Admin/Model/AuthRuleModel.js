@@ -58,7 +58,6 @@ module.exports = Model("CommonModel", function () {
                     data.level = 1;
                 }
             }
-
             return data;
         },
 

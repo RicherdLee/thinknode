@@ -29,12 +29,12 @@ module.exports = Behavior(function () {
             pathname = path.normalize(pathname);
             var file = THINK.ROOT_PATH + '/' + decodeURI(pathname);
             //正则判断是否文件
-            var urlReg= new RegExp(/[^\/]+\/([^\.]*)\/([^\/]+\.[^\/\.]+)$/);
+            var urlReg = new RegExp(/[^\/]+\/([^\.]*)\/([^\/]+\.[^\/\.]+)$/);
             var flag = !!file.match(urlReg);
 
             var res = this.http.res;
             var req = this.http.req;
-            if(flag){
+            if (flag) {
                 fs.stat(file, function (err, stats) {
                     if (err) {
                         res.statusCode = 404;
@@ -63,7 +63,7 @@ module.exports = Behavior(function () {
                                 gzip.on('end', function () {
                                     res.end();
                                 });
-                            }else {
+                            } else {
                                 fileStream.pipe(res);
                                 fileStream.on('end', function () {
                                     res.end();
@@ -72,7 +72,7 @@ module.exports = Behavior(function () {
                         }
                     }
                 });
-            }else{
+            } else {
                 res.statusCode = 403;
                 res.end();
             }

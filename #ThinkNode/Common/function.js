@@ -20,12 +20,12 @@ var _autoload_callbacks = [];
  * @param  {[type]} name [description]
  * @return {[type]}      [description]
  */
-global.getThinkRequirePath = function(name){
+global.getThinkRequirePath = function (name) {
     if (name in _alias) {
         return _alias[name];
     }
     var filepath, callback;
-    for(var i = 0, length =_autoload_callbacks.length; i < length; i++){
+    for (var i = 0, length = _autoload_callbacks.length; i < length; i++) {
         callback = _autoload_callbacks[i];
         filepath = callback && callback(name);
         if (filepath) {
@@ -47,7 +47,7 @@ global.getThinkRequirePath = function(name){
  * 自定义的require, 加入别名功能
  * @type {[type]}
  */
-global.thinkRequire = function(name){
+global.thinkRequire = function (name) {
     //如果不是字符串则直接返回
     if (!isString(name)) {
         return name;
@@ -71,7 +71,7 @@ global.thinkRequire = function(name){
  * @param  {Function} callback [description]
  * @return {[type]}            [description]
  */
-global.registerAutoload = function(callback){
+global.registerAutoload = function (callback) {
     _autoload_callbacks.push(callback);
 };
 
@@ -79,10 +79,10 @@ global.registerAutoload = function(callback){
  * 别名
  * @return {[type]} [description]
  */
-global.aliasImport = function(alias, classFile){
+global.aliasImport = function (alias, classFile) {
     if (isString(alias)) {
         _alias[alias] = classFile;
-    }else{
+    } else {
         _alias = extend(_alias, alias);
     }
 };
@@ -91,11 +91,11 @@ global.aliasImport = function(alias, classFile){
  * @param  {[type]} file [description]
  * @return {[type]}      [description]
  */
-global.safeRequire = function(file){
+global.safeRequire = function (file) {
     'use strict';
-    try{
+    try {
         return require(file);
-    }catch(e){
+    } catch (e) {
         //if (THINK.APP_DEBUG) {
         //    console.error(e.stack);
         //}
@@ -115,53 +115,54 @@ global.Promise = global.Promise || require('es6-promise').Promise;
  * 提供了继承、扩展、调用父级别方法等方法
  * @return {[type]} [description]
  */
-global.Class = function(superCls, prop) {
+global.Class = function (superCls, prop) {
     var cls = function () {
         function T(args) {
-            for(var name in cls.__prop){
+            for (var name in cls.__prop) {
                 var val = cls.__prop[name];
                 if (isObject(val)) {
                     this[name] = extend({}, val);
-                }else if (isArray(val)) {
+                } else if (isArray(val)) {
                     this[name] = extend([], val);
-                }else{
+                } else {
                     this[name] = val;
                 }
             }
             //自动执行init方法
-            if(isFunction(this.init)){
+            if (isFunction(this.init)) {
                 //获取init返回值，如果返回一个promise，可以让后续执行在then之后
                 this.__initReturn = this.init.apply(this, args);
             }
             return this;
         }
+
         T.prototype = cls.prototype;
         T.constructor = cls;
         return new T(arguments);
     };
     //类的属性，不放在原型上，实例化的时候调用
     cls.__prop = {};
-    cls.extend = function(prop){
+    cls.extend = function (prop) {
         if (isFunction(prop)) {
             prop = prop();
         }
         if (isObject(prop)) {
-            for(var name in prop){
+            for (var name in prop) {
                 var val = prop[name];
                 if (isFunction(val)) {
                     this.prototype[name] = val;
-                }else if (isObject(val)) {
+                } else if (isObject(val)) {
                     cls.__prop[name] = extend({}, val);
-                }else if (isArray(val)) {
+                } else if (isArray(val)) {
                     cls.__prop[name] = extend([], val);
-                }else{
+                } else {
                     cls.__prop[name] = val;
                 }
             }
         }
         return this;
     };
-    cls.inherits = function(superCls){
+    cls.inherits = function (superCls) {
         util.inherits(this, superCls);
         //将父级的属性复制到当前类上
         extend(cls.__prop, superCls.__prop);
@@ -175,7 +176,7 @@ global.Class = function(superCls, prop) {
         cls.inherits(superCls);
     }
     //调用父级方法
-    cls.prototype.super = cls.prototype.super_ = function(name, data){
+    cls.prototype.super = cls.prototype.super_ = function (name, data) {
         //如果当前类没有这个方法，则直接返回。
         //用于在a方法调用父级的b方法
         if (!this[name]) {
@@ -192,7 +193,7 @@ global.Class = function(superCls, prop) {
             this.super_c = null;
             return;
         }
-        while(this[name] === super_.prototype[name] && super_.super_){
+        while (this[name] === super_.prototype[name] && super_.super_) {
             super_ = super_.super_;
         }
         this.super_c = super_;
@@ -206,7 +207,7 @@ global.Class = function(superCls, prop) {
         var t = ++this.super_t;
         var method = super_.prototype[name];
         var ret;
-        switch(data.length){
+        switch (data.length) {
             case 0:
                 ret = method.call(this);
                 break;
@@ -234,7 +235,7 @@ global.Class = function(superCls, prop) {
  * extend, from jquery，具有深度复制功能
  * @return {[type]} [description]
  */
-global.extend = function(){
+global.extend = function () {
     var args = [].slice.call(arguments);
     var deep = true;
     var target = args.shift();
@@ -245,9 +246,9 @@ global.extend = function(){
     target = target || {};
     var length = args.length;
     var options, name, src, copy, copyAsArray, clone;
-    for(var i = 0; i < length; i++){
+    for (var i = 0; i < length; i++) {
         options = args[i] || {};
-        for(name in options){
+        for (name in options) {
             src = target[name];
             copy = options[name];
             if (src && src === copy) {
@@ -257,11 +258,11 @@ global.extend = function(){
                 if (copyAsArray) {
                     copyAsArray = false;
                     clone = [];
-                }else{
+                } else {
                     clone = src && isObject(src) ? src : {};
                 }
                 target[name] = extend(deep, clone, copy);
-            }else{
+            } else {
                 target[name] = copy;
             }
         }
@@ -270,15 +271,15 @@ global.extend = function(){
 };
 
 //常用类的基类
-['Cache', 'Behavior', 'Controller', 'Session', 'Model', 'Db', 'Service', 'Logic'].forEach(function(item){
-    global[item] = function(super_, obj){
+['Cache', 'Behavior', 'Controller', 'Session', 'Model', 'Db', 'Service', 'Logic'].forEach(function (item) {
+    global[item] = function (super_, obj) {
         if (isString(super_)) {
             var super_o = thinkRequire(super_);
-            if(isEmpty(super_o)){
+            if (isEmpty(super_o)) {
                 var mitem = super_.split('/');
                 super_o = thinkRequire(THINK.APP_PATH + '/' + mitem[0] + '/' + item + '/' + mitem[1] + '.js');
                 return Class(super_o, obj);
-            }else{
+            } else {
                 return Class(thinkRequire(super_), obj);
             }
         }
@@ -291,7 +292,7 @@ global.extend = function(){
  * A('Home/Index'), A('Admin/Index/test')
  * @param {[type]} name [description]
  */
-global.A = function(name, http, data){
+global.A = function (name, http, data) {
     //将/转为:，兼容之前的方式
     name = name.replace(/\//g, ':').split(':');
     http.group = ucfirst(name[0]);
@@ -306,7 +307,7 @@ global.A = function(name, http, data){
         return instance;
     }
     http.action = action;
-    return getPromise(instance.__initReturn).then(function(){
+    return getPromise(instance.__initReturn).then(function () {
         if (data && !isArray(data)) {
             data = [data];
         }
@@ -317,7 +318,7 @@ global.A = function(name, http, data){
  * 调用一个指定的行为
  * @param {[type]} name [description]
  */
-global.B = function(name, http, data){
+global.B = function (name, http, data) {
     if (!name) {
         return data;
     }
@@ -331,7 +332,7 @@ global.B = function(name, http, data){
  * 配置读取和写入
  */
 var _config = {};
-global.C = function(name, value){
+global.C = function (name, value) {
     //获取所有的配置
     if (arguments.length === 0) {
         return _config;
@@ -361,18 +362,18 @@ global.C = function(name, value){
             _config[name[0]] = {};
         }
         _config[name[0]][name[1]] = value;
-    }else{
+    } else {
         _config = extend(false, _config, name);
     }
 };
 /**
  * 实例化模型
  */
-global.D = function(name, layer, config){
+global.D = function (name, layer, config) {
     if (!isString(name)) {
         return thinkRequire(name.__filename)(name.name, config);
     }
-    if(isEmpty(layer)){
+    if (isEmpty(layer)) {
         layer = 'Model';
     }
     if (isString(config) && config.slice(-5) === layer) {
@@ -380,13 +381,13 @@ global.D = function(name, layer, config){
         config = arguments[3];
     }
     //支持目录
-    name = name.split('/').map(function(item){
+    name = name.split('/').map(function (item) {
         return item[0].toUpperCase() + item.slice(1);
     });
 
     var path = getThinkRequirePath(name[0] + layer);
-    if(name[1]){
-        path = THINK.APP_PATH + '/' + name.join('/'+layer+'/') + layer + '.js';
+    if (name[1]) {
+        path = THINK.APP_PATH + '/' + name.join('/' + layer + '/') + layer + '.js';
         name[0] = name[1];
     }
     return thinkRequire(path)(name[0], config);
@@ -395,7 +396,7 @@ global.D = function(name, layer, config){
  * 快速文件读取和写入
  * 默认写入到App/Runtime/Data目录下
  */
-global.F = function(name, value, rootPath){
+global.F = function (name, value, rootPath) {
     rootPath = rootPath || DATA_PATH;
     var filePath = rootPath + '/' + name + '.json';
     if (value !== undefined) {
@@ -420,25 +421,25 @@ global.F = function(name, value, rootPath){
  * @param filter
  * @constructor
  */
-global.I = function (name, http, method, defaultValue, filter){
+global.I = function (name, http, method, defaultValue, filter) {
     var value;
-    if(!isEmpty(method)){
+    if (!isEmpty(method)) {
         value = http.http[method];
-    }else{
-        if(http.isMethod("get")){
+    } else {
+        if (http.isMethod("get")) {
             value = http.http.get;
-        }else if(http.isMethod("post")){
+        } else if (http.isMethod("post")) {
             value = http.http.post;
-        }else{
+        } else {
             //PUT
         }
     }
     if (!isEmpty(name)) {
         value = value[name];
     }
-    value = walkFilter(value,filter);// 参数过滤
+    value = walkFilter(value, filter);// 参数过滤
 
-    if(isEmpty(value)){
+    if (isEmpty(value)) {
         value = isEmpty(defaultValue) ? '' : defaultValue;
     }
 
@@ -449,7 +450,7 @@ global.I = function (name, http, method, defaultValue, filter){
  * @param {[type]} name        [description]
  * @param {[type]} config      [description]
  */
-global.M = function(name, config){
+global.M = function (name, config) {
     var model = 'Model';
     if (!isString(name)) {
         return thinkRequire(model)(undefined, name);
@@ -464,10 +465,10 @@ global.M = function(name, config){
  * 缓存的设置和读取
  * 获取返回的是一个promise
  */
-global.S = function(name, value, options){
+global.S = function (name, value, options) {
     if (isNumber(options)) {
         options = {timeout: options};
-    }else if (options === true) {
+    } else if (options === true) {
         options = {type: true}
     }
     options = options || {};
@@ -476,19 +477,19 @@ global.S = function(name, value, options){
     var instance = thinkRequire(cls)(options);
     if (value === undefined) {//获取缓存
         return instance.get(name);
-    }else if (value === null) {
+    } else if (value === null) {
         return instance.rm(name); //删除缓存
-    }else if (isFunction(value)) { //获取缓存，如果不存在，则自动从回调里获取
-        return instance.get(name).then(function(data){
+    } else if (isFunction(value)) { //获取缓存，如果不存在，则自动从回调里获取
+        return instance.get(name).then(function (data) {
             return isEmpty(data) ? value() : getPromise(data, true);
-        }).then(function(data){
-            return S(name, data, options).then(function(){
+        }).then(function (data) {
+            return S(name, data, options).then(function () {
                 return data;
             });
-        }).catch(function(data){
+        }).catch(function (data) {
             return data;
         })
-    }else{
+    } else {
         return instance.set(name, value, options.timeout);
     }
 };
@@ -496,7 +497,7 @@ global.S = function(name, value, options){
  * 语言
  * @param {[type]} name [description]
  */
-global.L = function(name){
+global.L = function (name) {
     return name;
 };
 /**
@@ -513,12 +514,12 @@ global.X = function (name, arg, config) {
         return thinkRequire(name)(arg, config);
     }
     //支持目录
-    name = name.split('/').map(function(item){
+    name = name.split('/').map(function (item) {
         return item[0].toUpperCase() + item.slice(1);
     });
     var path = getThinkRequirePath(name[0] + layer);
-    if(name[1]){
-        path = THINK.APP_PATH + '/' + name.join('/'+layer+'/') + layer + '.js';
+    if (name[1]) {
+        path = THINK.APP_PATH + '/' + name.join('/' + layer + '/') + layer + '.js';
     }
     return thinkRequire(path)(arg, config);
 };
@@ -526,7 +527,7 @@ global.X = function (name, arg, config) {
  * 处理标签扩展
  * @return {[type]} [description]
  */
-global.tag = function(name, http, data){
+global.tag = function (name, http, data) {
     var tags = (C('tag.' + name) || []).slice();
     //tag处理的数据
     http.tag_data = data;
@@ -534,13 +535,14 @@ global.tag = function(name, http, data){
         return getPromise(http.tag_data);
     }
     var index = 0;
-    function runBehavior(){
+
+    function runBehavior() {
         var behavior = tags[index++];
         if (!behavior) {
             return getPromise(http.tag_data);
         }
         var result = B(behavior, http, http.tag_data);
-        return getPromise(result).then(function(data){
+        return getPromise(result).then(function (data) {
             //如果返回值不是undefined，那么认为有返回值
             if (data !== undefined) {
                 http.tag_data = data;
@@ -548,12 +550,13 @@ global.tag = function(name, http, data){
             return runBehavior();
         })
     }
+
     return runBehavior();
 };
 //合并加载用户行为
-global.loadTag = function(tag, userTag){
+global.loadTag = function (tag, userTag) {
     var mixTag = extend({}, tag);
-    for(var key in userTag){
+    for (var key in userTag) {
         var value = userTag[key];
         if (!value.length) {
             continue;
@@ -563,10 +566,10 @@ global.loadTag = function(tag, userTag){
             var flag = value.shift();
             if (flag) { //true为替换系统标签
                 mixTag[key] = value;
-            }else{ //false为将自定义标签置为系统标签前面
+            } else { //false为将自定义标签置为系统标签前面
                 mixTag[key] = value.concat(mixTag[key]);
             }
-        }else{// 默认将用户标签置为系统标签后面
+        } else {// 默认将用户标签置为系统标签后面
             mixTag[key] = mixTag[key].concat(value);
         }
     }
@@ -580,8 +583,8 @@ global.loadTag = function(tag, userTag){
  * @param filter 过滤函数
  * @returns {*}
  */
-global.walkFilter = function(array, filter){
-    if(isEmpty(filter)){
+global.walkFilter = function (array, filter) {
+    if (isEmpty(filter)) {
         filter = "htmlspecialchars";
     }
 
@@ -591,27 +594,28 @@ global.walkFilter = function(array, filter){
         arr.forEach(function (v) {
             if (isArray(v)) {
                 rst.push(walkFilter(v));
-            }else{
+            } else {
                 rst.push(_filter(v));
             }
         });
         return rst;
     };
 
-    var result = [],k = [];
+    var result = [], k = [];
 
-    if(isObject(array)){
+    if (isObject(array)) {
         result = Object.values(array);
         var keys = function (array) {
-            for(var key in array){
+            for (var key in array) {
                 k.push(key);
             }
             return k;
         };
-        return getObject(keys(array),walkArray(result));
-    }else if(isArray(array)){
+        return getObject(keys(array), walkArray(result));
+    } else if (isArray(array)) {
         return walkArray(array);
-    }else{
+    } else {
         return _filter(array);
-    };
+    }
+    ;
 };

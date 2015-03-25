@@ -24,7 +24,7 @@ module.exports = {
     post_max_fields_size: 2 * 1024 * 1024, //单个表单长度最大值，默认为2MB
     post_ajax_filename_header: 'x-filename', //通过ajax上传文件时文件名对应的header，如果有这个header表示是文件上传
     post_file_temp_path: THINK.RUNTIME_PATH + '/Temp', //文件上传的临时目录
-    post_file_allow_type:'jpg|jpeg|png|bmp|gif|zip|rar|ipa|apk',//允许上传的文件类型
+    post_file_allow_type: 'jpg|jpeg|png|bmp|gif|zip|rar|ipa|apk',//允许上传的文件类型
     post_file_save_path: THINK.ROOT_PATH + '/Public/uploads/',//上传文件保存目录
     post_file_save_url: '/Public/uploads/',//上传文件目录访问URL
 
@@ -109,8 +109,8 @@ module.exports = {
     log_memory_path: THINK.LOG_PATH + '/memory', //日志文件存放路径
     log_memory_interval: 60 * 1000, //一分钟记录一次
 
-    cache_type: 'File', //数据缓存类型
-    cache_key_prefix: '__thinknode__', //缓存key前置(memcache和redis下有效)
+    cache_type: 'Redis', //数据缓存类型 File,Redis,Memcache
+    cache_key_prefix: 'ThinkNode__', //缓存key前置(memcache和redis下有效)
     cache_timeout: 6 * 3600, //数据缓存有效期，单位: 秒
     cache_path: THINK.CACHE_PATH,  //缓存路径设置 (File缓存方式有效)
     cache_file_suffix: '.json', //File缓存方式下文件后缀名

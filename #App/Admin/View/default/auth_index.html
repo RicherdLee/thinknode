@@ -108,9 +108,14 @@
                             <i class="icon-edit bigger-130"></i>
                         </a>
 
+                        <a title="复制" href="./copy/id/<%=v.id%>" class="blue J_dialog">
+                            <i class="icon-external-link bigger-130"></i>
+                        </a>
+
                         <a title="删除" href="./del/id/<%=v.id%>" class="red J_ajax_del">
                             <i class="icon-trash bigger-130"></i>
                         </a>
+
                     </div>
 
                     <div class="hidden-desktop visible-phone">
@@ -132,6 +137,14 @@
                                     <a title="编辑" data-rel="tooltip" class="tooltip-success J_dialog" href="./edit/id/<%=v.id%>">
                                                                         <span class="green">
                                                                             <i class="icon-edit bigger-120"></i>
+                                                                        </span>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a title="复制" data-rel="tooltip" class="tooltip-success J_dialog" href="./copy/id/<%=v.id%>">
+                                                                        <span class="blue">
+                                                                            <i class="icon-external-link bigger-120"></i>
                                                                         </span>
                                     </a>
                                 </li>

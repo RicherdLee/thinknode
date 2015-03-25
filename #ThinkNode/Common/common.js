@@ -21,9 +21,9 @@ global.toString = Object.prototype.toString;
  * @param  {[type]} obj [description]
  * @return {[type]}     [description]
  */
-Object.values = function(obj){
+Object.values = function (obj) {
     var values = [];
-    for(var key in obj){
+    for (var key in obj) {
         if (obj.hasOwnProperty(key)) {
             values.push(obj[key])
         }
@@ -31,14 +31,17 @@ Object.values = function(obj){
     return values;
 };
 //数组删除元素
-global.arrayRemove = function(array,toDeleteIndexes){
-    var result=[];
-    for (var i=0;i<array.length ; i++){
+global.arrayRemove = function (array, toDeleteIndexes) {
+    var result = [];
+    for (var i = 0; i < array.length; i++) {
         var needDelete = false;
-        for (var j=0;j<toDeleteIndexes.length ; j++){
-            if(i==toDeleteIndexes[j]){needDelete=true; break;}
+        for (var j = 0; j < toDeleteIndexes.length; j++) {
+            if (i == toDeleteIndexes[j]) {
+                needDelete = true;
+                break;
+            }
         }
-        if(!needDelete){
+        if (!needDelete) {
             result.push(array[i]);
         }
     }
@@ -50,7 +53,7 @@ global.arrayRemove = function(array,toDeleteIndexes){
  * @param  {[type]}  obj
  * @return {Boolean}
  */
-global.isBoolean = function(obj){
+global.isBoolean = function (obj) {
     return toString.call(obj) === '[object Boolean]';
 };
 /**
@@ -58,7 +61,7 @@ global.isBoolean = function(obj){
  * @param  {[type]}  obj [description]
  * @return {Boolean}     [description]
  */
-global.isNumber = function(obj){
+global.isNumber = function (obj) {
     return toString.call(obj) === '[object Number]';
 };
 /**
@@ -66,7 +69,7 @@ global.isNumber = function(obj){
  * @param  {[type]}  obj [description]
  * @return {Boolean}     [description]
  */
-global.isObject = function(obj){
+global.isObject = function (obj) {
     if (isBuffer(obj)) {
         return false;
     }
@@ -77,7 +80,7 @@ global.isObject = function(obj){
  * @param  {[type]}  obj [description]
  * @return {Boolean}     [description]
  */
-global.isString = function(obj){
+global.isString = function (obj) {
     return toString.call(obj) === '[object String]';
 };
 /**
@@ -85,14 +88,14 @@ global.isString = function(obj){
  * @param  {[type]}  obj [description]
  * @return {Boolean}     [description]
  */
-global.isFunction = function(obj){
+global.isFunction = function (obj) {
     return typeof obj === 'function';
 };
 /**
  * 是否是日期
  * @return {Boolean} [description]
  */
-global.isDate = function(obj){
+global.isDate = function (obj) {
     return util.isDate(obj);
 };
 /**
@@ -100,7 +103,7 @@ global.isDate = function(obj){
  * @param  {[type]}  reg [description]
  * @return {Boolean}     [description]
  */
-global.isRegexp = function(obj){
+global.isRegexp = function (obj) {
     return util.isRegExp(obj);
 };
 /**
@@ -108,7 +111,7 @@ global.isRegexp = function(obj){
  * @param  {[type]}  obj [description]
  * @return {Boolean}     [description]
  */
-global.isError = function(obj){
+global.isError = function (obj) {
     return util.isError(obj);
 };
 /**
@@ -116,22 +119,22 @@ global.isError = function(obj){
  * @param  {[type]}  obj
  * @return {Boolean}
  */
-global.isEmpty = function(obj){
+global.isEmpty = function (obj) {
     if (isObject(obj)) {
         var key;
-        for(key in obj){
+        for (key in obj) {
             return false;
         }
         return true;
-    }else if (isArray(obj)) {
+    } else if (isArray(obj)) {
         return obj.length === 0;
-    }else if (isString(obj)) {
+    } else if (isString(obj)) {
         return obj.length === 0;
-    }else if (isNumber(obj)) {
+    } else if (isNumber(obj)) {
         return obj === 0;
-    }else if (obj === null || obj === undefined) {
+    } else if (obj === null || obj === undefined) {
         return true;
-    }else if (isBoolean(obj)) {
+    } else if (isBoolean(obj)) {
         return !obj;
     }
     return false;
@@ -141,7 +144,7 @@ global.isEmpty = function(obj){
  * @param  {[type]}  obj [description]
  * @return {Boolean}     [description]
  */
-global.isScalar = function(obj){
+global.isScalar = function (obj) {
     return isBoolean(obj) || isNumber(obj) || isString(obj);
 };
 /**
@@ -161,7 +164,7 @@ global.isIP6 = net.isIP6;
  * @param  {[type]}  p [description]
  * @return {Boolean}   [description]
  */
-global.isFile = function(p){
+global.isFile = function (p) {
     if (!fs.existsSync(p)) {
         return false;
     }
@@ -173,7 +176,7 @@ global.isFile = function(p){
  * @param  {[type]}  p [description]
  * @return {Boolean}   [description]
  */
-global.isDir = function(p){
+global.isDir = function (p) {
     if (!fs.existsSync(p)) {
         return false;
     }
@@ -191,7 +194,7 @@ global.isBuffer = Buffer.isBuffer;
  * @return {Boolean}     [description]
  */
 var numberReg = /^((\-?\d*\.?\d*(?:e[+-]?\d*(?:\d?\.?|\.?\d?)\d*)?)|(0[0-7]+)|(0x[0-9a-f]+))$/i;
-global.isNumberString = function(obj){
+global.isNumberString = function (obj) {
     return numberReg.test(obj);
 };
 /**
@@ -199,7 +202,7 @@ global.isNumberString = function(obj){
  * @param  {[type]}  obj [description]
  * @return {Boolean}     [description]
  */
-global.isPromise = function(obj){
+global.isPromise = function (obj) {
     return !!(obj && typeof obj.then === 'function');
 };
 
@@ -208,7 +211,7 @@ global.isPromise = function(obj){
  * @param  {[type]}  p [description]
  * @return {Boolean}      [description]
  */
-global.isWritable = function(p){
+global.isWritable = function (p) {
     if (!fs.existsSync(p)) {
         return false;
     }
@@ -229,7 +232,7 @@ global.isWritable = function(p){
  * @param  {[type]} mode [description]
  * @return {[type]}      [description]
  */
-global.mkdir = function(p, mode){
+global.mkdir = function (p, mode) {
     mode = mode || '0777';
     if (fs.existsSync(p)) {
         chmod(p, mode);
@@ -238,7 +241,7 @@ global.mkdir = function(p, mode){
     var pp = path.dirname(p);
     if (fs.existsSync(pp)) {
         fs.mkdirSync(p, mode);
-    }else{
+    } else {
         mkdir(pp, mode);
         mkdir(p, mode);
     }
@@ -251,9 +254,9 @@ global.mkdir = function(p, mode){
  * @param enc      为空返回Buffer类型,'utf8'返回String类型
  * @returns {Promise}
  */
-global.mReadFile = function(filename, enc){
-    return new Promise(function (fulfill, reject){
-        fs.readFile(filename, enc, function (err, res){
+global.mReadFile = function (filename, enc) {
+    return new Promise(function (fulfill, reject) {
+        fs.readFile(filename, enc, function (err, res) {
             if (err) reject(err);
             else fulfill(res);
         });
@@ -279,9 +282,9 @@ global.mWriteFile = function (filename, data) {
  * @param sfilename 新文件名
  * @returns {Promise}
  */
-global.mReName = function(filename, nfilename){
-    return new Promise(function (fulfill, reject){
-        fs.rename(filename, nfilename, function (err, res){
+global.mReName = function (filename, nfilename) {
+    return new Promise(function (fulfill, reject) {
+        fs.rename(filename, nfilename, function (err, res) {
             if (err) reject(err);
             else fulfill(res);
         });
@@ -294,39 +297,39 @@ global.mReName = function(filename, nfilename){
  * @param  boolean reserve 是否保留当前目录，只删除子目录
  * @return Promise
  */
-global.rmdir = function(p, reserve){
+global.rmdir = function (p, reserve) {
     if (!isDir(p)) {
         return getPromise();
     }
     var deferred = getDefer();
-    fs.readdir(p, function(err, files){
+    fs.readdir(p, function (err, files) {
         if (err) {
             return deferred.reject(err);
         }
-        var promises = files.map(function(item){
+        var promises = files.map(function (item) {
             var filepath = path.normalize(p + '/' + item);
             if (isDir(filepath)) {
                 return rmdir(filepath, false);
-            }else{
+            } else {
                 var deferred = getDefer();
-                fs.unlink(filepath, function(err){
+                fs.unlink(filepath, function (err) {
                     return err ? deferred.reject(err) : deferred.resolve();
                 });
                 return deferred.promise;
             }
         });
         var promise = files.length === 0 ? getPromise() : Promise.all(promises);
-        return promise.then(function(){
+        return promise.then(function () {
             if (!reserve) {
                 var deferred = getDefer();
-                fs.rmdir(p, function(err){
+                fs.rmdir(p, function (err) {
                     return err ? deferred.reject(err) : deferred.resolve();
                 });
                 return deferred.promise;
             }
-        }).then(function(){
+        }).then(function () {
             deferred.resolve();
-        }).catch(function(err){
+        }).catch(function (err) {
             deferred.reject(err);
         })
     });
@@ -338,7 +341,7 @@ global.rmdir = function(p, reserve){
  * @param  {[type]} mode [description]
  * @return {[type]}      [description]
  */
-global.chmod = function(p, mode){
+global.chmod = function (p, mode) {
     mode = mode || '0777';
     if (!fs.existsSync(p)) {
         return true;
@@ -350,7 +353,7 @@ global.chmod = function(p, mode){
  * @param  {[type]} file [description]
  * @return {[type]}      [description]
  */
-global.getFileContent = function(file, encoding){
+global.getFileContent = function (file, encoding) {
     if (!fs.existsSync(file)) {
         return '';
     }
@@ -362,7 +365,7 @@ global.getFileContent = function(file, encoding){
  * @param  {[type]} data [description]
  * @return {[type]}      [description]
  */
-global.setFileContent = function(file, data){
+global.setFileContent = function (file, data) {
     var filepath = path.dirname(file);
     mkdir(filepath);
     return fs.writeFileSync(file, data);
@@ -372,16 +375,16 @@ global.setFileContent = function(file, data){
  * @param  {[type]} name [description]
  * @return {[type]}      [description]
  */
-global.ucfirst = function(name){
+global.ucfirst = function (name) {
     name = (name || '') + '';
-    return name.substr(0,1).toUpperCase() + name.substr(1).toLowerCase();
+    return name.substr(0, 1).toUpperCase() + name.substr(1).toLowerCase();
 };
 /**
  * 获取字符串的md5
  * @param  {[type]} str [description]
  * @return {[type]}     [description]
  */
-global.md5 = function(str){
+global.md5 = function (str) {
     var instance = crypto.createHash('md5');
     instance.update(str + '');
     return instance.digest('hex');
@@ -390,7 +393,7 @@ global.md5 = function(str){
  * 获取随机整数
  * @return {[type]} [description]
  */
-global.rand = function(min, max){
+global.rand = function (min, max) {
     return Math.floor(min + Math.random() * (max - min + 1));
 }
 /**
@@ -398,7 +401,7 @@ global.rand = function(min, max){
  * @param  {[type]} obj [description]
  * @return {[type]}     [description]
  */
-global.getPromise = function(obj, reject){
+global.getPromise = function (obj, reject) {
     if (isPromise(obj)) {
         return obj;
     }
@@ -411,9 +414,9 @@ global.getPromise = function(obj, reject){
  * 生成一个defer对象
  * @return {[type]} [description]
  */
-global.getDefer = function(){
+global.getDefer = function () {
     var deferred = {};
-    deferred.promise = new Promise(function(resolve, reject){
+    deferred.promise = new Promise(function (resolve, reject) {
         deferred.resolve = resolve;
         deferred.reject = reject;
     });
@@ -425,13 +428,13 @@ global.getDefer = function(){
  * @param  {[type]} value [description]
  * @return {[type]}       [description]
  */
-global.getObject = function(key, value){
+global.getObject = function (key, value) {
     var obj = {};
     if (!isArray(key)) {
         obj[key] = value;
         return obj;
     }
-    key.forEach(function(item, i){
+    key.forEach(function (item, i) {
         obj[item] = value[i];
     });
     return obj;
@@ -443,16 +446,16 @@ global.getObject = function(key, value){
  * @param  {[type]} valueKeys [description]
  * @return {[type]}           [description]
  */
-global.arrToObj = function(arr, key, valueKey){
+global.arrToObj = function (arr, key, valueKey) {
     var result = {};
     var arrResult = [];
-    arr.forEach(function(item){
+    arr.forEach(function (item) {
         var keyValue = item[key];
         if (valueKey === null) {
             arrResult.push(keyValue);
-        }else if (valueKey) {
+        } else if (valueKey) {
             result[keyValue] = item[valueKey];
-        }else{
+        } else {
             result[keyValue] = item;
         }
     });

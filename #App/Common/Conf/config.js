@@ -13,7 +13,8 @@ module.exports = {
   db_prefix: 'think_', // 数据库表前缀
 
   /**缓存配置**/
-  cache_type: "File", //数据缓存类型
+  cache_type: "File", //数据缓存类型File,Redis,Memcache
+  cache_key_prefix: 'ThinkNode__', //缓存key前置(memcache和redis下有效)
   cache_timeout: 6 * 3600, //数据缓存有效期，单位: 秒
   cache_path: THINK.CACHE_PATH,  //缓存路径设置 (File缓存方式有效)
   cache_file_suffix: ".json", //File缓存方式下文件后缀名

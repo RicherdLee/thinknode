@@ -12,7 +12,7 @@ var App = module.exports = {};
  * @param  {[type]} http [description]
  * @return {[type]}      [description]
  */
-App.getBaseController = function(http, options, checkAction, ignoreCall){
+App.getBaseController = function (http, options, checkAction, ignoreCall) {
     'use strict';
     options = options || {};
     var group = options.group || http.group;
@@ -24,7 +24,7 @@ App.getBaseController = function(http, options, checkAction, ignoreCall){
     //如果是RESTFUL API，则调用RestController
     if (http.isRestful) {
         instance = thinkRequire('RestController')(http);
-    }else{
+    } else {
         var path = THINK.APP_PATH + '/' + group + '/Controller/' + controller + 'Controller.js';
         instance = thinkRequire(path)(http);
     }
@@ -46,7 +46,7 @@ App.getBaseController = function(http, options, checkAction, ignoreCall){
  * 执行具体的action，调用前置和后置操作
  * @return {[type]} [description]
  */
-App.execAction = function(controller, action, data, callMethod){
+App.execAction = function (controller, action, data, callMethod) {
     'use strict';
     //action操作
     var act = action + C('action_suffix');
@@ -62,7 +62,7 @@ App.execAction = function(controller, action, data, callMethod){
         return getPromise(new Error('action `' + action + '` not found.'), true);
     }
     //action不存在时执行魔术方法
-    if(flag){
+    if (flag) {
         return getPromise(controller[call](action));
     }
     //action前置操作
@@ -75,12 +75,12 @@ App.execAction = function(controller, action, data, callMethod){
     if (before && isFunction(controller[before + act])) {
         promise = getPromise(controller[before + act].apply(controller, data));
     }
-    promise = promise.then(function(){
+    promise = promise.then(function () {
         return controller[act].apply(controller, data);
     });
 
     if (after && isFunction(controller[after + act])) {
-        promise = promise.then(function(){
+        promise = promise.then(function () {
             return controller[after + act].apply(controller, data);
         })
     }
@@ -91,7 +91,7 @@ App.execAction = function(controller, action, data, callMethod){
  * 获取action的形参
  * @return {[type]} [description]
  */
-App.getActionParams = function(fn, http){
+App.getActionParams = function (fn, http) {
     'use strict';
     //注释的正则
     var commentReg = /((\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s))/mg;
@@ -104,7 +104,7 @@ App.getActionParams = function(fn, http){
     }
     match = match.split(/\s*,\s*/);
     //匹配到形参
-    return match.map(function(item){
+    return match.map(function (item) {
         return http.post[item] || http.get[item] || '';
     });
 };
@@ -113,7 +113,7 @@ App.getActionParams = function(fn, http){
  * @param  {[type]} http [description]
  * @return {[type]}      [description]
  */
-App.exec = function(http){
+App.exec = function (http) {
     'use strict';
     var controller = this.getBaseController(http, {}, true);
     //group禁用或不存在或者controller不存在
@@ -131,26 +131,26 @@ App.exec = function(http){
     var self = this;
     var loadFile = function () {
         //加载分组函数
-        if(isFile(THINK.APP_PATH + '/'+ http.group +'/Common/function.js')){
-            thinkRequire(THINK.APP_PATH + '/'+ http.group +'/Common/function.js');
+        if (isFile(THINK.APP_PATH + '/' + http.group + '/Common/function.js')) {
+            thinkRequire(THINK.APP_PATH + '/' + http.group + '/Common/function.js');
         }
         //加载分组配置
-        if(isFile(THINK.APP_PATH + '/'+ http.group +'/Conf/config.js')){
-            C(thinkRequire(THINK.APP_PATH + '/'+ http.group +'/Conf/config.js'));
+        if (isFile(THINK.APP_PATH + '/' + http.group + '/Conf/config.js')) {
+            C(thinkRequire(THINK.APP_PATH + '/' + http.group + '/Conf/config.js'));
         }
     };
     return getPromise(loadFile()).then(function () {
         return controller.__initReturn;
-    }).then(function(){
+    }).then(function () {
         return self.execAction(controller, http.action, params, true);
-    })
+    });
 };
 /**
  * 发送错误信息
  * @param  {[type]} error [description]
  * @return {[type]}       [description]
  */
-App.sendError = function(http, error){
+App.sendError = function (http, error) {
     'use strict';
     if (!error) {
         return;
@@ -164,10 +164,10 @@ App.sendError = function(http, error){
     http.setHeader('Content-Type', 'text/html; charset=' + C('encoding'));
     if (THINK.APP_DEBUG) {
         http.res.end(message);
-    }else{
+    } else {
         var readStream = fs.createReadStream(C('error_tpl_path'));
         readStream.pipe(http.res);
-        readStream.on('end', function(){
+        readStream.on('end', function () {
             http.res.end();
         });
     }
@@ -177,7 +177,7 @@ App.sendError = function(http, error){
  * run
  * @return {[type]} [description]
  */
-App.run = function(){
+App.run = function () {
     'use strict';
     if (THINK.APP_MODE && App.mode[THINK.APP_MODE]) {
         return App.mode[THINK.APP_MODE]();
@@ -190,21 +190,21 @@ App.run = function(){
  */
 App.mode = {
     //命令行模式
-    cli: function(){
+    cli: function () {
         'use strict';
         var defaultHttp = thinkHttp.getDefaultHttp(process.argv[2]);
         thinkHttp(defaultHttp.req, defaultHttp.res).run().then(App.listener);
         var cliTimeout = C('cli_timeout');
         //命令行模式下，超时后自动关闭
         if (cliTimeout) {
-            setTimeout(function(){
+            setTimeout(function () {
                 console.log('cli exec timeout');
                 process.exit();
             }, cliTimeout * 1000);
         }
     },
     //HTTP模式
-    http: function(){
+    http: function () {
         'use strict';
         var clusterNums = C('use_cluster');
         //不使用cluster
@@ -219,13 +219,13 @@ App.mode = {
             for (var i = 0; i < clusterNums; i++) {
                 cluster.fork();
             }
-            cluster.on('exit', function(worker) {
+            cluster.on('exit', function (worker) {
                 console.error('worker ' + worker.process.pid + ' died');
-                process.nextTick(function(){
+                process.nextTick(function () {
                     cluster.fork();
                 });
             });
-        }else {
+        } else {
             App.createServer();
         }
     }
@@ -234,10 +234,10 @@ App.mode = {
  * 创建服务
  * @return {[type]} [description]
  */
-App.createServer = function(){
+App.createServer = function () {
     'use strict';
     var http = require('http');
-    var server = http.createServer(function(request, response){
+    var server = http.createServer(function (request, response) {
         try {
             thinkHttp(request, response).run().then(App.listener);
         } catch (err) {
@@ -252,7 +252,7 @@ App.createServer = function(){
     var port = process.argv[2] || C('port');
     if (host) {
         server.listen(port, host);
-    }else{
+    } else {
         server.listen(port);
     }
     if (THINK.APP_DEBUG) {
@@ -264,7 +264,7 @@ App.createServer = function(){
  * @param  {[type]} http [description]
  * @return {[type]}      [description]
  */
-App.listener = function(http){
+App.listener = function (http) {
     'use strict';
     //自动发送thinkjs和版本的header
     http.setHeader('X-Powered-By', 'ThinkNode-' + THINK.THINK_VERSION);
@@ -276,24 +276,24 @@ App.listener = function(http){
     }
     var domainInstance = domain.create();
     var deferred = getDefer();
-    domainInstance.on('error', function(err){
+    domainInstance.on('error', function (err) {
         App.sendError(http, err);
         deferred.reject(err);
     });
-    domainInstance.run(function(){
-        return tag('app_init', http).then(function(){
+    domainInstance.run(function () {
+        return tag('app_init', http).then(function () {
             return Dispatcher(http).run();
-        }).then(function(){
+        }).then(function () {
             return tag('app_begin', http);
-        }).then(function(){
+        }).then(function () {
             return tag('action_init', http);
-        }).then(function(){
+        }).then(function () {
             return App.exec(http);
-        }).then(function(){
+        }).then(function () {
             return tag('app_end', http);
-        }).catch(function(err){
+        }).catch(function (err) {
             App.sendError(http, err);
-        }).then(function(){
+        }).then(function () {
             deferred.resolve();
         })
     });

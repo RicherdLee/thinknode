@@ -58,6 +58,15 @@ module.exports = Controller("AdminBaseController",function(){
             return this.Model.where({level:['<',4]}).select().then(function (data) {
                 self.assign("parents",data);
             });
+        },
+
+        _before_copyAction: function(){
+            var self = this;
+            if(!this.isPost()){
+                return this.Model.where({level:['<',4]}).select().then(function (data) {
+                    self.assign("parents",data);
+                });
+            }
         }
     };
 });

@@ -397,23 +397,24 @@ var Model = module.exports = Class(function () {
              {name: "username", value: "function",func_name:"autoName"}
              ];*/
             if (!isEmpty(this._auto)) {
-                var func_value;
+                var data = extend({}, data);
                 var promises = this._auto.map(function (auto) {
                     if (isEmpty(auto.name)) {
                         return;
                     }
                     auto.type = auto.type || type;
-                    if(auto.type !== type){
+                    if (auto.type !== type) {
                         return;
                     }
-                    if(auto.value === 'function' && auto.func_name !== undefined){
+                    if (auto.value === 'function' && auto.func_name !== undefined) {
                         //自定义方法内没有定义返回结果,data内不增加此属性
-                        func_value = self[auto.func_name](data);
-                        if (func_value !== undefined) {
-                            return data[auto.name] = func_value;
-                        }
+                        return getPromise(self[auto.func_name](data)).then(function (fvalue) {
+                            if (fvalue !== undefined) {
+                                data[auto.name] = fvalue;
+                            }
+                        });
                     } else {
-                        return data[auto.name] = auto.value;
+                        data[auto.name] = auto.value;
                     }
                 });
 
@@ -422,6 +423,8 @@ var Model = module.exports = Class(function () {
                 }).catch(function (e) {
                     return getPromise({"errmsg": e});
                 });
+            } else {
+                return data;
             }
         },
         /**
@@ -631,22 +634,22 @@ var Model = module.exports = Class(function () {
             data = extend({}, data);
             var key;
             if (!isEmpty(this._fields)) {
-                for (key in data) {
+                for(key in data){
                     var val = data[key];
                     if (this._fields._field.indexOf(key) === -1) {
                         delete data[key];
-                    } else if (isScalar(val)) {
-                        data = this.parseType(data, key);
+                    }else if(isScalar(val)){
+                        //data = this.parseType(data, key);
                     }
                 }
             }
             //安全过滤
             if (isFunction(this._options.filter)) {
-                for (key in data) {
+                for(key in data){
                     var ret = this._options.filter.call(this, key, data[key]);
                     if (ret === undefined) {
                         delete data[key];
-                    } else {
+                    }else{
                         data[key] = ret;
                     }
                 }
@@ -705,12 +708,12 @@ var Model = module.exports = Class(function () {
             //解析后的数据
             var parsedData = {};
             //自动完成和自动验证
-            return Promise.all([this._autoValidation(data, 1),this._autoOperation(data, 1)]).then(function (result) {
+            return Promise.all([this._autoValidation(data, 1), this._autoOperation(data, 1)]).then(function (result) {
                 if (result[0] !== true) {
                     return getPromise(new Error(result[0]), true);
-                }else if (result[1].errmsg !== undefined) {
+                } else if (result[1].errmsg !== undefined) {
                     return getPromise(new Error('_DATA_AUTO_OPERATION_INVALID_'), true);
-                }else{
+                } else {
                     data = result[1];
                     return self.parseOptions(options).then(function (options) {
                         parsedOptions = options;
@@ -831,12 +834,12 @@ var Model = module.exports = Class(function () {
             var parsedData = {};
             var affectedRows = 0;
             //自动完成和自动验证
-            return Promise.all([this._autoValidation(data, 2),this._autoOperation(data, 2)]).then(function (result) {
+            return Promise.all([this._autoValidation(data, 2), this._autoOperation(data, 2)]).then(function (result) {
                 if (result[0] !== true) {
                     return getPromise(new Error(result[0]), true);
-                }else if (result[1].errmsg !== undefined) {
+                } else if (result[1].errmsg !== undefined) {
                     return getPromise(new Error('_DATA_AUTO_OPERATION_INVALID_'), true);
-                }else{
+                } else {
                     data = result[1];
                     return self.parseOptions(options).then(function (options) {
                         parsedOptions = options;
