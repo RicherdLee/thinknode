@@ -46,10 +46,10 @@ App.getBaseController = function (http, options, checkAction, ignoreCall) {
  * 执行具体的action，调用前置和后置操作
  * @return {[type]} [description]
  */
-App.execAction = function (controller, action, data, callMethod) {
+App.execAction = function (controller, http, data, callMethod) {
     'use strict';
     //action操作
-    var act = action + C('action_suffix');
+    var act = http.action + C('action_suffix');
     var call = C('empty_method');
     var flag = false;
     if (callMethod && !isFunction(controller[act])) {
@@ -59,11 +59,11 @@ App.execAction = function (controller, action, data, callMethod) {
     }
     //action不存在
     if (!isFunction(controller[act]) && !flag) {
-        return getPromise(new Error('action `' + action + '` not found.'), true);
+        return getPromise(new Error('action `' + http.action + '` not found.'), true);
     }
     //action不存在时执行魔术方法
     if (flag) {
-        return getPromise(controller[call](action));
+        return getPromise(controller[call](http.action));
     }
     //action前置操作
     var before = C('before_action');
@@ -85,6 +85,7 @@ App.execAction = function (controller, action, data, callMethod) {
         })
     }
     return promise;
+
 };
 
 /**
@@ -139,11 +140,12 @@ App.exec = function (http) {
             C(thinkRequire(THINK.APP_PATH + '/' + http.group + '/Conf/config.js'));
         }
     };
+
     return getPromise(loadFile()).then(function () {
-        return controller.__initReturn;
+        return getPromise(controller.__initReturn);
     }).then(function () {
-        return self.execAction(controller, http.action, params, true);
-    });
+        return self.execAction(controller, http, params, true);
+    })
 };
 /**
  * 发送错误信息

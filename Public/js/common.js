@@ -269,14 +269,14 @@
                                 _span.attr("data-title","上传中...");
                             },
                             success: function (result) {
-                                if(result.status == true){
-                                    obj.attr("readonly",true);
-                                    _span.attr("data-title",result.info);
-                                    $("#file_url").val(result.info);
-                                    return;
-                                }else{
-                                    _span.attr("data-title",result.info);
+                                if(result.errno > 0){
+                                    _span.attr("data-title",result.errmsg);
                                     return false;
+                                }else{
+                                    obj.attr("readonly",true);
+                                    _span.attr("data-title",result.data.filename);
+                                    $("#file_url").val(result.data.fileurl);
+                                    return;
                                 }
                             }
                         });
@@ -651,7 +651,10 @@ function doUpload(obj,title,callback,type){
         dataType : "json",
         async : false,
         success : function(json) {
-            if(json.status == true){
+            if(json.errno > 0){
+                isAlert(json.info || '没有上传权限');
+                return false;
+            }else{
                 head.use("artDialog", function() {
                     head.css('/Public/js/artDialog/skins/default.css');
                     art.dialog.open('/Attachment/Index/doUpload/type/'+type,{
@@ -669,9 +672,6 @@ function doUpload(obj,title,callback,type){
                         cancel : true
                     });
                 });
-            }else{
-                isAlert(json.info || '没有上传权限');
-                return false;
             }
         }
     });

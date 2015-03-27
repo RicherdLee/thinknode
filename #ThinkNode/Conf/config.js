@@ -24,6 +24,7 @@ module.exports = {
     post_max_fields_size: 2 * 1024 * 1024, //单个表单长度最大值，默认为2MB
     post_ajax_filename_header: 'x-filename', //通过ajax上传文件时文件名对应的header，如果有这个header表示是文件上传
     post_file_temp_path: THINK.RUNTIME_PATH + '/Temp', //文件上传的临时目录
+    post_file_autoremove: true, //请求完成时，自动删除未处理的上传缓存文件
     post_file_allow_type: 'jpg|jpeg|png|bmp|gif|zip|rar|ipa|apk',//允许上传的文件类型
     post_file_save_path: THINK.ROOT_PATH + '/Public/uploads/',//上传文件保存目录
     post_file_save_url: '/Public/uploads/',//上传文件目录访问URL
@@ -34,8 +35,8 @@ module.exports = {
     default_controller: 'Index', //默认模块
     default_action: 'index',  //默认Action
     empty_method: '_empty', //当找不到方法时调用此方法，这个方法存在时才有效
-    before_action: '_before_', //调用一个action前调用的方法，会将action名传递进去
-    after_action: '_after_', //调用一个action之后调用的方法，会将action名传递进去
+    before_action: '_before_', //action前置方法前缀
+    after_action: '_after_', //action后置方法前置
     url_params_bind: true, //方法参数绑定,将URL参数值绑定到action的参数上
     action_suffix: 'Action', //action后缀
     url_callback_name: 'callback', //jsonp格式的callback名字

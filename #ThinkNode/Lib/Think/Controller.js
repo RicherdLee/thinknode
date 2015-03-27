@@ -18,11 +18,11 @@ module.exports = Class(function () {
         init: function (http) {
             this.http = http;
             this.view = null;
-            //将http数据打到模版里
+            //将http数据赋值到模版
             this.assign('http', this.http);
             //将配置信息打到模版里
             this.assign('config', C());
-            //将controller赋值到模版中
+            //将controller赋值到模版
             this.assign('controller', this);
             //设置变量别名
             this.set = this.assign;

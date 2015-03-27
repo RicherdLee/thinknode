@@ -30,12 +30,12 @@ module.exports = Class(function(){
                 var mimetype = mime.extension(mime.lookup(file.path));
                 var allowUploadType = C("post_file_allow_type");
                 if(allowUploadType.split("|").indexOf(mimetype) <0 ){
-                    return getPromise({"status":false,"info":"上传的文件类型非法"});
+                    return getPromise({"errno":403,"errmsg":"上传的文件类型非法","data":{}});
                 }
                 //检查文件大小
                 var allowUploadSize = C("post_max_file_size");
                 if(file.size > allowUploadSize){
-                    return getPromise({"status":false,"info":"上传的文件大小超限"});
+                    return getPromise({"errno":403,"errmsg":"上传的文件大小超限","data":{}});
                 }
                 //var ext = file.originalFilename.split(".");
                 var newFileName = md5(file.originalFilename + file.size) + "." + mimetype;
@@ -63,12 +63,12 @@ module.exports = Class(function(){
                         return self.doUploadLocal(file.path,path,newFileName);
                     }
                 }).then(function (data) {
-                    return getPromise({"status":true,"info":data});
+                    return getPromise({"errno":0,"errmsg":"","data":{filename:newFileName,fileurl:data,filesize:file.size}});
                 }).catch(function (e) {
-                    return getPromise({"status":false,"info": e.toString()});
+                    return getPromise({"errno":500,"errmsg":e.toString(),"data":{}});
                 });
             }else{
-                return getPromise({"status":false,"info":"获取文件错误"});
+                return getPromise({"errno":500,"errmsg":"获取文件错误","data":{}});
             }
         },
         //本地上传

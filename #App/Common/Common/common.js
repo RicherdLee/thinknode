@@ -65,6 +65,9 @@ Date.prototype.Format = function (formatStr) {
 global.authCheck = function (group,controller,action, user, mode, relation,http) {
     mode = mode || 1;
     relation = relation || 'or';
+    if (isEmpty(user)) {
+        return getPromise(false);
+    }
     //控制器名为PublicController或者以public_开头的方法无需权限认证
     if(controller == 'Public' || action.toString().substring(0,6) == "public"){
         return getPromise(true);

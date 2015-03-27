@@ -376,6 +376,15 @@ var Http = module.exports = Class(function () {
                     this.sendCookie();
                     this.res.end();
                     this.emit('afterEnd', this);
+                    if (C('post_file_autoremove') && !isEmpty(this.file)) {
+                        var key, path, fn = function(){};
+                        for(key in this.file){
+                            path = this.file[key].path;
+                            if (isFile(path)) {
+                                fs.unlink(path, fn);
+                            }
+                        }
+                    }
                 }
             };
             extend(this.http, res);
