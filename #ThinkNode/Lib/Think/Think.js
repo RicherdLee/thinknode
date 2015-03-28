@@ -14,23 +14,6 @@ var autoloadPaths = {};
 module.exports = {
     run: function () {
         'use strict';
-        this.init();
-        //debug模式
-        if (THINK.APP_DEBUG) {
-            this.debug();
-        } else {
-            this.processEvent();
-        }
-        //记录日志
-        this.log();
-        //记录进程的id
-        this.logPid();
-    },
-    /**
-     * 初始化
-     */
-    init: function () {
-        'use strict';
         //加载框架核心
         this.loadCore();
         //加载项目
@@ -41,7 +24,18 @@ module.exports = {
         this.mergeAutoloadPath();
         //注册自动加载
         registerAutoload(this.autoload);
+        //debug模式
+        if (THINK.APP_DEBUG) {
+            this.debug();
+        } else {
+            this.processEvent();
+            //记录日志
+            this.log();
+        }
+        //记录进程的id
+        this.logPid();
     },
+
     //加载框架核心
     loadCore: function () {
         'use strict';
@@ -71,9 +65,11 @@ module.exports = {
         aliasImport(core);
 
         //加载模式的配置文件
-        var modes = safeRequire(THINK.THINK_PATH + '/Conf/mode.js');
-        if (modes[THINK.APP_MODE]) {
-            C(modes[THINK.APP_MODE]);
+        if(THINK.APP_MODE){
+            var modes = safeRequire(THINK.THINK_PATH + '/Conf/mode.js');
+            if (modes[THINK.APP_MODE]) {
+                C(modes[THINK.APP_MODE]);
+            }
         }
         //自定义路由
         if (C('url_route_on') && isFile(THINK.THINK_PATH + '/Conf/route.js')) {
@@ -106,12 +102,15 @@ module.exports = {
             C('url_route_rules', safeRequire(THINK.APP_PATH + '/Common/Conf/route.js'));
         }
         //加载项目模式定义
-        if (isFile(THINK.APP_PATH + '/Common/conf/mode.js')) {
-            var modes = safeRequire(THINK.APP_PATH + '/Common/conf/mode.js');
-            if (modes[THINK.APP_MODE]) {
-                C(modes[THINK.APP_MODE]);
+        if(THINK.APP_MODE){
+            if (isFile(THINK.APP_PATH + '/Common/conf/mode.js')) {
+                var modes = safeRequire(THINK.APP_PATH + '/Common/conf/mode.js');
+                if (modes[THINK.APP_MODE]) {
+                    C(modes[THINK.APP_MODE]);
+                }
             }
         }
+
         //加载项目别名
         if (isFile(THINK.APP_PATH + '/Common/Conf/alias.js')) {
             aliasImport(THINK.APP_PATH + '/Common/Conf/alias.js');

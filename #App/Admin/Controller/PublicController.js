@@ -69,11 +69,11 @@ module.exports = Controller("AppFrameController", function () {
                     ,rotate: .01 //text ratate
                     ,charLength: 4 //how many chars
                     ,font: '35px Arial' //font size
-                    ,strokeStyle: '#0088cc' //style
-                    ,bgColor: '#fff' //bg color
+                    ,strokeStyle: '#46A3FF' //style
+                    ,bgColor: '#FFFFFF' //bg color
                     ,confusion: true //draw another group background text to mangle the text
                     ,cFont: '40px Arial' //bg text style
-                    ,cStrokeStyle: '#adc' //bg text color
+                    ,cStrokeStyle: '#87CEEB' //bg text color
                     ,cRotate: -.05 //bg text rotate
                 };
 

@@ -29,9 +29,9 @@ module.exports = Behavior(function () {
             pathname = path.normalize(pathname);
             var file = THINK.ROOT_PATH + '/' + decodeURI(pathname);
             //正则判断是否文件
-            var urlReg = new RegExp(/[^\/]+\/([^\.]*)\/([^\/]+\.[^\/\.]+)$/);
-
-            if (!!file.match(urlReg)) {
+            //var urlReg = new RegExp(/[^\/]+\/([^\.]*)\/([^\/]+\.[^\/\.]+)$/);
+            //if (!!file.match(urlReg)) {
+            if (isFile(file)) {
                 var res = this.http.res;
                 var req = this.http.req;
                 var contentType = mime.lookup(file);

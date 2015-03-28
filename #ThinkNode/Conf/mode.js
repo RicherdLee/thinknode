@@ -10,7 +10,7 @@ module.exports = {
         log_process_pid: false,
         clear_require_cache: false,
         auto_close_db: false,  //自动关闭数据库连接
-        log_record: false,
+        log_record: false
     },
     cli_debug: {
         clear_require_cache: false
