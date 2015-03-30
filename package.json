@@ -1,0 +1,45 @@
+{
+  "name": "ThinkNode",
+  "version": "1.0.0",
+  "description": "[\"Hello ThinkNode!\",\"A Node.js MVC Framework Based on Promise\"]",
+  "main": "index.js",
+  "dependencies": {
+    "ejs": "*",
+    "es6-promise": "*",
+    "mime": "*",
+    "multiparty": "*",
+    "mysql": "*",
+    "redis": "*",
+    "websocket-driver": "*",
+    "ftp": "*",
+    "htmlspecialchars": "*",
+    "phpjs": "*",
+    "ccap":">0.5.3"
+  },
+  "devDependencies": {
+    "should": "4.0.4",
+    "jshint": "2.5.1",
+    "mocha": "1.20.1",
+    "muk": "0.3.1",
+    "istanbul": "*"
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@bev4.enlink-mob.com:ThinkNode.git"
+  },
+  "keywords": [
+    "ThinkNode"
+  ],
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "readmeFilename": "README.md",
+  "author": {
+    "name": "richen",
+    "email": "richenlin@gmail.com"
+  },
+  "license": "MIT"
+}
