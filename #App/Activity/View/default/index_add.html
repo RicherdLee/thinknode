@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh-cn">
+    <!--加载后台头部公共文件-->
+    <%include ../../../Admin/View/default/public_header.html%>
+    <!-- 在此加入当前页面自定义CSS及JS start -->
+    <script>
+        function setIcon(obj){
+            if(obj !== undefined){
+                var icon = $(obj).find("i").eq(0).attr("class");
+                $("#icon").val(icon);
+            }
+        }
+    </script>
+    <!-- 在此加入当前页面自定义CSS及JS end -->
+</head>
+<body>
+<!--PAGE CONTENT BEGINS-->
+<div class="page-content">
+    <form id="main_form" class="J_ajaxForm" method="post">
+        <div class="row-fluid">
+            <table class="table table-striped table-bordered">
+                <tr>
+                    <td>活动名称</td>
+                    <td><input type="text" name="name" placeholder="名称" /></td>
+                </tr>
+                <tr>
+                    <td>开始时间</td>
+                    <td><div class="input-append">
+                        <input class="input-small J_date" id="form-starttime-date" name="starttime" type="text" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd" value="" />
+																	<span class="add-on">
+																		<i class="icon-calendar"></i>
+																	</span>
+
+                    </div></td>
+                </tr>
+                <tr>
+                    <td>结束时间</td>
+                    <td><div class="input-append">
+                        <input class="input-small J_date" id="form-endtime-date" name="endtime" type="text" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd" value="" />
+																	<span class="add-on">
+																		<i class="icon-calendar"></i>
+																	</span>
+
+                    </div></td>
+                </tr>
+                <tr>
+                    <td>图片</td>
+                    <td><input class="J_upload_text" type="text" id="logo" name="logo" value=""/></td>
+                </tr>
+                <tr>
+                    <td>描述</td>
+                    <td><textarea class="autosize-transition" id="form-field-comment" name="memo"></textarea></td>
+                </tr>
+                <tr>
+                    <td>状态</td>
+                    <td>
+                        <input name="status" class="ace-switch ace-switch-3 J_switch" type="checkbox" />
+                        <span class="lbl"></span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="form-actions">
+            <button class="btn btn-info J_ajax_submit_btn" type="submit" data-action="./add">
+                <i class="icon-ok bigger-110"></i>
+                保存
+            </button>
+
+            &nbsp; &nbsp; &nbsp;
+            <button id="J_dialog_close" class="btn">
+                <i class="icon-undo bigger-110"></i>
+                取消
+            </button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

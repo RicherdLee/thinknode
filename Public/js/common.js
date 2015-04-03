@@ -156,7 +156,7 @@
     if($("input.J_upload_preview").length){
         if(typeof($("input.J_upload_preview").attr("id")) !== undefined){
             var _id = $("input.J_upload_preview").attr("id");
-            $("input.J_upload_preview").after('<div style="text-align: center;">'
+            $("input.J_upload_preview").after('<div>'
             +'<a onclick="doUpload(\''+_id+'\', \'图片上传\',imgPreview,1);return false;" href="javascript:void(0);">'
             +'<img class="profile-picture" style="cursor:hand" id="'+_id+'_preview" src="/Public/img/upload-pic.png" />'
             +'</a><br />'
@@ -661,7 +661,7 @@ function doUpload(obj,title,callback,type){
                         id : obj,
                         title : title,
                         width : '600px',
-                        height : '400px',
+                        height : '300px',
                         lock : true,
                         fixed : true,
                         ok : function() {

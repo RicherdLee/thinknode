@@ -47,7 +47,7 @@ module.exports = Controller("AppFrameController", function () {
                                 return self.error("没有权限");
                             } else {
                                 //跳转到错误页
-                                return self.redirect("/Admin/Public/error/errmsg/没有权限",302);
+                                return self.redirect("/Admin/Public/error/errmsg/"+encodeURI('没有权限'),302);
                             }
                         }
                         //将用户信息赋值到模版变量里，供模版里使用
@@ -56,7 +56,7 @@ module.exports = Controller("AppFrameController", function () {
                 }
             }).catch(function (e) {
                 //跳转到错误页
-                return self.redirect("/Admin/Public/error/errmsg/请重新登录再操作",302);
+                return self.redirect("/Admin/Public/error/errmsg/"+encodeURI('请重新登录再操作'),302);
             });
         },
 
@@ -71,6 +71,8 @@ module.exports = Controller("AppFrameController", function () {
                 }).catch(function (e) {
                     return self.error(e.toString());
                 });
+            }else{
+                this.end();
             }
         },
 
@@ -89,8 +91,9 @@ module.exports = Controller("AppFrameController", function () {
                     }).catch(function (e) {
                         return self.error(e.toString());
                     });
+                }else{
+                    this.end();
                 }
-
             } else {
                 this.display();
             }
@@ -120,6 +123,8 @@ module.exports = Controller("AppFrameController", function () {
                         });
                     });
                 }
+            }else{
+                this.end();
             }
         },
 
@@ -148,6 +153,8 @@ module.exports = Controller("AppFrameController", function () {
                 }).catch(function (e) {
                     return self.error(e.toString());
                 });
+            }else{
+                this.end();
             }
         },
 
@@ -178,6 +185,8 @@ module.exports = Controller("AppFrameController", function () {
                 }).catch(function (e) {
                     return self.error(e.toString());
                 });
+            }else{
+                this.end();
             }
         },
 
@@ -191,6 +200,8 @@ module.exports = Controller("AppFrameController", function () {
                         return self.display();
                     });
                 });
+            }else{
+                this.end();
             }
         },
 
@@ -218,6 +229,8 @@ module.exports = Controller("AppFrameController", function () {
                         });
                     });
                 }
+            }else{
+                this.end();
             }
         }
 

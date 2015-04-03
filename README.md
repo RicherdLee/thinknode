@@ -12,4 +12,3 @@ ThinkNode 是一款基于Promise的Node.js MVC框架，借鉴于ThinkJs、ThinkP
 ## 协议
 
 MIT
-

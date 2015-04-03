@@ -71,7 +71,7 @@ module.exports = Class(function () {
         memory: function () {
             var format = function (data) {
                 return (data / 1048576).toFixed(1) + 'MB'; // 1048576 = 1024 * 1024
-            }
+            };
             var self = this;
             setInterval(function () {
                 var memoryUsage = process.memoryUsage();

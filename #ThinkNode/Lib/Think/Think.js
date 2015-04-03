@@ -14,6 +14,23 @@ var autoloadPaths = {};
 module.exports = {
     run: function () {
         'use strict';
+        this.init();
+        //debug模式
+        if (THINK.APP_DEBUG) {
+            this.debug();
+        } else {
+            this.processEvent();
+        }
+        //记录日志
+        this.log();
+        //记录进程的id
+        this.logPid();
+    },
+    /**
+     * 初始化
+     */
+    init: function () {
+        'use strict';
         //加载框架核心
         this.loadCore();
         //加载项目
@@ -24,16 +41,6 @@ module.exports = {
         this.mergeAutoloadPath();
         //注册自动加载
         registerAutoload(this.autoload);
-        //debug模式
-        if (THINK.APP_DEBUG) {
-            this.debug();
-        } else {
-            this.processEvent();
-            //记录日志
-            this.log();
-        }
-        //记录进程的id
-        this.logPid();
     },
 
     //加载框架核心

@@ -22,7 +22,7 @@ module.exports = Class({
         //创建连接
         var config = extend({
             db_host: '127.0.0.1',
-            db_port: 27017,
+            db_port: 27017
         }, this.config);
         config = 'mongodb://' + config.db_host + ':' + config.db_port + '/' + config.db_name;
         var connection = mongoose.createConnection(config);
