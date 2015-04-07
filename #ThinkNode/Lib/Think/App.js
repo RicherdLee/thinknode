@@ -1,7 +1,13 @@
+/**
+ *
+ * @author     richen
+ * @copyright  Copyright (c) 2014- <ric3000(at)163.com>
+ * @license    CC BY-NC-ND
+ * @version    15/1/15
+ */
 var cluster = require('cluster');
 var fs = require('fs');
 var domain = require('domain');
-
 var thinkHttp = thinkRequire('HHttp');
 var Dispatcher = thinkRequire('Dispatcher');
 
@@ -46,12 +52,13 @@ App.getBaseController = function (http, options, checkAction, ignoreCall) {
  * 执行具体的action，调用前置和后置操作
  * @return {[type]} [description]
  */
-App.execAction = function (controller, http, data, callMethod) {
+App.execAction = function (controller, action, data, callMethod) {
     'use strict';
     //action操作
-    var act = http.action + C('action_suffix');
+    var act = action + C('action_suffix');
     var call = C('empty_method');
     var flag = false;
+    //action不存在时执行魔术方法
     if (callMethod && !isFunction(controller[act])) {
         if (call && isFunction(controller[call])) {
             flag = true;
@@ -59,26 +66,33 @@ App.execAction = function (controller, http, data, callMethod) {
     }
     //action不存在
     if (!isFunction(controller[act]) && !flag) {
-        return getPromise(new Error('action `' + http.action + '` not found.'), true);
+        return getPromise(new Error('action `' + action + '` not found.'), true);
     }
-    //action不存在时执行魔术方法
+    //action不存在时执行魔术方法只传递action参数
     if (flag) {
-        return getPromise(controller[call](http.action));
+        return getPromise(controller[call](action));
     }
-    //action前置操作
-    var before = C('before_action');
-    //action后置操作
-    var after = C('after_action');
 
     var promise = getPromise();
+    var common_before = C('common_before_action');
+    var before = C('before_action');
+    var after = C('after_action');
 
+    //公共action前置操作
+    if (before && isFunction(controller[common_before])) {
+        promise = getPromise(controller[common_before].apply(controller, data));
+    }
+
+    //action前置操作
     if (before && isFunction(controller[before + act])) {
-        promise = getPromise(controller[before + act].apply(controller, data));
+        promise = promise.then(function () {
+            return getPromise(controller[before + act].apply(controller, data));
+        });
     }
     promise = promise.then(function () {
         return controller[act].apply(controller, data);
     });
-
+    //action后置操作
     if (after && isFunction(controller[after + act])) {
         promise = promise.then(function () {
             return controller[after + act].apply(controller, data);
@@ -144,7 +158,7 @@ App.exec = function (http) {
     return getPromise(loadFile()).then(function () {
         return getPromise(controller.__initReturn);
     }).then(function () {
-        return self.execAction(controller, http, params, true);
+        return self.execAction(controller, http.action, params, true);
     })
 };
 /**
@@ -238,10 +252,18 @@ App.mode = {
  */
 App.createServer = function () {
     'use strict';
-    var http = require('http');
-    var server = http.createServer(function (request, response) {
+    //自定义创建server
+    var createServerFn = C('create_server_fn');
+    if(createServerFn){
+        if(isFunction(createServerFn)){
+            return createServerFn(App);
+        }else if (isFunction(global[createServerFn])){
+            return global[createServerFn](App);
+        }
+    }
+    var server = require('http').createServer(function (req, res) {
         try {
-            thinkHttp(request, response).run().then(App.listener);
+            thinkHttp(req, res).run().then(App.listener);
         } catch (err) {
             console.log(err.toString());
         }

@@ -12,17 +12,27 @@ var cluster = require('cluster');
 var autoloadPaths = {};
 
 module.exports = {
+    /**
+     * [run description]
+     * @return {[type]} [description]
+     */
     run: function () {
         'use strict';
         this.init();
+        //加载项目文件
+        this.loadFiles();
+        //合并自动加载的路径
+        this.mergeAutoloadPath();
+        //注册自动加载
+        registerAutoload(this.autoload);
         //debug模式
         if (THINK.APP_DEBUG) {
             this.debug();
         } else {
             this.processEvent();
+            //记录日志
+            this.log();
         }
-        //记录日志
-        this.log();
         //记录进程的id
         this.logPid();
     },
@@ -31,27 +41,11 @@ module.exports = {
      */
     init: function () {
         'use strict';
-        //加载框架核心
-        this.loadCore();
-        //加载项目
-        this.loadApp();
-        //解析分组
-        this.parseGroupList();
-        //合并自动加载的路径
-        this.mergeAutoloadPath();
-        //注册自动加载
-        registerAutoload(this.autoload);
-    },
-
-    //加载框架核心
-    loadCore: function () {
-        'use strict';
         //加载框架函数
         require(THINK.THINK_PATH + '/Common/common.js');
         require(THINK.THINK_PATH + '/Common/function.js');
-        //加载配置
-        C(null); //移除之前的所有配置
-        C(require(THINK.THINK_PATH + '/Conf/config.js'));
+        //框架版本
+        THINK.THINK_VERSION = C('think_version');
         //加载核心
         var core = {
             Controller: THINK.CORE_PATH + '/Controller.js',
@@ -70,6 +64,22 @@ module.exports = {
             WebSocket: THINK.CORE_PATH + '/WebSocket.js'
         };
         aliasImport(core);
+    },
+
+    //加载框架文件
+    loadFiles: function () {
+        'use strict';
+        //加载项目公共函数
+        if (isFile(THINK.APP_PATH + '/Common/Common/common.js')) {
+            require(THINK.APP_PATH + '/Common/Common/common.js');
+        }
+        //加载配置
+        C(null); //移除之前的所有配置
+        C(require(THINK.THINK_PATH + '/Conf/config.js'));
+        //加载项目公共配置
+        if (isFile(THINK.APP_PATH + '/Common/Conf/config.js')) {
+            C(safeRequire(THINK.APP_PATH + '/Common/Conf/config.js'));
+        }
 
         //加载模式的配置文件
         if(THINK.APP_MODE){
@@ -77,39 +87,7 @@ module.exports = {
             if (modes[THINK.APP_MODE]) {
                 C(modes[THINK.APP_MODE]);
             }
-        }
-        //自定义路由
-        if (C('url_route_on') && isFile(THINK.THINK_PATH + '/Conf/route.js')) {
-            C('url_route_rules', safeRequire(THINK.THINK_PATH + '/Conf/route.js'));
-        }
-        //别名文件
-        if (isFile(THINK.THINK_PATH + '/Conf/alias.js')) {
-            aliasImport(safeRequire(THINK.THINK_PATH + '/Conf/alias.js'));
-        }
-        //加载标签行为
-        if (C('app_tag_on') && isFile(THINK.THINK_PATH + '/Conf/tag.js')) {
-            C('tag', safeRequire(THINK.THINK_PATH + '/Conf/tag.js'));
-        }
-
-    },
-
-    //加载项目公共文件
-    loadApp: function () {
-        'use strict';
-        //加载项目公共函数
-        if (isFile(THINK.APP_PATH + '/Common/Common/common.js')) {
-            require(THINK.APP_PATH + '/Common/Common/common.js');
-        }
-        //加载项目公共配置
-        if (isFile(THINK.APP_PATH + '/Common/Conf/config.js')) {
-            C(safeRequire(THINK.APP_PATH + '/Common/Conf/config.js'));
-        }
-        //加载项目自定义路由
-        if (C('url_route_on') && isFile(THINK.APP_PATH + '/Common/Conf/route.js')) {
-            C('url_route_rules', safeRequire(THINK.APP_PATH + '/Common/Conf/route.js'));
-        }
-        //加载项目模式定义
-        if(THINK.APP_MODE){
+            //加载项目模式定义
             if (isFile(THINK.APP_PATH + '/Common/conf/mode.js')) {
                 var modes = safeRequire(THINK.APP_PATH + '/Common/conf/mode.js');
                 if (modes[THINK.APP_MODE]) {
@@ -117,16 +95,68 @@ module.exports = {
                 }
             }
         }
-
+        //自定义路由
+        if (C('url_route_on') && isFile(THINK.THINK_PATH + '/Conf/route.js')) {
+            C('url_route_rules', safeRequire(THINK.THINK_PATH + '/Conf/route.js'));
+        }
+        //加载项目自定义路由
+        if (C('url_route_on') && isFile(THINK.APP_PATH + '/Common/Conf/route.js')) {
+            C('url_route_rules', safeRequire(THINK.APP_PATH + '/Common/Conf/route.js'));
+        }
+        //别名文件
+        if (isFile(THINK.THINK_PATH + '/Conf/alias.js')) {
+            aliasImport(safeRequire(THINK.THINK_PATH + '/Conf/alias.js'));
+        }
         //加载项目别名
         if (isFile(THINK.APP_PATH + '/Common/Conf/alias.js')) {
             aliasImport(THINK.APP_PATH + '/Common/Conf/alias.js');
         }
+        //加载标签行为
+        if (C('app_tag_on') && isFile(THINK.THINK_PATH + '/Conf/tag.js')) {
+            C('tag', safeRequire(THINK.THINK_PATH + '/Conf/tag.js'));
+        }
         //加载项目标签
         if (isFile(THINK.APP_PATH + '/Common/Conf/tag.js')) {
-            var userTag = require(THINK.APP_PATH + '/Common/Conf/tag.js');
-            loadTag(C('tag'), userTag);
+            loadTag(C('tag'), safeRequire(THINK.APP_PATH + '/Common/Conf/tag.js'));
         }
+        //解析分组列表
+        this.parseGroupList();
+    },
+    /**
+     * 解析分组列表
+     * @return {[type]} [description]
+     */
+    parseGroupList: function () {
+        'use strict';
+        var filePath = THINK.APP_PATH;
+        if (!isDir(filePath)) {
+            var groupList = C('app_group_list').map(function (item) {
+                return item.toLowerCase();
+            });
+            C('app_group_list', groupList);
+            return;
+        }
+        var dirs = fs.readdirSync(filePath);
+        //禁止分组列表
+        var denyDirs = C('deny_group_list');
+        if (!isEmpty(denyDirs)) {
+            var length = denyDirs.length;
+            var result = [];
+            dirs.forEach(function (dir) {
+                for (var i = 0; i < length; i++) {
+                    if (dir.toLowerCase() === denyDirs[i].toLowerCase()) {
+                        return;
+                    }
+                }
+                result.push(dir.toLowerCase());
+            });
+            dirs = result;
+        } else {
+            dirs = dirs.map(function (item) {
+                return item.toLowerCase();
+            })
+        }
+        C('app_group_list', dirs);
     },
 
     /**
@@ -199,44 +229,6 @@ module.exports = {
         }
         autoloadPaths = sysAutoloadPath;
     },
-
-    /**
-     * 解析分组列表
-     * @return {[type]} [description]
-     */
-    parseGroupList: function () {
-        'use strict';
-        var filePath = THINK.APP_PATH;
-        if (!isDir(filePath)) {
-            var groupList = C('app_group_list').map(function (item) {
-                return item.toLowerCase();
-            });
-            C('app_group_list', groupList);
-            return;
-        }
-        var dirs = fs.readdirSync(filePath);
-        //禁止分组列表
-        var denyDirs = C('deny_group_list');
-        if (!isEmpty(denyDirs)) {
-            var length = denyDirs.length;
-            var result = [];
-            dirs.forEach(function (dir) {
-                for (var i = 0; i < length; i++) {
-                    if (dir.toLowerCase() === denyDirs[i].toLowerCase()) {
-                        return;
-                    }
-                }
-                result.push(dir.toLowerCase());
-            });
-            dirs = result;
-        } else {
-            dirs = dirs.map(function (item) {
-                return item.toLowerCase();
-            })
-        }
-        C('app_group_list', dirs);
-    },
-
     /**
      * 自动加载机制，给thinkRequire使用
      * @param  {[type]} cls [description]
@@ -321,6 +313,7 @@ module.exports = {
                         require.cache[file] = null;
                     }
                 }
+                self.loadFiles();
                 self.loadDebugFiles();
             }, 500);
         }

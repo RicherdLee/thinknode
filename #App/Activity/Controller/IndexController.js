@@ -6,7 +6,7 @@ module.exports = Controller("AdminBaseController", function () {
     "use strict";
     return {
         init: function (http) {
-            this.super("init", http);
+            this.super_("init", http);
             this.Model = D("Activity/Activity");
         },
 
@@ -26,7 +26,7 @@ module.exports = Controller("AdminBaseController", function () {
         },
 
         _before_addAction: function () {
-
+            this.error('cao');
         }
     };
 });

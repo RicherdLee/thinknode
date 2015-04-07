@@ -374,7 +374,7 @@ module.exports = Class(function () {
         end: function (obj, encoding) {
             if (obj !== undefined) {
                 var self = this;
-                return getPromise(this.echo(obj, encoding)).then(function () {
+                return this.echo(obj, encoding).then(function(){
                     self.http.end();
                 });
             }

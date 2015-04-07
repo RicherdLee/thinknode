@@ -91,12 +91,6 @@ module.exports = Controller("AppFrameController", function () {
                 self.header("Content-Type", "image/png");
                 self.end(data.captchaImg);
             });
-        },
-
-        errorAction: function(){
-            var msg = this.param("errmsg");
-            this.assign("errmsg",isEmpty(msg) ? '发生错误' : decodeURI(msg));
-            this.display();
         }
 
     };

@@ -14,20 +14,9 @@ module.exports = Controller("AppFrameController", function () {
 
         init: function (http) {
             this.super_("init", http);
-            //初始化项目和用户
-            return Promise.all([this.initSite(),this.initUser()]);
         },
 
-        //初始化项目
-        initSite: function () {
-            var self = this;
-
-            ////初始化配置
-            //var Config = F("Config");
-            //this.assign("Config",Config);
-        },
-        //初始化用户
-        initUser: function () {
+        __before: function () {
             var self = this;
             //判断用户是否登录
             return this.session("userInfo").then(function (user) {
@@ -40,23 +29,21 @@ module.exports = Controller("AppFrameController", function () {
                         return self.redirect("/Admin/Public/login",302);
                     }
                 } else {
+                    //判断用户权限
                     return authCheck(self.http.group, self.http.controller, self.http.action, user, 2, 'or', self.http).then(function (check) {
-                        if (check == false || check == "false") {
+                        if (check === false) {
                             //ajax访问返回一个json的错误信息
                             if (self.isAjax()) {
                                 return self.error("没有权限");
                             } else {
                                 //跳转到错误页
-                                return self.redirect("/Admin/Public/error/errmsg/"+encodeURI('没有权限'),302);
+                                return self.error('没有权限');
                             }
                         }
                         //将用户信息赋值到模版变量里，供模版里使用
                         self.assign("userInfo", user);
                     });
                 }
-            }).catch(function (e) {
-                //跳转到错误页
-                return self.redirect("/Admin/Public/error/errmsg/"+encodeURI('请重新登录再操作'),302);
             });
         },
 
@@ -71,8 +58,6 @@ module.exports = Controller("AppFrameController", function () {
                 }).catch(function (e) {
                     return self.error(e.toString());
                 });
-            }else{
-                this.end();
             }
         },
 
@@ -91,9 +76,8 @@ module.exports = Controller("AppFrameController", function () {
                     }).catch(function (e) {
                         return self.error(e.toString());
                     });
-                }else{
-                    this.end();
                 }
+
             } else {
                 this.display();
             }
@@ -123,8 +107,6 @@ module.exports = Controller("AppFrameController", function () {
                         });
                     });
                 }
-            }else{
-                this.end();
             }
         },
 
@@ -153,8 +135,6 @@ module.exports = Controller("AppFrameController", function () {
                 }).catch(function (e) {
                     return self.error(e.toString());
                 });
-            }else{
-                this.end();
             }
         },
 
@@ -185,8 +165,6 @@ module.exports = Controller("AppFrameController", function () {
                 }).catch(function (e) {
                     return self.error(e.toString());
                 });
-            }else{
-                this.end();
             }
         },
 
@@ -200,8 +178,6 @@ module.exports = Controller("AppFrameController", function () {
                         return self.display();
                     });
                 });
-            }else{
-                this.end();
             }
         },
 
@@ -229,8 +205,6 @@ module.exports = Controller("AppFrameController", function () {
                         });
                     });
                 }
-            }else{
-                this.end();
             }
         }
 

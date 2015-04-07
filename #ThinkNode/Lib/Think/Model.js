@@ -347,7 +347,7 @@ var Model = module.exports = Class(function () {
                         } else {
                             //此处修改为字段存在才验证
                             //if(isEmpty(data[validate.name]) && validate.valid !== 'required'){
-                            if (data.hasOwnProperty(validate.name)) {
+                            if (validate.name in data) {
                                 if (validate.type === type) {
                                     //删除type属性兼容Vaild类
                                     delete validate.type;
