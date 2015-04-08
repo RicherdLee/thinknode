@@ -69,7 +69,7 @@ global.authCheck = function (group,controller,action, user, mode, relation,http)
         return getPromise(false);
     }
     //控制器名为PublicController或者以public_开头的方法无需权限认证
-    if(controller == 'Public' || action.toString().substring(0,6) == "public"){
+    if(controller == 'Public' || action.toString().substring(0,6) == "public" || C('auth_superroleid') == user.role_id){
         return getPromise(true);
     }else{
         //实例化Auth类
