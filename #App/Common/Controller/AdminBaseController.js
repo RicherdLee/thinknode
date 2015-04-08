@@ -31,12 +31,12 @@ module.exports = Controller("AppFrameController", function () {
                     return authCheck(self.http.group, self.http.controller, self.http.action, user, 2, 'or', self.http).then(function (check) {
                         if (!check) {
                             //ajax访问返回一个json的错误信息
-                            if (self.isAjax()) {
+                            //if (self.isAjax()) {
                                 return self.error("没有权限");
-                            } else {
+                            //} else {
                                 //跳转到错误页
-                                return self.error("没有权限!");
-                            }
+                            //    return self.error("没有权限!");
+                            //}
                         }
                         //将用户信息赋值到模版变量里，供模版里使用
                         self.assign("userInfo", user);
