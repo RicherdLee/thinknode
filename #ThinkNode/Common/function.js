@@ -67,6 +67,22 @@ global.thinkRequire = function (name) {
     return safeRequire(name);
 };
 /**
+ * 安全方式加载文件
+ * @param  {[type]} file [description]
+ * @return {[type]}      [description]
+ */
+global.safeRequire = function (file) {
+    'use strict';
+    try {
+        return require(file);
+    } catch (e) {
+        //if (THINK.APP_DEBUG) {
+        //    console.error(e.stack);
+        //}
+        return {};
+    }
+};
+/**
  * 注册require
  * @param  {Function} callback [description]
  * @return {[type]}            [description]
@@ -84,22 +100,6 @@ global.aliasImport = function (alias, classFile) {
         _alias[alias] = classFile;
     } else {
         _alias = extend(_alias, alias);
-    }
-};
-/**
- * 安全方式加载文件
- * @param  {[type]} file [description]
- * @return {[type]}      [description]
- */
-global.safeRequire = function (file) {
-    'use strict';
-    try {
-        return require(file);
-    } catch (e) {
-        //if (THINK.APP_DEBUG) {
-        //    console.error(e.stack);
-        //}
-        return {};
     }
 };
 
@@ -166,6 +166,7 @@ global.Class = function (superCls, prop) {
         util.inherits(this, superCls);
         //将父级的属性复制到当前类上
         extend(cls.__prop, superCls.__prop);
+        extend(cls.__initReturn, superCls.__initReturn);
         return this;
     };
     if (arguments.length === 1) {

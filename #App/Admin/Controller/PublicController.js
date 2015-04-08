@@ -11,7 +11,7 @@ module.exports = Controller("AppFrameController", function () {
     return {
 
         loginAction: function(){
-            this.display();
+            return this.display();
         },
 
         checkLoginAction: function(){
@@ -36,7 +36,7 @@ module.exports = Controller("AppFrameController", function () {
         logoutAction: function(){
             var self = this;
             return this.session().then(function(){
-                self.redirect("/Admin/Public/login");
+                return self.redirect("/Admin/Public/login");
             });
         },
 
@@ -50,7 +50,7 @@ module.exports = Controller("AppFrameController", function () {
             //return captchaPromise.then(function(data){
             //    self.session("verify",data[0]);
             //    self.header("Content-Type", "image/jpeg");
-            //    self.end(data[1]);
+            //    return self.end(data[1]);
             //});
 
             //captcha
@@ -89,7 +89,7 @@ module.exports = Controller("AppFrameController", function () {
             return captchaPromise(captchaOptions).then(function (data) {
                 self.session("verify",data.captchaStr);
                 self.header("Content-Type", "image/png");
-                self.end(data.captchaImg);
+                return self.end(data.captchaImg);
             });
         }
 

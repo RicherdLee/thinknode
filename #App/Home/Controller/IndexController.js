@@ -9,7 +9,7 @@ module.exports = Controller("AppFrameController", function(){
       this.super("init", http);
     },
     indexAction: function(){
-      this.json(["Hello ThinkNode!","A Node.js MVC Framework Based on Promise"]);
+      return this.json(["Hello ThinkNode!","A Node.js MVC Framework Based on Promise"]);
     }
   };
 });

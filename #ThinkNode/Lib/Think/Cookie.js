@@ -67,4 +67,4 @@ module.exports = {
         }
         return item.join('; ');
     }
-}
+};

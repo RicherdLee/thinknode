@@ -7,13 +7,12 @@
  */
 module.exports = Controller("AppFrameController", function () {
     "use strict";
-
     return {
-        //定义是后台
-        inAdmin: true,
 
         init: function (http) {
-            this.super_("init", http);
+            this.super("init", http);
+            //定义是后台
+            this.inAdmin = true;
         },
 
         __before: function () {
@@ -26,18 +25,17 @@ module.exports = Controller("AppFrameController", function () {
                         return self.error("用户未登录，不能访问");
                     } else {
                         //跳转到登录页
-                        return self.redirect("/Admin/Public/login",302);
+                        return self.redirect("/Admin/Public/login");
                     }
-                } else {
-                    //判断用户权限
+                }else{
                     return authCheck(self.http.group, self.http.controller, self.http.action, user, 2, 'or', self.http).then(function (check) {
-                        if (check === false) {
+                        if (!check) {
                             //ajax访问返回一个json的错误信息
                             if (self.isAjax()) {
                                 return self.error("没有权限");
                             } else {
                                 //跳转到错误页
-                                return self.error('没有权限');
+                                return self.error("没有权限!");
                             }
                         }
                         //将用户信息赋值到模版变量里，供模版里使用

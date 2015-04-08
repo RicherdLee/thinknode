@@ -10,7 +10,7 @@ module.exports = Controller("Common/AdminBaseController", function () {
     return {
 
         indexAction: function () {
-            this.redirect('/Admin/Index/public_index');
+            return this.redirect('/Admin/Index/public_index');
         },
 
         publicIndexAction: function () {

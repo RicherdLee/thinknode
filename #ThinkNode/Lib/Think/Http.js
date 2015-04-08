@@ -348,7 +348,7 @@ var Http = module.exports = Class(function () {
                  */
                 echo: function (obj, encoding) {
                     this.sendCookie();
-                    if (obj === undefined) {
+                    if (obj === undefined || obj === '') {
                         return;
                     }
                     if (isArray(obj) || isObject(obj)) {
@@ -357,15 +357,12 @@ var Http = module.exports = Class(function () {
                     if (!isString(obj) && !isBuffer(obj)) {
                         obj += '';
                     }
-                    var self = this;
-                    return tag('content_write', this, obj).then(function (obj) {
-                        if (isBuffer(obj)) {
-                            self.res.write(obj);
-                        } else {
-                            self.res.write(obj, encoding || C('encoding'));
-                        }
-                        return obj;
-                    })
+                    if (isBuffer(obj)) {
+                        this.res.write(obj);
+                    } else {
+                        this.res.write(obj, encoding || C('encoding'));
+                    }
+                    return getPromise(obj);
                 },
                 /**
                  * 结束URL

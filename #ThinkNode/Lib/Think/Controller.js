@@ -244,16 +244,6 @@ module.exports = Class(function () {
             return instance.get(name);
         },
         /**
-         * 跳转，返回一个pendding promise阻止后面继续执行
-         * @param  {[type]} url  [description]
-         * @param  {[type]} code [description]
-         * @return {[type]}      [description]
-         */
-        redirect: function (url, code) {
-            this.http.redirect(url, code);
-            return getDefer().promise;
-        },
-        /**
          * 赋值变量到模版
          * @param  {[type]} name  [description]
          * @param  {[type]} value [description]
@@ -301,33 +291,6 @@ module.exports = Class(function () {
             return A(action, this.http, data);
         },
         /**
-         * jsonp格式输出
-         * @param  {[type]} data  [description]
-         * @param  {[type]} jsonp [description]
-         * @return {[type]}       [description]
-         */
-        jsonp: function (data) {
-            this.type(C('json_content_type'));
-            var callback = this.get(C('url_callback_name'));
-            //过滤callback值里的非法字符
-            callback = callback.replace(/[^\w\.]/g, '');
-            if (callback) {
-                data = callback + '(' + (data !== undefined ? JSON.stringify(data) : '') + ')';
-                this.end(data);
-            } else {
-                this.end(data);
-            }
-        },
-        /**
-         * json格式输出
-         * @param  {[type]} data [description]
-         * @return {[type]}      [description]
-         */
-        json: function (data) {
-            this.type(C('json_content_type'));
-            return this.end(data);
-        },
-        /**
          * 设置http响应状态码
          * @param  {[type]} status [description]
          * @return {[type]}        [description]
@@ -367,6 +330,31 @@ module.exports = Class(function () {
             return this.http.echo(obj, encoding);
         },
         /**
+         * jsonp格式输出
+         * @param  {[type]} data  [description]
+         * @param  {[type]} jsonp [description]
+         * @return {[type]}       [description]
+         */
+        jsonp: function (data) {
+            this.type(C('json_content_type'));
+            var callback = this.get(C('url_callback_name'));
+            //过滤callback值里的非法字符
+            callback = callback.replace(/[^\w\.]/g, '');
+            if (callback) {
+                data = callback + '(' + (data !== undefined ? JSON.stringify(data) : '') + ')';
+            }
+            return this.end(data);
+        },
+        /**
+         * json格式输出
+         * @param  {[type]} data [description]
+         * @return {[type]}      [description]
+         */
+        json: function (data) {
+            this.type(C('json_content_type'));
+            return this.end(data);
+        },
+        /**
          * 结束输出，输出完成时一定要调用这个方法
          * @param  {[type]} obj [description]
          * @return {[type]}     [description]
@@ -376,9 +364,54 @@ module.exports = Class(function () {
                 var self = this;
                 return this.echo(obj, encoding).then(function(){
                     self.http.end();
+                    return getDefer().promise;
                 });
+            }else{
+                this.http.end();
+                return getDefer().promise;
             }
-            this.http.end();
+        },
+        /**
+         * 跳转，返回一个pendding promise阻止后面继续执行
+         * @param  {[type]} url  [description]
+         * @param  {[type]} code [description]
+         * @return {[type]}      [description]
+         */
+        redirect: function (url, code) {
+            this.http.redirect(url, code);
+            return getDefer().promise;
+        },
+        /**
+         * 正常json数据输出
+         * @param  {[type]} errmsg [description]
+         * @param  {[type]} data [description]
+         * @return {[type]}      [description]
+         */
+        success: function (errmsg, data) {
+            var obj = getObject([C('error_no_key'), C('error_msg_key')], [0, errmsg || '']);
+            if (data !== undefined) {
+                obj.data = data;
+            } else {
+                obj.data = {};
+            }
+            this.type(C('json_content_type'));
+            return this.end(obj);
+        },
+        /**
+         * 异常json数据数据
+         * @param  {[type]} errmsg [description]
+         * @param  {[type]} data [description]
+         * @return {[type]}        [description]
+         */
+        error: function (errmsg, data) {
+            var obj = getObject([C('error_no_key'), C('error_msg_key')], [500, errmsg || 'error']);
+            if (data !== undefined) {
+                obj.data = data;
+            } else {
+                obj.data = {};
+            }
+            this.type(C('json_content_type'));
+            return this.end(obj);
         },
         /**
          * 发送Content-Type
@@ -426,40 +459,6 @@ module.exports = Class(function () {
                 deferred.reject(err);
             });
             return deferred.promise;
-        },
-        /**
-         * 正常json数据输出
-         * @param  {[type]} errmsg [description]
-         * @param  {[type]} data [description]
-         * @return {[type]}      [description]
-         */
-        success: function (errmsg, data) {
-            var obj = getObject([C('error_no_key'), C('error_msg_key')], [0, errmsg || '']);
-            if (data !== undefined) {
-                obj.data = data;
-            } else {
-                obj.data = {};
-            }
-            this.type(C('json_content_type'));
-            this.end(obj);
-            return getDefer().promise;
-        },
-        /**
-         * 异常json数据数据
-         * @param  {[type]} errmsg [description]
-         * @param  {[type]} data [description]
-         * @return {[type]}        [description]
-         */
-        error: function (errmsg, data) {
-            var obj = getObject([C('error_no_key'), C('error_msg_key')], [500, errmsg || 'error']);
-            if (data !== undefined) {
-                obj.data = data;
-            } else {
-                obj.data = {};
-            }
-            this.type(C('json_content_type'));
-            this.end(obj);
-            return getDefer().promise;
         },
         /**
          * 关闭数据库连接

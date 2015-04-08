@@ -38,7 +38,6 @@ module.exports = {
     empty_method: '_empty', //当找不到方法时调用此方法，这个方法存在时才有效
     common_before_action:'__before',//公共action前置方法
     before_action: '_before_', //action前置方法前缀
-    after_action: '_after_', //action后置方法前置
     url_params_bind: true, //方法参数绑定,将URL参数值绑定到action的参数上
     action_suffix: 'Action', //action后缀
     url_callback_name: 'callback', //jsonp格式的callback名字

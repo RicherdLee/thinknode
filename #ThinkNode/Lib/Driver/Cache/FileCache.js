@@ -99,7 +99,7 @@ module.exports = Cache(function () {
                 //修改缓存文件权限，避免不同账号下启动时可能会出现无权限的问题
                 chmod(filePath);
                 deferred.resolve();
-            })
+            });
             return deferred.promise;
         },
         /**

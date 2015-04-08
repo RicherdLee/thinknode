@@ -76,7 +76,7 @@ Session.start = function(http){
   }
   var type = C('session_type');
   if (!type) {
-    if (APP_DEBUG || C('use_cluster')) {
+    if (THINK.APP_DEBUG || C('use_cluster')) {
       type = 'File';
       C('session_type', 'File');
       console.log("in debug or cluster mode, session can't use memory for storage, convert to File");
@@ -92,6 +92,6 @@ Session.start = function(http){
   http.on('afterEnd', function(){
     //刷新session
     return session.flush && session.flush();
-  })
+  });
   return cookie;
 };

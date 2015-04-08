@@ -70,34 +70,27 @@ App.execAction = function (controller, action, data, callMethod) {
     }
     //action不存在时执行魔术方法只传递action参数
     if (flag) {
-        return getPromise(controller[call](action));
+        return controller[call](action);
     }
 
     var promise = getPromise();
     var common_before = C('common_before_action');
     var before = C('before_action');
-    var after = C('after_action');
 
     //公共action前置操作
     if (before && isFunction(controller[common_before])) {
-        promise = getPromise(controller[common_before].apply(controller, data));
+        promise = controller[common_before].apply(controller, data);
     }
 
-    //action前置操作
+    //当前action前置操作
     if (before && isFunction(controller[before + act])) {
         promise = promise.then(function () {
-            return getPromise(controller[before + act].apply(controller, data));
+            return controller[before + act].apply(controller, data);
         });
     }
     promise = promise.then(function () {
         return controller[act].apply(controller, data);
     });
-    //action后置操作
-    if (after && isFunction(controller[after + act])) {
-        promise = promise.then(function () {
-            return controller[after + act].apply(controller, data);
-        })
-    }
     return promise;
 
 };
@@ -133,8 +126,7 @@ App.exec = function (http) {
     var controller = this.getBaseController(http, {}, true);
     //group禁用或不存在或者controller不存在
     if (!controller) {
-        var err = new Error('/' + http.group + '/Controller/' + http.controller + 'Controller' + ' not found.' + ' pathname is `' + http.pathname + '`');
-        return getPromise(err, true);
+        return getPromise(new Error('Controller not found.' + ' pathname is `' + http.pathname + '`'), true);
     }
     var params;
     var actionFn = controller[http.action + C('action_suffix')];
@@ -142,22 +134,17 @@ App.exec = function (http) {
     if (actionFn && C('url_params_bind')) {
         params = this.getActionParams(actionFn, http);
     }
+    //加载分组函数
+    if (isFile(THINK.APP_PATH + '/' + http.group + '/Common/function.js')) {
+        thinkRequire(THINK.APP_PATH + '/' + http.group + '/Common/function.js');
+    }
+    //加载分组配置
+    if (isFile(THINK.APP_PATH + '/' + http.group + '/Conf/config.js')) {
+        C(thinkRequire(THINK.APP_PATH + '/' + http.group + '/Conf/config.js'));
+    }
 
     var self = this;
-    var loadFile = function () {
-        //加载分组函数
-        if (isFile(THINK.APP_PATH + '/' + http.group + '/Common/function.js')) {
-            thinkRequire(THINK.APP_PATH + '/' + http.group + '/Common/function.js');
-        }
-        //加载分组配置
-        if (isFile(THINK.APP_PATH + '/' + http.group + '/Conf/config.js')) {
-            C(thinkRequire(THINK.APP_PATH + '/' + http.group + '/Conf/config.js'));
-        }
-    };
-
-    return getPromise(loadFile()).then(function () {
-        return getPromise(controller.__initReturn);
-    }).then(function () {
+    return getPromise(controller.__initReturn).then(function () {
         return self.execAction(controller, http.action, params, true);
     })
 };

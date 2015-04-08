@@ -9,14 +9,17 @@ module.exports = Controller(function(){
     "use strict";
 
     return {
-        //各种缓存
-        Cache:{},
-        // 页面公共过滤条件
-        Map:{},
-        // 定义数据对象
-        Model:'',
-        // index列表分页查询SQL数组参数
-        Mo:{sortasc:'',sortby:'',field:'*',ispage:true,pagesize:10},
+        init: function (http) {
+            this.super('init',http);
+            //各种缓存
+            this.Cache = {};
+            // 页面公共过滤条件
+            this.Map = {};
+            // 定义数据对象
+            this.Model = '';
+            // index列表分页查询SQL数组参数
+            this.Mo = {sortasc:'',sortby:'',field:'*',ispage:true,pagesize:10};
+        },
 
         _empty: function(){
             this.redirect("/");
