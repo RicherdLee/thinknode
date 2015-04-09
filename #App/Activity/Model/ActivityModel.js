@@ -17,7 +17,7 @@ module.exports = Model("CommonModel", function () {
         ],
         //字段,自动填写的值[,完成时间(1新增 2编辑 null新增和编辑)]
         _auto:[
-            {name: "starttime", value: php.time(),type: 1},
+            {name: "starttime", value: php.time()},
             {name: "endtime", value: php.time()}
         ]
     };

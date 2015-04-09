@@ -12,7 +12,7 @@ module.exports = Controller("AdminBaseController", function () {
             if(this.isPost()){
 
             }else{
-                //return this.display();
+                return this.display();
             }
         }
     };

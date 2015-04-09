@@ -19,7 +19,7 @@ module.exports = Controller("Common/AdminBaseController", function () {
             var username = '';
             return this.session("userInfo").then(function (user) {
                 if(user){
-                    return Promise.all([self.getDbVersion(),X("Admin/AdminMenu",user.id).getAdminMenu()]).then(function (data) {
+                    return Promise.all([self.getDbVersion(),X("Admin/AdminMenu",user.id,{'userInfo':user}).getAdminMenu()]).then(function (data) {
                         username = user.nickname ? user.nickname : user.username;
                         var os = thinkRequire("os");
                         info.platform = os.platform();

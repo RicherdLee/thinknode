@@ -41,15 +41,31 @@ module.exports = Class(function(){
             return S("adminMenu_"+this.userId).then(function(value){
                 if(isEmpty(value)){
                     var ruleIds = self.getRuleIds();
+                    var flag = false;
+                    if(self.config.userInfo.role_id == C('auth_superroleid')){
+                        flag = true;
+                    }
 
                     var one = ruleIds.then(function (data) {
-                        return M("AuthRule").where({status:1,isshow:1,level:1,_complex: {id: ['IN', data],name: '',_logic: 'or'}}).select();
+                        if(flag){
+                            return M("AuthRule").where({status:1,isshow:1,level:1}).select();
+                        }else{
+                            return M("AuthRule").where({status:1,isshow:1,level:1,_complex: {id: ['IN', data],name: '',_logic: 'or'}}).select();
+                        }
                     });
                     var two = ruleIds.then(function (data) {
-                        return M("AuthRule").where({status:1,isshow:1,level:2,_complex: {id: ['IN', data],name: '',_logic: 'or'}}).select();
+                        if(flag){
+                            return M("AuthRule").where({status:1,isshow:1,level:2}).select();
+                        }else{
+                            return M("AuthRule").where({status:1,isshow:1,level:2,_complex: {id: ['IN', data],name: '',_logic: 'or'}}).select();
+                        }
                     });
                     var three = ruleIds.then(function (data) {
-                        return M("AuthRule").where({status:1,isshow:1,level:3,id:["in",data]}).select();
+                        if(flag){
+                            return M("AuthRule").where({status:1,isshow:1,level:3}).select();
+                        }else{
+                            return M("AuthRule").where({status:1,isshow:1,level:3,id:["in",data]}).select();
+                        }
                     });
 
                     return Promise.all([one,two,three]).then(function (result) {
@@ -115,7 +131,7 @@ module.exports = Class(function(){
                 data.forEach(function(item){
                     var ruleIds = (item.rule_ids || '').split(',');
                     ids = ids.concat(ruleIds);
-                })
+                });
                 return ids;
             })
         },

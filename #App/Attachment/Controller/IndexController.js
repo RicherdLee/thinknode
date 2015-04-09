@@ -26,7 +26,7 @@ module.exports = Controller("AdminBaseController", function () {
                 }
                 this.assign("type", type);
                 this.assign("allowUploadType", allowUploadType);
-                this.display();
+                return this.display();
             }
         },
         //上传前置检查
@@ -52,7 +52,7 @@ module.exports = Controller("AdminBaseController", function () {
 
         albumAction: function () {
             var self = this;
-            this.display();
+            return this.display();
         }
     };
 });
