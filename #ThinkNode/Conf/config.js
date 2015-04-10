@@ -15,7 +15,7 @@ module.exports = {
     url_pathname_suffix: '.html', //不解析的pathname后缀，这样利于seo
     app_tag_on: true, //是否支持标签功能
     url_resource_on: true,  //是否监听静态资源类请求
-    url_resource_reg: /^(Public\/|robot\.txt)/, //判断是否是静态资源的正则
+    url_resource_reg: /^(Static\/|robot\.txt)/, //判断是否是静态资源的正则
     url_route_on: true, //是否开启自定义路由功能
     filter_data: true, //主要是安全过滤，强烈建议开启
 
@@ -27,8 +27,8 @@ module.exports = {
     post_file_temp_path: THINK.RUNTIME_PATH + '/Temp', //文件上传的临时目录
     post_file_autoremove: true, //请求完成时，自动删除未处理的上传缓存文件
     post_file_allow_type: 'jpg|jpeg|png|bmp|gif|zip|rar|ipa|apk',//允许上传的文件类型
-    post_file_save_path: THINK.ROOT_PATH + '/Public/uploads/',//上传文件保存目录
-    post_file_save_url: '/Public/uploads/',//上传文件目录访问URL
+    post_file_save_path: THINK.ROOT_PATH + '/Static/uploads/',//上传文件保存目录
+    post_file_save_url: '/Static/uploads/',//上传文件目录访问URL
 
     app_group_list: ['Home', 'Admin', 'Restful'], //分组列表
     deny_group_list: ['Common'],//禁止分组
@@ -40,7 +40,7 @@ module.exports = {
     before_action: '_before_', //action前置方法前缀
     url_params_bind: true, //方法参数绑定,将URL参数值绑定到action的参数上
     action_suffix: 'Action', //action后缀
-    url_callback_name: 'callback', //jsonp格式的callback名字
+    url_callback_name: 'jsonpcallback', //jsonp格式的callback名字
     json_content_type: 'application/json', //发送json时的content-type
     auto_send_content_type: true, //是否自动发送Content-Type,默认值为`tpl_content_type`配置值
 
@@ -111,7 +111,7 @@ module.exports = {
     log_memory_path: THINK.LOG_PATH + '/memory', //日志文件存放路径
     log_memory_interval: 60 * 1000, //一分钟记录一次
 
-    cache_type: 'Redis', //数据缓存类型 File,Redis,Memcache
+    cache_type: 'File', //数据缓存类型 File,Redis,Memcache
     cache_key_prefix: 'ThinkNode__', //缓存key前置(memcache和redis下有效)
     cache_timeout: 6 * 3600, //数据缓存有效期，单位: 秒
     cache_path: THINK.CACHE_PATH,  //缓存路径设置 (File缓存方式有效)

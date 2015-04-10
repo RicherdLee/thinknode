@@ -19,7 +19,7 @@ rm -rf /www/web/node/#Runtime/Data/*
 rm -rf /www/web/node/#Runtime/Temp/*
 
 chmod -R 755 /www/web/node
-chmod -R 777 ./Public
+chmod -R 777 ./Static
 chmod -R 777 ./\#Runtime
 chown -R richen:docker /www/web/node
 

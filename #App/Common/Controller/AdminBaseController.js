@@ -56,6 +56,8 @@ module.exports = Controller("AppFrameController", function () {
                 }).catch(function (e) {
                     return self.error(e.toString());
                 });
+            }else{
+                return this.end();
             }
         },
 
@@ -74,6 +76,8 @@ module.exports = Controller("AppFrameController", function () {
                     }).catch(function (e) {
                         return self.error(e.toString());
                     });
+                }else{
+                    return this.end();
                 }
 
             } else {
@@ -105,6 +109,8 @@ module.exports = Controller("AppFrameController", function () {
                         });
                     });
                 }
+            }else{
+                return this.end();
             }
         },
 
@@ -133,6 +139,8 @@ module.exports = Controller("AppFrameController", function () {
                 }).catch(function (e) {
                     return self.error(e.toString());
                 });
+            }else{
+                return this.end();
             }
         },
 
@@ -163,6 +171,8 @@ module.exports = Controller("AppFrameController", function () {
                 }).catch(function (e) {
                     return self.error(e.toString());
                 });
+            }else{
+                return this.end();
             }
         },
 
@@ -176,6 +186,8 @@ module.exports = Controller("AppFrameController", function () {
                         return self.display();
                     });
                 });
+            }else{
+                return this.end();
             }
         },
 
@@ -203,6 +215,8 @@ module.exports = Controller("AppFrameController", function () {
                         });
                     });
                 }
+            }else{
+                return this.end();
             }
         }
 

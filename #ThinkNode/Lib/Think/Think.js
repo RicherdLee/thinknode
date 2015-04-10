@@ -30,9 +30,9 @@ module.exports = {
             this.debug();
         } else {
             this.processEvent();
-            //记录日志
-            this.log();
         }
+        //记录日志
+        this.log();
         //记录进程的id
         this.logPid();
     },
@@ -44,8 +44,6 @@ module.exports = {
         //加载框架函数
         require(THINK.THINK_PATH + '/Common/common.js');
         require(THINK.THINK_PATH + '/Common/function.js');
-        //框架版本
-        THINK.THINK_VERSION = C('think_version');
         //加载核心
         var core = {
             Controller: THINK.CORE_PATH + '/Controller.js',
@@ -69,18 +67,19 @@ module.exports = {
     //加载框架文件
     loadFiles: function () {
         'use strict';
-        //加载项目公共函数
-        if (isFile(THINK.APP_PATH + '/Common/Common/common.js')) {
-            require(THINK.APP_PATH + '/Common/Common/common.js');
-        }
         //加载配置
         C(null); //移除之前的所有配置
         C(require(THINK.THINK_PATH + '/Conf/config.js'));
+        //框架版本
+        THINK.THINK_VERSION = C('think_version');
         //加载项目公共配置
         if (isFile(THINK.APP_PATH + '/Common/Conf/config.js')) {
             C(safeRequire(THINK.APP_PATH + '/Common/Conf/config.js'));
         }
-
+        //加载项目公共函数
+        if (isFile(THINK.APP_PATH + '/Common/Common/common.js')) {
+            require(THINK.APP_PATH + '/Common/Common/common.js');
+        }
         //加载模式的配置文件
         if(THINK.APP_MODE){
             var modes = safeRequire(THINK.THINK_PATH + '/Conf/mode.js');
