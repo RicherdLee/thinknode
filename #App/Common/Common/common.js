@@ -9,14 +9,6 @@
 //加载 phpjs 扩展
 global.php = thinkRequire("phpjs");
 
-/**
- * 控制台输出简写
- * @param data
- */
-global.echo = function (data) {
-    console.log(data);
-};
-
 //---------------------------------------------------
 // 日期格式化
 // 格式 YYYY/yyyy/YY/yy 表示年份

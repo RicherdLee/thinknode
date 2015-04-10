@@ -16,7 +16,7 @@ module.exports = Controller("AppFrameController", function () {
                 self.assign('info',data);
                 return self.display();
             }).catch(function (e) {
-                echo(e);
+                console.log(e);
             });
 
         },
