@@ -1,4 +1,3 @@
-var fs = require('fs');
 var mime = require('mime');
 var path = require('path');
 var zlib = require('zlib');
@@ -31,27 +30,12 @@ module.exports = Behavior(function () {
             //正则判断是否文件
             //var urlReg = new RegExp(/[^\/]+\/([^\.]*)\/([^\/]+\.[^\/\.]+)$/);
             //if (!!file.match(urlReg)) {
+            var res = this.http.res;
             if (isFile(file)) {
-                var res = this.http.res;
-                var req = this.http.req;
                 var contentType = mime.lookup(file);
                 res.setHeader('Content-Type', contentType + '; charset=' + C('encoding'));
-                var acceptEncoding = "Accept-Encoding".toLowerCase();
-                var fileStream = fs.createReadStream(file);
-                if ((req.headers[acceptEncoding] || '').indexOf('gzip') != -1 && contentType.match(/(javascript|css)/)) {
-                    res.setHeader('Content-Encoding', 'gzip');
-                    var gzip = fileStream.pipe(zlib.createGzip());
-                    gzip.pipe(res);
-                    gzip.on('end', function () {
-                        res.end();
-                    });
-                } else {
-                    fileStream.pipe(res);
-                    fileStream.on('end', function () {
-                        res.end();
-                    });
-                }
-            } else {
+                tag('resource_output', this.http, file);
+            }else{
                 res.statusCode = 404;
                 res.end();
             }

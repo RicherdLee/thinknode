@@ -479,6 +479,10 @@ var Model = module.exports = Class(function () {
             if (!table) {
                 return this;
             }
+            table = table.trim();
+            if (table.indexOf(' ') > -1) {
+                hasPrefix = true;
+            }
             this._options.table = hasPrefix ? table : this.tablePrefix + table;
             return this;
         },
@@ -995,13 +999,16 @@ var Model = module.exports = Class(function () {
             var parsedOptions = {};
             var result = {};
             return this.parseOptions(options).then(function (options) {
-                delete options.table;
+                //delete options.table;
                 parsedOptions = options;
                 return self.options({
-                    where: options.where,
-                    cache: options.cache,
-                    join: options.join,
-                    alias: options.alias
+                    //where: options.where,
+                    //cache: options.cache,
+                    //join: options.join,
+                    //alias: options.alias
+                    alias: options.alias,
+                    table: options.table,
+                    group: options.group
                 }).count((options.alias || self.getTableName()) + '.' + self.getPk());
             }).then(function (count) {
                 var pageOptions = parsePage(parsedOptions);
