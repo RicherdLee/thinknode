@@ -13,8 +13,7 @@ module.exports = Controller("AppFrameController", function () {
         indexAction: function () {
             var self = this;
             return rp('http://ticket.cnautoshows.com/index.php/api/GetProjectList').promise().then(function (data) {
-                self.assign('info',data);
-                return self.display();
+                return self.json(data);
             }).catch(function (e) {
                 console.log(e);
             });

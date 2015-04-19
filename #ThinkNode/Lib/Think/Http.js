@@ -233,12 +233,22 @@ var Http = module.exports = Class(function () {
                 ip: function () {
                     var connection = this.req.connection;
                     var socket = this.req.socket;
+                    var ip;
                     if (connection && connection.remoteAddress !== localIp) {
-                        return connection.remoteAddress;
+                        //return connection.remoteAddress;
+                        ip = connection.remoteAddress;
                     } else if (socket && socket.remoteAddress !== localIp) {
-                        return socket.remoteAddress;
+                        //return socket.remoteAddress;
+                        ip = socket.remoteAddress;
+                    }else{
+                        ip = this.headers['x-forwarded-for'] || this.headers['x-real-ip'] || localIp;
                     }
-                    return this.headers['x-forwarded-for'] || this.headers['x-real-ip'] || localIp;
+                    if (ip.indexOf(':') > -1) {
+                        ip = ip.split(':').slice(-1)[0];
+                    }
+                    return ip;
+
+                    //return this.headers['x-forwarded-for'] || this.headers['x-real-ip'] || localIp;
                 },
                 //请求的cookie
                 cookie: cookie.parse(this.req.headers.cookie || '')

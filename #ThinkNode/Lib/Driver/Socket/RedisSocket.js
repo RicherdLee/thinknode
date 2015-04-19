@@ -3,7 +3,13 @@ module.exports = Class(function () {
     'use strict';
     return {
         init: function (config) {
-            this.config = config || {};
+            //this.config = config || {};
+            this.config = extend({
+                port: C('redis_port'),
+                host: C('redis_host'),
+                password: C('redis_password')
+            }, config);
+
             this.handle = null;
             this.deferred = null;
         },
