@@ -17,7 +17,7 @@ module.exports = Class({
      * @param  {[type]} schema_options [description]
      * @return {[type]}                [description]
      */
-    init: function (config, modelName, fields, schema_options) {
+    init: function(config, modelName, fields, schema_options){
         this.config = config;
         this.modelName = modelName;
         this.fields = fields;
@@ -27,14 +27,14 @@ module.exports = Class({
      * 连接
      * @return {[type]} [description]
      */
-    connect: function () {
+    connect: function(){
         if (this.linkId) {
             return this.linkId.connect();
         }
         var key = md5(this.config);
         if (key in dbConnections) {
             this.linkId = dbConnections[key];
-        } else {
+        }else{
             this.linkId = dbConnections[key] = mongoSocket(this.config);
         }
         return this.linkId.connect();
@@ -46,11 +46,18 @@ module.exports = Class({
      * @param  {[type]} schema_options [description]
      * @return {[type]}                [description]
      */
-    model: function () {
+    model: function(){
         var self = this;
-        return this.connect().then(function (handle) {
-            var schema = self.linkId.mongoose.Schema(self.fields, self.schema_options);
-            var model = handle.model(self.modelName, schema);
+        return this.connect().then(function(handle){
+            var model;
+            try {
+                if (handle.model(self.modelName)) model = handle.model(self.modelName);
+            } catch(e) {
+                if (e.name === 'MissingSchemaError') {
+                    var schema = self.linkId.mongoose.Schema(self.fields, self.schema_options);
+                    model = handle.model(self.modelName, schema);
+                }
+            }
             return model;
         })
     },
@@ -58,10 +65,10 @@ module.exports = Class({
      * 关闭mongoSocket连接
      * @return {[type]} [description]
      */
-    close: function () {
+    close: function(){
         if (this.linkId) {
             this.linkId.close();
             this.linkId = null;
         }
     }
-})
+});

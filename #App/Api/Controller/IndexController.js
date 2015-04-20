@@ -9,7 +9,7 @@ var rp = require('request-promise');
 module.exports = Controller("AppFrameController", function () {
     "use strict";
     return {
-        indexAction: function () {
+        testAction: function () {
             var self = this;
 
             var id = I("id",this);
@@ -21,20 +21,22 @@ module.exports = Controller("AppFrameController", function () {
                         method : 'POST'
                     };
 
-                    var info = JSON.parse(data);
+                    //var info = JSON.parse(data);
 
-                    var ps = [];
-                    info.data.forEach(function (v,k) {
-                        //if(k>=100 && k<200){
-                            var form = {
-                                'code': v.deductionsnos
-                            };
-                            ps.push(rp.post(options).form(form).promise());
-                        //}
-                    });
-                    return Promise.all(ps).then(function (result) {
-                        return self.echo(result);
-                    });
+                    return this.end(data);
+
+                    //var ps = [];
+                    //info.data.forEach(function (v,k) {
+                    //    //if(k>=100 && k<200){
+                    //        var form = {
+                    //            'code': v.deductionsnos
+                    //        };
+                    //        ps.push(rp.post(options).form(form).promise());
+                    //    //}
+                    //});
+                    //return Promise.all(ps).then(function (result) {
+                    //    return self.echo(result);
+                    //});
                 });
             }
 
