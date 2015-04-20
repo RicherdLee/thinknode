@@ -9,39 +9,8 @@ var rp = require('request-promise');
 module.exports = Controller("AppFrameController", function () {
     "use strict";
     return {
-        testAction: function () {
-            var self = this;
-
-            var id = I("id",this);
-
-            if(!isEmpty(id)){
-                return rp.get('http://ticket.cnautoshows.com/index.php/api/test/doCODE/id/'+id).promise().then(function (data) {
-                    var options = {
-                        uri : 'http://newactivity.cnautoshows.com/index.php/api/ActivityAward/index',
-                        method : 'POST'
-                    };
-
-                    //var info = JSON.parse(data);
-
-                    return this.end(data);
-
-                    //var ps = [];
-                    //info.data.forEach(function (v,k) {
-                    //    //if(k>=100 && k<200){
-                    //        var form = {
-                    //            'code': v.deductionsnos
-                    //        };
-                    //        ps.push(rp.post(options).form(form).promise());
-                    //    //}
-                    //});
-                    //return Promise.all(ps).then(function (result) {
-                    //    return self.echo(result);
-                    //});
-                });
-            }
-
-            this.end();
-
+        indexAction: function () {
+            return this.json(["Hello ThinkNode!","A Node.js MVC Framework Based on Promise"]);
         }
     };
 });
