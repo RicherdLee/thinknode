@@ -395,7 +395,7 @@ global.md5 = function (str) {
  */
 global.rand = function (min, max) {
     return Math.floor(min + Math.random() * (max - min + 1));
-}
+};
 /**
  * 生成一个promise,如果传入的参数是promise则直接返回
  * @param  {[type]} obj [description]
