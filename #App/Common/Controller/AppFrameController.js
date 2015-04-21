@@ -10,7 +10,7 @@ module.exports = Controller(function(){
 
     return {
         init: function (http) {
-            this.super('init',http);
+            this.super_('init',http);
             //各种缓存
             this.Cache = {};
             // 页面公共过滤条件

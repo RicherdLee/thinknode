@@ -26,7 +26,7 @@ module.exports = Behavior(function () {
                 return false;
             }
             pathname = path.normalize(pathname);
-            var file = THINK.ROOT_PATH + '/' + decodeURI(pathname);
+            var file = THINK.RESOURCE_PATH + '/' + decodeURI(pathname);
             //正则判断是否文件
             //var urlReg = new RegExp(/[^\/]+\/([^\.]*)\/([^\/]+\.[^\/\.]+)$/);
             //if (!!file.match(urlReg)) {

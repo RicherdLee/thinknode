@@ -9,7 +9,7 @@ module.exports = {
     think_version:'0.0.3',//框架版本
     port: 3000, //监听端口
     host: '', //监听的host
-    use_proxy: false, //是否使用代理访问，如：nginx。开启后不能通过ip+端口直接访问
+    use_proxy: true, //是否使用代理访问，如：nginx。开启后不能通过ip+端口直接访问
     encoding: 'utf-8', //输出数据的编码
     url_pathname_prefix: '',  //不解析的pathname前缀
     url_pathname_suffix: '.html', //不解析的pathname后缀，这样利于seo
@@ -27,7 +27,7 @@ module.exports = {
     post_file_temp_path: THINK.RUNTIME_PATH + '/Temp', //文件上传的临时目录
     post_file_autoremove: true, //请求完成时，自动删除未处理的上传缓存文件
     post_file_allow_type: 'jpg|jpeg|png|bmp|gif|zip|rar|ipa|apk',//允许上传的文件类型
-    post_file_save_path: THINK.ROOT_PATH + '/Static/uploads/',//上传文件保存目录
+    post_file_save_path: THINK.RESOURCE_PATH + '/Static/uploads/',//上传文件保存目录
     post_file_save_url: '/Static/uploads/',//上传文件目录访问URL
 
     app_group_list: ['Home', 'Admin', 'Restful'], //分组列表

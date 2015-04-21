@@ -10,7 +10,7 @@ module.exports = Controller("AppFrameController", function () {
     return {
         //默认初始化方法(仅适合做赋值类同步逻辑,断言目前无法正确返回)
         init: function (http) {
-            this.super("init", http);
+            this.super_("init", http);
             //定义是后台
             this.inAdmin = true;
         },
