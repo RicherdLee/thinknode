@@ -525,6 +525,14 @@ global.X = function (name, arg, config) {
     return thinkRequire(path)(arg, config);
 };
 /**
+ * 自定义日志记录
+ * @param context
+ * @param name
+ */
+global.addLogs = function (context, name) {
+    thinkRequire('Log')(C('log_console_path')).info(context, name);
+};
+/**
  * 处理标签扩展
  * @return {[type]} [description]
  */

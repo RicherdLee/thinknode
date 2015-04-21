@@ -25,9 +25,10 @@ module.exports = Class(function () {
          * 获取文件
          * @return {[type]} [description]
          */
-        getLogFile: function () {
+        getLogFile: function (name) {
             var date = this.getDate();
-            var file = this.logPath + '/' + date + '.log';
+            name = (name !== undefined || name !== '') ? name + '_' : '';
+            var file = this.logPath + '/' + name + date + '.log';
             return file;
         },
         get2: function (str) {
@@ -60,7 +61,7 @@ module.exports = Class(function () {
             C('log_console_type').forEach(function (item) {
                 console[item] = function () {
                     var msgs = ['[' + item.toUpperCase() + ']'].concat([].slice.call(arguments));
-                    self.write(msgs);
+                    self.write(msgs,'');
                 }
             })
         },
@@ -83,19 +84,28 @@ module.exports = Class(function () {
                     'freeMemory:' + format(os.freemem()),
                     'loadAvg:' + loadAvg[0].toFixed(1) + ',' + loadAvg[1].toFixed(1) + ',' + loadAvg[2].toFixed(2)
                 ];
-                self.write(msgs);
+                self.write(msgs,'');
             }, C('log_memory_interval'))
+        },
+        /**
+         * 自定义日志
+         * @param context
+         */
+        info: function (context, name) {
+            var item = 'Info';
+            var msgs = ['[' + item + ']', context];
+            this.write(msgs, name);
         },
         /**
          * 写入日志
          * @param  {[type]} obj [description]
          * @return {[type]}     [description]
          */
-        write: function (msgs) {
+        write: function (msgs, name) {
             var dateTime = this.getDateTime();
             msgs = ['[' + dateTime + ']'].concat([].slice.call(msgs));
             var message = util.format.apply(null, msgs) + '\n';
-            fs.appendFile(this.getLogFile(), message);
+            fs.appendFile(this.getLogFile(name), message);
         }
     }
 });
