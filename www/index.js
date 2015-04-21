@@ -8,7 +8,9 @@
 var path = require('path');
 global.THINK = [];
 //网站根目录
-THINK.ROOT_PATH = __dirname;
+THINK.ROOT_PATH = path.dirname(__dirname);
+//静态资源根目录
+THINK.RESOURCE_PATH = __dirname;
 //定义APP的根目录
 THINK.APP_PATH = THINK.ROOT_PATH + '/#App';
 //定义框架目录
