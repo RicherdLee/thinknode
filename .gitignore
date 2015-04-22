@@ -1,4 +1,4 @@
-node_modules/ccap/cap_img
+node_modules/
 .idea
 \#Runtime
-Static/uploads
+www/Static/uploads
