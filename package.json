@@ -7,8 +7,8 @@
     "test": "test"
   },
   "dependencies": {
-    "canvas-captcha": "^1.2.6",
-    "ccap": "^0.6.0",
+    //"canvas-captcha": "^1.2.6",
+    //"ccap": "^0.6.0",
     "ejs": "^2.3.1",
     "es6-promise": "^2.0.1",
     "ftp": "^0.3.9",
