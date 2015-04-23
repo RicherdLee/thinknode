@@ -57,6 +57,8 @@ module.exports = {
     path_info: [],
     //静态资源请求检测
     resource_check: ['CheckResource'],
+    //静态资源输出
+    resource_output: [resourceOutput],
     //路由检测
     route_check: ['CheckRoute'],
     //应用开始
