@@ -9,7 +9,7 @@ module.exports = {
     think_version:'1.0.3',//框架版本
     port: 3000, //监听端口
     host: '', //监听的host
-    use_proxy: true, //是否使用代理访问，如：nginx。开启后不能通过ip+端口直接访问
+    use_proxy: false, //是否使用代理访问，如：nginx。开启后不能通过ip+端口直接访问
     encoding: 'utf-8', //输出数据的编码
     url_pathname_prefix: '',  //不解析的pathname前缀
     url_pathname_suffix: '.html', //不解析的pathname后缀，这样利于seo
