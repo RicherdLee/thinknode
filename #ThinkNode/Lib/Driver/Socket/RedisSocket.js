@@ -64,7 +64,7 @@ module.exports = Class(function () {
                     } else {
                         deferred.resolve(data);
                     }
-                })
+                });
                 self.handle[name].apply(self.handle, data);
                 return deferred.promise;
             })
@@ -72,8 +72,15 @@ module.exports = Class(function () {
         get: function (name) {
             return this.wrap('get', [name]);
         },
-        set: function (name, value, time) {
-            return this.wrap('setex', [name, time, value]);
+        set: function(name, value, timeout){
+            var setP = [this.wrap('set', [name, value])];
+            if (timeout !== undefined) {
+                setP.push(this.expire(name, timeout));
+            }
+            return Promise.all(setP);
+        },
+        expire: function(name, timeout){
+            return this.wrap('expire', [name, timeout]);
         }
     }
 });
