@@ -28,16 +28,16 @@ module.exports = Class(function () {
             }
             connection.on('ready', function () {
                 deferred.resolve();
-            })
+            });
             connection.on('connect', function () {
                 deferred.resolve();
-            })
+            });
             connection.on('error', function () {
                 self.close();
-            })
+            });
             connection.on('end', function () {
                 self.close();
-            })
+            });
             this.handle = connection;
             if (this.deferred) {
                 this.deferred.reject(new Error('connection closed'));
