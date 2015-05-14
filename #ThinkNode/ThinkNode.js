@@ -23,7 +23,7 @@ if (THINK.CORE_PATH === undefined) {
 }
 
 if (THINK.RUNTIME_PATH === undefined) {
-    THINK.RUNTIME_PATH = THINK.APP_PATH + '/Runtime/';
+    THINK.RUNTIME_PATH = THINK.APP_PATH + '/#Runtime/';
 }
 if (THINK.LOG_PATH === undefined) {
     THINK.LOG_PATH = THINK.RUNTIME_PATH + '/Logs/';
