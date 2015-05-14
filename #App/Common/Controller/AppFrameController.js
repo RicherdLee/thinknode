@@ -2,7 +2,7 @@
  * 项目基类
  * @author     Richen
  * @copyright  Copyright (c) 2014- <ric3000(at)163.com>
- * @license    CC BY-NC-ND
+ * @license    MIT
  * @version    14-8-28
  */
 module.exports = Controller(function(){

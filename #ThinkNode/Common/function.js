@@ -2,7 +2,7 @@
  *
  * @author     richen
  * @copyright  Copyright (c) 2014- <ric3000(at)163.com>
- * @license    CC BY-NC-ND
+ * @license    MIT
  * @version    15/1/15
  */
 'use strict';

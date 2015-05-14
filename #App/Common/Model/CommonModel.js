@@ -2,7 +2,7 @@
  *
  * @author     richen
  * @copyright  Copyright (c) 2014- <ric3000(at)163.com>
- * @license    CC BY-NC-ND
+ * @license    MIT
  * @version    14-8-29
  */
 module.exports = Model(function(){
