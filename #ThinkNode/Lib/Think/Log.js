@@ -27,7 +27,7 @@ module.exports = Class(function () {
          */
         getLogFile: function (name) {
             var date = this.getDate();
-            name = (name !== undefined || name !== '') ? name + '_' : '';
+            name = isEmpty(name) ? '' : name + '_';
             var file = this.logPath + '/' + name + date + '.log';
             return file;
         },
