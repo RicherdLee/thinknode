@@ -166,7 +166,9 @@ App.sendError = function (http, error) {
     http.res.statusCode = C('error_code') || 500;
     http.setHeader('Content-Type', 'text/html; charset=' + C('encoding'));
     if (THINK.APP_DEBUG) {
-        http.res.end(message);
+        http.echo('<pre>' + message + '</pre>').then(function () {
+            http.end();
+        });
     } else {
         var readStream = fs.createReadStream(C('error_tpl_path'));
         readStream.pipe(http.res);
