@@ -31,25 +31,30 @@ module.exports = Class(function () {
                 user: 'root',
                 password: ''
             }, this.config);
-            var connection = mysql.createConnection(config);
+
+            //var connection = mysql.createConnection(config);
+            var connection = mysql.createPool(config);
             //连接
-            connection.connect(function (err) {
+            connection.getConnection(function (err) {
                 //连接失败
                 if (err) {
                     deferred.reject(err);
-                    self.close();
+                    //self.close();
+                    self.release();
                 } else {
                     deferred.resolve();
                 }
             });
             //错误时关闭当前连接
             connection.on('error', function () {
-                self.close();
+                //self.close();
+                self.release();
             });
             //PROTOCOL_CONNECTION_LOST
             connection.on('end', function () {
-                self.close();
-            })
+                //self.close();
+                self.release();
+            });
             //连接句柄
             this.handle = connection;
             //把上一次的promise reject

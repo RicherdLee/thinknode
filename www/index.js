@@ -20,4 +20,4 @@ THINK.RUNTIME_PATH = THINK.ROOT_PATH + '/#Runtime';
 //开启调试模式，线上环境需要关闭调试功能
 THINK.APP_DEBUG = true;
 //加载框架
-require(THINK.THINK_PATH + '/ThinkNode.js');
+require(THINK.THINK_PATH + '/ThinkNode.js')();
