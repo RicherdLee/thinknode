@@ -26,15 +26,13 @@ App.getBaseController = function (http, options, checkAction, ignoreCall) {
     if (!controller) {
         return;
     }
-    var instance;
-    //如果是RESTFUL API，则调用RestController
-    if (http.isRestful) {
-        instance = thinkRequire('RestController')(http);
-    } else {
-        var path = THINK.APP_PATH + '/' + group + '/Controller/' + controller + 'Controller.js';
-        instance = thinkRequire(path)(http);
+    var gc = group + '/Controller/' + controller + 'Controller';
+    var path = getThinkRequirePath(gc);
+    if (!path) {
+        path = THINK.APP_PATH + '/' + group + '/Controller/' + controller + 'Controller.js';
+        aliasImport(gc,path);
     }
-
+    var instance = thinkRequire(path)(http);
     if (!checkAction) {
         return instance;
     }
@@ -46,6 +44,42 @@ App.getBaseController = function (http, options, checkAction, ignoreCall) {
     if (!ignoreCall && isFunction(instance[C('empty_method')])) {
         return instance;
     }
+};
+
+/**
+ * controller不存在时调用的默认controller
+ * @return {[type]} [description]
+ */
+App.getCallController = function(http){
+    'use strict';
+    //如果是RESTFUL API，则调用RestController
+    if (http.isRestful) {
+        return thinkRequire('RestController')(http);
+    }
+    var config = C('call_controller');
+    if (!config) {
+        return;
+    }
+    config = config.split(':');
+    var group = ucfirst(config[0]);
+    var controller = ucfirst(config[1]);
+    var action = config[2];
+    var instance;
+    instance = this.getBaseController(http, {
+        group: group,
+        controller: controller,
+        action: action
+    }, true, true);
+    if (instance) {
+        http._group = http.group;
+        http._controller = http.controller;
+        http._action = http.action;
+
+        http.group = group;
+        http.controller = controller;
+        http.action = action;
+    }
+    return instance;
 };
 
 /**
@@ -123,10 +157,18 @@ App.getActionParams = function (fn, http) {
  */
 App.exec = function (http) {
     'use strict';
-    var controller = this.getBaseController(http, {}, true);
+    var controller = this.getBaseController(http, {}, true) || this.getCallController(http);
     //group禁用或不存在或者controller不存在
     if (!controller) {
-        return getPromise(new Error('Controller not found.' + ' pathname is `' + http.pathname + '`'), true);
+        var path = getThinkRequirePath(http.group + '/Controller/' + http.controller + 'Controller');
+        var cmessage;
+        if (path) {
+            cmessage = 'Action `' + http.action + '` not found.';
+        }else{
+            cmessage = 'Controller' + (http.controller ? ' `' + http.controller + '`' : '') + ' not found.';
+        }
+        var err = new Error(cmessage + ' pathname is `' + http.pathname + '`');
+        return getPromise(err, true);
     }
     var params;
     var actionFn = controller[http.action + C('action_suffix')];
@@ -134,19 +176,24 @@ App.exec = function (http) {
     if (actionFn && C('url_params_bind')) {
         params = this.getActionParams(actionFn, http);
     }
-    //加载分组函数
-    if (isFile(THINK.APP_PATH + '/' + http.group + '/Common/function.js')) {
-        thinkRequire(THINK.APP_PATH + '/' + http.group + '/Common/function.js');
-    }
-    //加载分组配置
-    if (isFile(THINK.APP_PATH + '/' + http.group + '/Conf/config.js')) {
-        C(thinkRequire(THINK.APP_PATH + '/' + http.group + '/Conf/config.js'));
-    }
 
     var self = this;
-    return getPromise(controller.__initReturn).then(function () {
+    var promise = getPromise();
+    return promise.then(function () {
+        //加载分组函数
+        if (isFile(THINK.APP_PATH + '/' + http.group + '/Common/function.js')) {
+            thinkRequire(THINK.APP_PATH + '/' + http.group + '/Common/function.js');
+        }
+    }).then(function () {
+        //加载分组配置
+        if (isFile(THINK.APP_PATH + '/' + http.group + '/Conf/config.js')) {
+            C(thinkRequire(THINK.APP_PATH + '/' + http.group + '/Conf/config.js'));
+        }
+    }).then(function () {
+        return controller.__initReturn;
+    }).then(function () {
         return self.execAction(controller, http.action, params, true);
-    })
+    });
 };
 /**
  * 发送错误信息
@@ -279,7 +326,7 @@ App.createServer = function () {
  */
 App.listener = function (http) {
     'use strict';
-    //自动发送thinkjs和版本的header
+    //自动发送thinknode和版本的header
     http.setHeader('X-Powered-By', 'ThinkNode-' + THINK.THINK_VERSION);
     //禁止远程直接用带端口的访问,websocket下允许
     if (C('use_proxy') && http.host !== http.hostname && !http.websocket) {

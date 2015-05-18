@@ -103,7 +103,7 @@ module.exports = Behavior(function () {
                                 reg = /^\d+$/;
                                 break;
                             case 'w':
-                                reg = /^\w+$/
+                                reg = /^\w+$/;
                                 break;
                         }
                         if (reg && !reg.test(pathname[i])) {

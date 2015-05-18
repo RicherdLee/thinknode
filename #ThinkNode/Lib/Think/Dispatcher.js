@@ -40,6 +40,7 @@ var Dispatcher = module.exports = Class(function () {
                 return true;
             }
             var paths = Dispatcher.splitPathName(this.http.pathname);
+            //将group list变为小写
             var groupList = C('app_group_list');
             var group = '';
             var controller = '';

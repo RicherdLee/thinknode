@@ -35,6 +35,7 @@ module.exports = {
     default_group: 'Home', //默认分组
     default_controller: 'Index', //默认模块
     default_action: 'index',  //默认Action
+    call_controller: 'Home:Index:_empty', //controller不存在时执行方法，此配置表示调用Home分组下IndexController的_emptyAction方法
     empty_method: '_empty', //当找不到方法时调用此方法，这个方法存在时才有效
     common_before_action:'__before',//公共action前置方法
     before_action: '_before_', //action前置方法前缀

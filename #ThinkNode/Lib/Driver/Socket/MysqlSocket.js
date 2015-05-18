@@ -31,29 +31,24 @@ module.exports = Class(function () {
                 user: 'root',
                 password: ''
             }, this.config);
-
-            //var connection = mysql.createConnection(config);
-            var connection = mysql.createPool(config);
+            var connection = mysql.createConnection(config);
             //连接
-            connection.getConnection(function (err) {
+            connection.connect(function (err) {
                 //连接失败
                 if (err) {
                     deferred.reject(err);
-                    //self.close();
-                    self.release();
+                    self.close();
                 } else {
                     deferred.resolve();
                 }
             });
             //错误时关闭当前连接
             connection.on('error', function () {
-                //self.close();
-                self.release();
+                self.close();
             });
             //PROTOCOL_CONNECTION_LOST
             connection.on('end', function () {
-                //self.close();
-                self.release();
+                self.close();
             });
             //连接句柄
             this.handle = connection;

@@ -82,17 +82,20 @@ module.exports = {
         }
         //加载模式的配置文件
         if(THINK.APP_MODE){
-            var modes = safeRequire(THINK.THINK_PATH + '/Conf/mode.js');
-            if (modes[THINK.APP_MODE]) {
-                C(modes[THINK.APP_MODE]);
-            }
-            //加载项目模式定义
-            if (isFile(THINK.APP_PATH + '/Common/conf/mode.js')) {
-                var modes = safeRequire(THINK.APP_PATH + '/Common/conf/mode.js');
-                if (modes[THINK.APP_MODE]) {
-                    C(modes[THINK.APP_MODE]);
+            var modeFiles = [
+                THINK.THINK_PATH + '/Conf/mode.js',
+                THINK.APP_PATH + '/Common/conf/mode.js'
+            ];
+            var self = this;
+            modeFiles.forEach(function(file){
+                if (!isFile(file)) {
+                    return;
                 }
-            }
+                var conf = self.safeRequire(file);
+                if (conf[THINK.APP_MODE]) {
+                    C(conf[THINK.APP_MODE]);
+                }
+            });
         }
         //自定义路由
         if (C('url_route_on') && isFile(THINK.THINK_PATH + '/Conf/route.js')) {
@@ -108,7 +111,7 @@ module.exports = {
         }
         //加载项目别名
         if (isFile(THINK.APP_PATH + '/Common/Conf/alias.js')) {
-            aliasImport(THINK.APP_PATH + '/Common/Conf/alias.js');
+            aliasImport(safeRequire(THINK.APP_PATH + '/Common/Conf/alias.js'));
         }
         //加载标签行为
         if (C('app_tag_on') && isFile(THINK.THINK_PATH + '/Conf/tag.js')) {
@@ -204,9 +207,6 @@ module.exports = {
             ],
             'Session': [
                 THINK.THINK_PATH + '/Lib/Driver/Session/' + file
-            ],
-            'Util': [
-                THINK.THINK_PATH + '/Lib/Util/' + file
             ]
         };
 
@@ -271,7 +271,6 @@ module.exports = {
                 THINK.THINK_PATH + '/Conf/mode.js',
                 THINK.APP_PATH + '/Common/Conf/mode.js'
             ];
-            var self = this;
             modeFiles.forEach(function (file) {
                 if (!isFile(file)) {
                     return;
