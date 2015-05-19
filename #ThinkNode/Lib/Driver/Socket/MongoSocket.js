@@ -2,6 +2,7 @@
 
 var mongoose = require('mongoose');
 module.exports = Class({
+
     init: function (config) {
         this.handle = null;
         this.deferred = null;
@@ -24,20 +25,36 @@ module.exports = Class({
             db_host: '127.0.0.1',
             db_port: 27017
         }, this.config);
-        config = 'mongodb://' + config.db_host + ':' + config.db_port + '/' + config.db_name;
-        var connection = mongoose.createConnection(config);
+
+        var options = {
+            db: { native_parser: true },
+            //server: { poolSize: 5 },
+            //replset: { rs_name: 'myReplicaSetName' },
+            user: config.db_user,
+            pass: config.db_pwd,
+            auth: true
+        };
+
+        var uri = 'mongodb://' + config.db_host + ':' + config.db_port + '/' + config.db_name;
+        var connection = mongoose.createConnection(uri, options);
+
         connection.on('open', function () {
             deferred.resolve(connection);
         });
-        connection.on('error', function () {
+
+        connection.on('error', function (err) {
+            console.log(err.toString());
             self.close();
-        })
+        });
+
         //连接句柄
         this.handle = connection;
+
         //把上一次的promise reject
         if (this.deferred) {
             this.deferred.reject(new Error('connection closed'));
         }
+
         this.deferred = deferred;
         return this.deferred.promise;
     },
@@ -51,4 +68,4 @@ module.exports = Class({
             this.handle = null;
         }
     }
-})
+});

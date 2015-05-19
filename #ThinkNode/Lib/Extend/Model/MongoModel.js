@@ -6,41 +6,53 @@ var mongoDb = thinkRequire('mongoDb');
  * @type {[type]}
  */
 module.exports = Class({
-    /**
-     * 模型名
-     * @type {String}
-     */
+    //模型名
     name: '',
-    /**
-     * 连接mongodb句柄
-     * @type {[type]}
-     */
+    // 数据表前缀
+    tablePrefix: '',
+    // 数据表名（不包含表前缀）
+    tableName: '',
+    // 实际数据表名（包含表前缀）
+    trueTableName: '',
+    //连接mongodb句柄
     db: null,
-    /**
-     * 字段列表
-     * @type {Object}
-     */
+    //字段列表
     fields: {},
-    /**
-     * 选项列表
-     * @type {Object}
-     */
+    //选项列表
     schema_options: {},
-    /**
-     * 操作选项
-     * @type {Object}
-     */
+    //操作选项
     _options: {},
     /**
      * 初始化
      * @return {[type]} [description]
      */
-    init: function (config) {
+    init: function (name, config) {
+        // 获取模型名称
+        if (name) {
+            this.name = name;
+        }
+        if (isString(config)) {
+            config = {db_prefix: config};
+        }
         this.config = extend({
             db_host: C('db_host'),
             db_port: C('db_port'),
-            db_name: C('db_name')
+            db_name: C('db_name'),
+            db_user: C('db_user'),
+            db_pwd: C('db_pwd')
         }, config || {});
+
+        //如果Model设置了实际数据库名，则需要将数据库名进行设置
+        if (this.dbName) {
+            this.config.db_name = this.dbName;
+        }
+
+        //数据表前缀
+        if (this.config.db_prefix) {
+            this.tablePrefix = this.config.db_prefix;
+        } else if (!this.tablePrefix) {
+            this.tablePrefix = C('db_prefix');
+        }
     },
     /**
      * 初始化db
@@ -50,8 +62,8 @@ module.exports = Class({
         if (this.db) {
             return this.db;
         }
-        var modelName = this.getModelName();
-        this.db = mongoDb(this.config, modelName, this.fields, this.schema_options);
+        var tableName = this.getTableName();
+        this.db = mongoDb(this.config, tableName, this.fields, this.schema_options);
         return this.db;
     },
     /**
@@ -74,6 +86,35 @@ module.exports = Class({
         var last = filename.lastIndexOf('/');
         this.name = filename.substr(last + 1, filename.length - last - 9);
         return this.name;
+    },
+    /**
+     * 字符串命名风格转换
+     * @param  {[type]} name [description]
+     * @param  {[type]} type [description]
+     * @return {[type]}      [description]
+     */
+    parseName: function (name) {
+        name = name.trim();
+        if (!name) {
+            return name;
+        }
+        //首字母如果是大写，不转义为_x
+        name = name[0].toLowerCase() + name.substr(1);
+        return name.replace(/[A-Z]/g, function (a) {
+            return '_' + a.toLowerCase();
+        });
+    },
+    /**
+     * 获取表名
+     * @return {[type]} [description]
+     */
+    getTableName: function () {
+        if (!this.trueTableName) {
+            var tableName = this.tablePrefix || '';
+            tableName += this.tableName || this.parseName(this.getModelName());
+            this.trueTableName = tableName.toLowerCase();
+        }
+        return this.trueTableName;
     },
     /**
      * 查询条件
@@ -141,7 +182,7 @@ module.exports = Class({
                 } else {
                     deferred.resolve();
                 }
-            })
+            });
             return deferred.promise;
         })
     },
@@ -153,7 +194,7 @@ module.exports = Class({
         var self = this;
         var promises = data.map(function (item) {
             return self.add(item);
-        })
+        });
         return Promise.all(promises);
     },
     /**
@@ -171,7 +212,7 @@ module.exports = Class({
                 } else {
                     deferred.resolve(data);
                 }
-            })
+            });
             return deferred.promise;
         })
     },
@@ -192,7 +233,7 @@ module.exports = Class({
                 } else {
                     deferred.resolve(data);
                 }
-            })
+            });
             return deferred.promise;
         })
     },
@@ -212,7 +253,7 @@ module.exports = Class({
                 } else {
                     deferred.resolve(data);
                 }
-            })
+            });
             return deferred.promise;
         })
     },
@@ -230,7 +271,7 @@ module.exports = Class({
                 } else {
                     deferred.resolve(data);
                 }
-            })
+            });
             return deferred.promise;
         })
     },
@@ -240,6 +281,7 @@ module.exports = Class({
      * @return {[type]}       [description]
      */
     parseWhere: function () {
+        this._options.where = extend({}, this._options.where);
         return this._options.where;
     }
-})
+});

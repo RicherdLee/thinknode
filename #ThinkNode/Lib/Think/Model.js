@@ -132,14 +132,14 @@ var Model = module.exports = Class(function () {
          * @param  {[type]} type [description]
          * @return {[type]}      [description]
          */
-        parseName: function(name){
+        parseName: function (name) {
             name = name.trim();
             if (!name) {
                 return name;
             }
             //首字母如果是大写，不转义为_x
             name = name[0].toLowerCase() + name.substr(1);
-            return name.replace(/[A-Z]/g, function(a){
+            return name.replace(/[A-Z]/g, function (a) {
                 return '_' + a.toLowerCase();
             });
         },
@@ -637,22 +637,22 @@ var Model = module.exports = Class(function () {
             data = extend({}, data);
             var key;
             if (!isEmpty(this._fields)) {
-                for(key in data){
+                for (key in data) {
                     var val = data[key];
                     if (this._fields._field.indexOf(key) === -1) {
                         delete data[key];
-                    }else if(isScalar(val)){
+                    } else if (isScalar(val)) {
                         //data = this.parseType(data, key);
                     }
                 }
             }
             //安全过滤
             if (isFunction(this._options.filter)) {
-                for(key in data){
+                for (key in data) {
                     var ret = this._options.filter.call(this, key, data[key]);
                     if (ret === undefined) {
                         delete data[key];
-                    }else{
+                    } else {
                         data[key] = ret;
                     }
                 }
@@ -1048,7 +1048,7 @@ var Model = module.exports = Class(function () {
                     var result = {};
                     fields.forEach(function (item) {
                         result[item] = [];
-                    })
+                    });
                     data.every(function (item) {
                         fields.forEach(function (fItem) {
                             if (one === true) {
@@ -1056,14 +1056,14 @@ var Model = module.exports = Class(function () {
                             } else {
                                 result[fItem].push(item[fItem]);
                             }
-                        })
+                        });
                         return one !== true;
-                    })
+                    });
                     return result;
                 } else {
                     data = data.map(function (item) {
                         return Object.values(item)[0];
-                    })
+                    });
                     return one === true ? data[0] : data;
                 }
             });
@@ -1251,4 +1251,4 @@ Model.close = function () {
 Model.clearTableFieldsCache = function () {
     'use strict';
     tableFieldsCache = {};
-}
+};
