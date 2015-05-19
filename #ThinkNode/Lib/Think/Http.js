@@ -8,7 +8,6 @@ var cookie = thinkRequire('Cookie');
 var EventEmitter = require('events').EventEmitter;
 var multiparty = require('multiparty');
 var crypto = require('crypto');
-var os = require('os');
 var path = require('path');
 var fs = require('fs');
 

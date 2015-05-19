@@ -13,6 +13,18 @@ module.exports = Class(function () {
             this.config = config;
             this.deferred = null;
             this.tryTimes = 0;
+
+            if (isEmpty(this.pool)) {
+                //创建连接池
+                var config = extend({
+                    host: '127.0.0.1',
+                    port: 3306,
+                    user: 'root',
+                    password: ''
+                }, this.config);
+
+                this.pool = mysql.createPool(config);
+            }
         },
         /**
          * 建立数据库连接
@@ -68,37 +80,56 @@ module.exports = Class(function () {
             if (C('db_log_sql')) {
                 console.log('sql: ' + sql);
             }
-            var self = this;
-            return this.connect().then(function () {
-                var deferred = getDefer();
-                self.handle.query(sql, function (err, rows) {
+
+            var deferred = getDefer();
+            this.pool.getConnection(function (err, connection) {
+                if (err) {
+                    deferred.reject(err);
+                }
+                connection.query(sql, function (err, rows) {
                     if (err) {
-                        //当数据量非常大时，可能会出现连接丢失，这里进行重连
-                        if (err.code === 'PROTOCOL_CONNECTION_LOST' && self.tryTimes < 3) {
-                            self.tryTimes++;
-                            self.close();
-                            return self.query(sql).then(function (data) {
-                                deferred.resolve(data);
-                            }).catch(function (err) {
-                                deferred.reject(err);
-                            })
-                        }
-                        return deferred.reject(err);
+                        deferred.reject(err);
+                    } else {
+                        deferred.resolve(rows);
                     }
-                    self.tryTimes = 0;
-                    return deferred.resolve(rows || []);
                 });
-                return deferred.promise;
+                connection.release();
             });
+
+            return deferred.promise;
+
+            //var self = this;
+            //return this.connect().then(function () {
+            //    var deferred = getDefer();
+            //    self.handle.query(sql, function (err, rows) {
+            //        if (err) {
+            //            //当数据量非常大时，可能会出现连接丢失，这里进行重连
+            //            if (err.code === 'PROTOCOL_CONNECTION_LOST' && self.tryTimes < 3) {
+            //                self.tryTimes++;
+            //                self.close();
+            //                return self.query(sql).then(function (data) {
+            //                    deferred.resolve(data);
+            //                }).catch(function (err) {
+            //                    deferred.reject(err);
+            //                })
+            //            }
+            //            return deferred.reject(err);
+            //        }
+            //        self.tryTimes = 0;
+            //        return deferred.resolve(rows || []);
+            //    });
+            //    return deferred.promise;
+            //});
         },
         /**
          * 关闭连接
          * @return {[type]} [description]
          */
         close: function () {
-            if (this.handle) {
-                this.handle.destroy();
-                this.handle = null;
+            if (this.pool) {
+                //this.handle.destroy();
+                this.pool.end();
+                this.pool = null;
             }
         }
     };

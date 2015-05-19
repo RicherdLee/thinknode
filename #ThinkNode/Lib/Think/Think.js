@@ -174,7 +174,7 @@ module.exports = {
                 THINK.APP_PATH + '/Common/Behavior/' + file
             ],
             'Model': [
-                THINK.THINK_PATH + '/Extend/Model/' + file,
+                THINK.THINK_PATH + '/Lib/Extend/Model/' + file,
                 THINK.APP_PATH + '/Common/Model/' + file
             ],
             'Logic': [
