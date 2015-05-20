@@ -6,7 +6,7 @@
  * @version    15/1/15
  */
 module.exports = {
-    think_version:'1.0.3',//框架版本
+    think_version:'1.0.4',//框架版本
     port: 3000, //监听端口
     host: '', //监听的host
     use_proxy: false, //是否使用代理访问，如：nginx。开启后不能通过ip+端口直接访问
@@ -74,9 +74,9 @@ module.exports = {
     session_sign: '', //session对应的cookie使用签名
     session_timeout: 24 * 3600, //服务器上session失效时间，单位：秒
 
-    db_type: 'mysql', // 数据库类型
+    db_type: 'mongo', // 数据库类型
     db_host: '127.0.0.1', // 服务器地址
-    db_port: '', // 端口
+    db_port: '27017', // 端口
     db_name: '', // 数据库名
     db_user: '', // 用户名
     db_pwd: '', // 密码

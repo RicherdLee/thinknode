@@ -343,7 +343,7 @@ module.exports = Class(function () {
             if (callback) {
                 data = callback + '(' + (data !== undefined ? JSON.stringify(data) : '') + ')';
             }
-            return this.end(data);
+            return this.echo(data);
         },
         /**
          * json格式输出
@@ -352,7 +352,7 @@ module.exports = Class(function () {
          */
         json: function (data) {
             this.type(C('json_content_type'));
-            return this.end(data);
+            return this.echo(data);
         },
         /**
          * 结束输出，输出完成时一定要调用这个方法

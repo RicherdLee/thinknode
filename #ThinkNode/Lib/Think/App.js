@@ -354,6 +354,7 @@ App.listener = function (http) {
         }).catch(function (err) {
             App.sendError(http, err);
         }).then(function () {
+            http.end();
             deferred.resolve();
         })
     });
