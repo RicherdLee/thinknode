@@ -1,6 +1,9 @@
 /**
- * controller
- * @return 
+ *
+ * @author     richen
+ * @copyright  Copyright (c) 2014- <ric3000(at)163.com>
+ * @license    MIT
+ * @version    15/5/20
  */
 module.exports = Controller("AppFrameController", function(){
   "use strict";
@@ -9,7 +12,8 @@ module.exports = Controller("AppFrameController", function(){
       this.super_("init", http);
     },
     indexAction: function(){
-      return this.json(["Hello ThinkNode!","A Node.js MVC Framework Based on Promise"]);
+        var self = this;
+        return this.json(["Hello ThinkNode!","A Node.js MVC Framework Based on Promise"]);
     }
   };
 });
