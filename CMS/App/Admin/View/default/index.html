@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh-cn">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
+    <script>
+        $().ready(function () {
+            Access-Control-Allow-Origin: http://b.com,
+            Access-Control-Allow-Credentials: true, //表示可以发cookie
+            $('#clk').click(function () {
+                $.ajax(
+                        {
+                            type: "POST",
+                            url: "http://b.com/send_cookie.php",
+                            dataType: 'jsonp',
+                            xhrFields: {
+                                withCredentials: true
+                            },
+                            crossDomain: true,
+                            beforeSend: function(xhr) {
+                                xhr.setRequestHeader("Cookie", "session=xxxyyyzzz");//也可以传cookie
+                            },
+                            success: function(){
+                                alert('success');
+                            },
+                            error: function (xhr) {
+                                alert(xhr.responseText);
+                            }
+                        }
+                );
+            });
+        });
+    </script>
+</head>
+<body>
+<input type="button" id="clk" value="submit" />
+</body>
+</html>

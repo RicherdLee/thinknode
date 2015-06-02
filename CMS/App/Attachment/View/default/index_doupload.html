@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh-cn">
+    <!--加载后台头部公共文件-->
+    <%include ../../../Admin/View/default/public_header.html%>
+    <!-- 在此加入当前页面自定义CSS及JS start -->
+
+    <!-- 在此加入当前页面自定义CSS及JS end -->
+</head>
+<body>
+<!--PAGE CONTENT BEGINS-->
+<div class="page-content">
+    <form id="file_upload_form" class="form-inline page-header" method="post" action="/Attachment/Index/doUpload" enctype="multipart/form-data">
+        <div class="tabbable">
+            <ul class="nav nav-tabs padding-16">
+                <li class="active">
+                    <a data-toggle="tab" href="#do_upload">
+                        <i class="green icon-file bigger-125"></i>
+                        上传附件
+                    </a>
+                </li>
+
+                <li>
+                    <a data-toggle="tab" href="#do_online">
+                        <i class="blue icon-globe bigger-125"></i>
+                        网络文件
+                    </a>
+                </li>
+
+            </ul>
+            <div class="tab-content">
+                <div id="do_upload" class="tab-pane in active">
+                    <div class="row-fluid">
+                        <div class="control-group">
+                            <label class="control-label">允许上传类型:<%=allowUploadType%></label>
+                            <div class="controls">
+                                <input class="J_upload_input" type="file" name="file_upload" data_type="<%=type%>" file_type="<%=allowUploadType%>"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="do_online" class="tab-pane">
+                    <div class="row-fluid">
+                        <div class="control-group">
+                            <label class="control-label">请输入网络地址:</label>
+                            <div class="controls">
+                                <input class="span10" type="text" id="file_online" name="file_online" placeholder="http://" onblur="addonlinefile(this)"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="file_url" name="file_url" value=""/>
+    </form>
+</div>
+<script>
+    //网络地址
+    function addonlinefile(obj) {
+        var strs = $(obj).val() ? $(obj).val() :'';
+        //正则判断是否文件
+        var urlReg= new RegExp(/[^\/]+\/([^\.]*)\/([^\/]+\.[^\/\.]+)$/);
+        var flag = strs.match(urlReg);
+        if(flag){
+            if(isAllowdFile("<%=allowUploadType%>",strs)){
+                $("#file_url").val(strs);
+            }else{
+                isAlert("填写的地址文件类型不允许");
+            }
+        }else{
+            isAlert("填写的地址不是有效的文件");
+        }
+    }
+</script>
+</body>
+</html>

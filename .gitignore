@@ -1,5 +1,5 @@
 node_modules/
 .idea
-\#Runtime
 www/Static/uploads
-Runtime
+/Runtime
+CMS/Runtime
