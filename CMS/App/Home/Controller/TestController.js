@@ -23,17 +23,18 @@ module.exports = Controller("AppFrameController", function () {
 
         testAction: function () {
             var self = this;
-            return rp.post('http://app2.cnautoshows.com/index.php/api/GetExhibitionList').promise().then(function (data) {
-                return data;
-            }).then(function (data) {
-                return rp.post('http://ticket.cnautoshows.com/index.php/api/GetProjectList/aaa/'+data.aaa).promise();
-            }).then(function (rest) {
-                self.assign('rest',rest);
-                return self.display();
-            });
-            //var promise2 =
-            //return Promise.all([promise1,promise2]).then(function (data) {
-            //    return self.end(data[0]+'<br>'+data[1]);
+            //var options = {
+            //    uri : 'http://ticket.cnautoshows.com/index.php/api/GetProjectGoodsInfoList/index',
+            //    method : 'POST'
+            //};
+            //var form = {
+            //    'projectid': 5,
+            //    'tchannelid': 13
+            //};
+            //return rp.post(options).form(form).promise().then(function (data) {
+            //    return self.end(data);
+            //}).catch(function (e) {
+            //    console.log(e);
             //});
         }
     };

@@ -26,16 +26,26 @@ module.exports = Model("CommonModel", function () {
             }
         },
 
-        _afterFind: function(result){
+        _beforeAdd: function (data) {
+            data.rule_ids = data.rule_ids.join(",");
+            return data;
+        },
+
+        _beforeUpdate: function (data) {
+            data.rule_ids = data.rule_ids.join(",");
+            return data;
+        },
+
+        _afterFind: function (result) {
             var ps = [];
-            if(!isEmpty(result.rule_ids)){
+            if (!isEmpty(result.rule_ids)) {
                 var rule_ids = result.rule_ids.split(',');
-                ps.push(M("AuthRule").field("desc").where({id:["in",rule_ids]}).find().then(function (data) {
+                ps.push(M("AuthRule").field("desc").where({id: ["in", rule_ids]}).find().then(function (data) {
                     result.rule_names = data.desc;
                     result.rule_ids = rule_ids;
                     return result;
                 }));
-            }else{
+            } else {
                 result.rule_names = [];
                 result.rule_ids = [];
                 ps.push(result);
@@ -45,4 +55,5 @@ module.exports = Model("CommonModel", function () {
             });
         }
     };
-});
+})
+;

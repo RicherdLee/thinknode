@@ -27,12 +27,28 @@
                 <tr>
                     <td>权限规则</td>
                     <td>
-                        <select name="rule_ids" multiple="" class="J_select chzn-select" data-placeholder="请选择...">
-                            <%rules.forEach(function(v,k){%>
-                            <option value="<%=v.id%>"
-                            <%if(php.in_array(v.id,info.rule_ids)){%>selected<%}%>><%=v.desc%></option>
-                            <%})%>
-                        </select>
+                        <!--<select name="rule_ids" multiple="" class="J_select chzn-select" data-placeholder="请选择...">-->
+                            <!--<%rules.forEach(function(v,k){%>-->
+                            <!--<option value="<%=v.id%>"-->
+                            <!--<%if(php.in_array(v.id,info.rule_ids)){%>selected<%}%>><%=v.desc%></option>-->
+                            <!--<%})%>-->
+                        <!--</select>-->
+                        <span class="J_dualselect">
+                            	<select name="rules" multiple="multiple" size="10">
+                                    <%allRules.forEach(function(v,k){%>
+                                    <option value="<%=v.id%>"><%=v.desc%></option>
+                                    <%})%>
+                                </select>
+                                <span class="ds_arrow">
+                                	<span class="arrow ds_prev btn btn-minier btn-primary icon-arrow-left"></span>
+                                    <span class="arrow ds_next btn btn-minier btn-primary icon-arrow-right"></span>
+                                </span>
+                                <select name="rule_ids" multiple="multiple" size="10">
+                                    <%rules.forEach(function(v,k){%>
+                                    <option value="<%=v.id%>" selected="selected"><%=v.desc%></option>
+                                    <%})%>
+                                </select>
+                            </span>
                     </td>
                 </tr>
             </table>

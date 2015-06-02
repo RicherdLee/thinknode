@@ -9,23 +9,63 @@ module.exports = Model('CommonModel',function(){
     "use strict";
     return {
         tableName: 'User',
-        //验证字段,验证规则[,附加规则],错误提示[,验证时间(1新增 2编辑 null新增和编辑)]
-        _validate : [
-            {name: "username", valid: 'required', msg: "用户名必填"},
-            {name: "nickname", valid: 'required', msg: "姓名必填"},
-            {name: "email", valid: "email", msg: "email格式不正确"},
-            {name: "password", valid: 'required', msg:"密码不能为空" ,type: 1},
-            {name: "password", valid: ["length"], length_args: [6, 20], msg:"密码长度至少6位" ,type: 2},
-            {name: "role_id", valid: "required", msg:"用户角色必须" ,type: 1},
-            //{name: "username", valid: "function",func_name:"checkName", msg: "username不合法"}
-        ],
-        //字段,自动填写的值[,完成时间(1新增 2编辑 null新增和编辑)]
-        _auto:[
-            {name: "create_time", value: php.time(),type: 1},
-            {name: "update_time", value: php.time()},
-            {name: "birthday", value: "function",func_name:"autoBirthday"},
-            {name: "password", value: "function",func_name:"autoPassword"}
-        ],
+
+        //定义数据校验的字段
+        fields: {
+            username: {
+                valid: ['required'],
+                msg: {
+                    required: '用户名必填'
+                }
+            },
+            nickname: {
+                valid: ['required'],
+                msg: {
+                    required: '姓名必填'
+                }
+            },
+            email: {
+                valid: ['email'],
+                msg: {
+                    required: 'email格式不正确'
+                }
+            }
+        },
+
+        _beforeAdd: function (data) {
+            this.fields = extend(this.fields,{
+                password: {
+                    valid: ['required', 'length'],
+                    length_args: [6],
+                    msg: {
+                        required: '密码不能为空',
+                        length: '密码长度至少6位'
+                    }
+                },
+                role_id: {
+                    valid: ['required'],
+                    msg: {
+                        required: '用户角色必须'
+                    }
+                }
+            });
+            data.create_time = php.time();
+            data.update_time = php.time();
+            data.birthday = this.autoBirthday(data);
+            if(!isEmpty(data.password)){
+                data.password = this.autoPassword(data);
+            }
+            return data;
+        },
+
+        _beforeUpdate: function (data) {
+            data.update_time = php.time();
+            data.birthday = this.autoBirthday(data);
+            if(!isEmpty(data.password)){
+                data.password = this.autoPassword(data);
+            }
+            return data;
+        },
 
         /*checkName: function (data) {
             return true;

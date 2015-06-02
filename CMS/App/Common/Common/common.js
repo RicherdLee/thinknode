@@ -65,7 +65,7 @@ global.authCheck = function (group,controller,action, user, mode, relation,http)
         return getPromise(true);
     }else{
         //实例化Auth类
-        var auth = X("Auth",user.id,{type:mode,http:http,userInfo:user});
+        var auth = X("Admin/Auth",user.id,{type:mode,http:http,userInfo:user});
         return auth.check('/'+group+'/'+controller+'/'+action,relation).then(function (data) {
             if(data){
                 return true;

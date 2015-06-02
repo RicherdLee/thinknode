@@ -27,6 +27,8 @@ head.js('/Static/js/bootstrap.min.js','/Static/js/ace-elements.min.js','/Static/
     head.add('ajaxForm',['jquery.ajaxform.js']);
     //artDialog
     head.add('artDialog',['artDialog/jquery.artDialog.js','artDialog/plugins/iframeTools.js']);
+    //
+    head.add('uniForm','jquery.uniform.min.js');
 });
 
 

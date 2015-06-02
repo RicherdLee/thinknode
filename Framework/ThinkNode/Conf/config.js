@@ -17,7 +17,7 @@ module.exports = {
     url_resource_on: true,  //是否监听静态资源类请求
     url_resource_reg: /^(Static\/|robot\.txt)/, //判断是否是静态资源的正则
     url_route_on: true, //是否开启自定义路由功能
-    filter_data: true, //主要是安全过滤，强烈建议开启
+    filter_data: true, //安全过滤，强烈建议开启
 
     post_json_content_type: ['application/json'], //post数据为json时的content-type
     post_max_file_size: 300 * 1024 * 1024, //上传文件大小限制，默认300M
