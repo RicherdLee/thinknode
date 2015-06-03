@@ -327,7 +327,7 @@ module.exports = Class(function () {
             if (C('auto_send_content_type')) {
                 this.type(C('tpl_content_type'));
             }
-            return this.http.echo(obj, encoding);
+            return this.http.end(obj, encoding);
         },
         /**
          * jsonp格式输出
@@ -343,7 +343,7 @@ module.exports = Class(function () {
             if (callback) {
                 data = callback + '(' + (data !== undefined ? JSON.stringify(data) : '') + ')';
             }
-            return this.echo(data);
+            return this.end(data);
         },
         /**
          * json格式输出
