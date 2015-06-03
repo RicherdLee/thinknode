@@ -17,6 +17,7 @@ module.exports = Controller("Common/AdminBaseController", function () {
             var self = this;
             var info = [];
             var username = '';
+            console.log(new Date().valueOf());
             return this.session("userInfo").then(function (user) {
                 if(user){
                     return Promise.all([self.getDbVersion(),X("Admin/AdminMenu",user.id,{'userInfo':user}).getAdminMenu()]).then(function (data) {

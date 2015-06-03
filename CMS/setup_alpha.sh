@@ -23,7 +23,7 @@ chmod -R 755 ./*
 chmod -R 777 ./www
 chmod -R 777 ./Runtime
 
-docker restart nodejs
+docker restart node_test
 
 rm -rf ./*.sh
 

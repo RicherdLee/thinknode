@@ -8,7 +8,7 @@
 module.exports = Controller("AppFrameController", function () {
     "use strict";
     return {
-        //默认初始化方法(仅适合做赋值类同步逻辑,断言目前无法正确返回)
+        //默认初始化方法(仅适合做非中断型同步或者异步逻辑,中断目前无法正确返回)
         init: function (http) {
             this.super_("init", http);
             //定义是后台

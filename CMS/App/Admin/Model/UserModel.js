@@ -27,7 +27,7 @@ module.exports = Model('CommonModel',function(){
             email: {
                 valid: ['email'],
                 msg: {
-                    required: 'email格式不正确'
+                    email: 'email格式不正确'
                 }
             }
         },
