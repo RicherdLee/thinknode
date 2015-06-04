@@ -134,19 +134,33 @@ App.exec = function (http) {
     if (actionFn && C('url_params_bind')) {
         params = this.getActionParams(actionFn, http);
     }
+
+    var self = this;
+    return this.loadConf(http).then(function () {
+        return getPromise(controller.__initReturn);
+    }).then(function () {
+        return self.execAction(controller, http.action, params, true);
+    })
+};
+
+/**
+ * 加载独立分组文件
+ * @param http
+ * @returns {*}
+ */
+App.loadConf = function (http) {
+    var promise = getPromise();
     //加载分组函数
     if (isFile(THINK.APP_PATH + '/' + http.group + '/Common/function.js')) {
-        thinkRequire(THINK.APP_PATH + '/' + http.group + '/Common/function.js');
+        promise = getPromise(thinkRequire(THINK.APP_PATH + '/' + http.group + '/Common/function.js'));
     }
     //加载分组配置
     if (isFile(THINK.APP_PATH + '/' + http.group + '/Conf/config.js')) {
-        C(thinkRequire(THINK.APP_PATH + '/' + http.group + '/Conf/config.js'));
+        promise = promise.then(function () {
+            return getPromise(C(thinkRequire(THINK.APP_PATH + '/' + http.group + '/Conf/config.js')));
+        });
     }
-
-    var self = this;
-    return getPromise(controller.__initReturn).then(function () {
-        return self.execAction(controller, http.action, params, true);
-    })
+    return promise;
 };
 /**
  * 发送错误信息

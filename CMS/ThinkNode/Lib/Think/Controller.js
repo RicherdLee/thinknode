@@ -327,7 +327,7 @@ module.exports = Class(function () {
             if (C('auto_send_content_type')) {
                 this.type(C('tpl_content_type'));
             }
-            return this.http.end(obj, encoding);
+            return this.http.echo(obj, encoding);
         },
         /**
          * jsonp格式输出
@@ -352,7 +352,7 @@ module.exports = Class(function () {
          */
         json: function (data) {
             this.type(C('json_content_type'));
-            return this.echo(data);
+            return this.end(data);
         },
         /**
          * 结束输出，输出完成时一定要调用这个方法
