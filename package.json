@@ -1,6 +1,6 @@
 {
-  "name": "ThinkNode",
-  "version": "1.0.8",
+  "name": "thinknode",
+  "version": "1.1.0",
   "description": "ThinkNode 是一款基于Promise的Node.js MVC框架，借鉴于ThinkJS、ThinkPHP",
   "main": "index.js",
   "directories": {
